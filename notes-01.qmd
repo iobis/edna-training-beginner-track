@@ -1,0 +1,72 @@
+---
+title: "Instructor notes: Episode 1"
+---
+
+::: {.callout-note}
+These notes supplement the inline instructor notes embedded in
+[Episode 1](../episodes/01-episode.qmd). They are only rendered in the instructor build.
+:::
+
+## Summary
+
+<!-- One short paragraph on what this episode covers and where it fits in the track arc. -->
+
+## Estimated time
+
+| Component | Time |
+|-----------|------|
+| Introduction | XX min |
+| Section 1 | XX min |
+| Exercise 1.1 | XX min |
+| Section 2 | XX min |
+| Wrap-up / key points | XX min |
+| **Total** | **XX min** |
+
+## Learning objectives — instructor read
+
+<!-- Restate the learning objectives here with additional context on what "success"
+     looks like for each one. What does it mean for a learner to have achieved it? -->
+
+- Objective 1: ...
+- Objective 2: ...
+- Objective 3: ...
+
+## Before you teach this episode
+
+<!-- What do instructors need to know, prepare, or have ready? -->
+
+- Confirm dataset is downloaded and accessible.
+- Note any version-sensitive code (which package version was used?).
+- Suggest opening the exercise solution in a separate script so you can refer to it
+  quickly during the session.
+
+## Common learner errors
+
+| Error | Likely cause | Suggested response |
+|-------|-------------|-------------------|
+| Error message here | Cause | What to say/do |
+
+## Discussion and reflection prompts
+
+<!-- Questions you can pose to the group at different points in the episode. -->
+
+1. After the introduction: *"Before we dive in — has anyone encountered X before? What did you use?"*
+2. After Exercise 1.1: *"What surprised you about the output? Was it what you expected?"*
+
+## Modifications and adaptations
+
+<!-- Suggestions for shortening, lengthening, or adjusting the episode for different audiences. -->
+
+**If time is short:** Skip Exercise 1.1 and walk through the solution instead.
+
+**If audience is more advanced:** Replace Exercise 1.1 with the following extension task:
+
+```r
+# Extension exercise here
+```
+
+## Notes from past deliveries
+
+<!-- After you teach it, note what worked, what didn't, and any fixes needed. -->
+
+- NA

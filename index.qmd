@@ -1,0 +1,83 @@
+---
+title: "{{< var track.title >}}"
+subtitle: "{{< var track.subtitle >}}"
+---
+
+<!-- Replace the banner image below with a relevant one for your track -->
+![](figures/banner.png){fig-alt="A descriptive alt text for the banner image." width=100%}
+
+## Overview
+
+<!-- Write 2–4 sentences introducing the track. What is it about? Why does it matter for the eDNA / OBIS community? -->
+
+Replace this text with a brief, welcoming introduction to the track. Describe the problem or
+workflow it addresses and why it is relevant to biodiversity data practitioners.
+
+## Learning outcomes
+
+By the end of this track, you will be able to:
+
+- Outcome one — use an active verb (e.g. *construct*, *apply*, *interpret*).
+- Outcome two.
+- Outcome three.
+- Outcome four.
+- Outcome five.
+
+## Prerequisites
+
+::: {.callout-important icon=false}
+## Prerequisites
+
+Before starting this track, you should be comfortable with:
+
+- Item one (link to resource if possible)
+- Item two
+
+If you are new to R, we recommend working through the
+[Introduction to R episode](setup.qmd) in the setup materials first.
+:::
+
+## Episodes
+
+| # | Episode | Description | Time |
+|---|---------|-------------|------|
+| 1 | [Episode title](episodes/01-episode.qmd) | One sentence description. | ~60 min |
+| 2 | [Episode title](episodes/02-episode.qmd) | One sentence description. | ~60 min |
+| 3 | [Episode title](episodes/03-episode.qmd) | One sentence description. | ~60 min |
+| 4 | [Episode title](episodes/04-episode.qmd) | One sentence description. | ~60 min |
+| 5 | [Episode title](episodes/05-episode.qmd) | One sentence description. | ~60 min |
+
+: {tbl-colwidths="[5,25,55,15]"}
+
+## Setup
+
+Before the first episode, please complete the [Setup instructions](setup.qmd).
+These cover software installation, package installation, and downloading the example dataset.
+
+## How to use these materials
+
+These materials can be used for **self-paced study** or as part of an **instructor-led workshop**.
+
+- **Self-paced:** Work through each episode in order. Exercises marked 🧪 are for your own
+  practice; there is no submission required.
+- **Instructor-led:** Your instructor will guide the pace. Exercises will be worked through
+  together or in small groups.
+
+Tip boxes, challenge boxes, and key-point summaries appear throughout. Take time to read them —
+they highlight common mistakes and the most important concepts.
+
+## Acknowledgements
+
+This lesson was developed for the [Ocean Biodiversity Information System (OBIS)](https://obis.org)
+training programme.
+
+Lesson design follows the pedagogical framework of
+[The Carpentries](https://carpentries.org), whose
+[Curriculum Development Handbook](https://cdh.carpentries.org) informed the structure of these
+materials. Content is original and independent; this is not an official Carpentries lesson.
+
+Maintained by {{< var maintainer.name >}}. Licensed {{< var license >}}.
+
+---
+
+*This track was last rendered on `r Sys.Date()`.*

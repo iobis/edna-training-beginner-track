@@ -1,0 +1,26 @@
+# _variables.yml
+# -------------------------------------------------------
+# Track metadata — edit this file to customise the site.
+# All values are injected via {{< var ... >}} shortcodes.
+# -------------------------------------------------------
+
+track:
+  title: "Track Title Here"
+  subtitle: "A short sentence describing what this track covers."
+  audience: "Beginner"          # Beginner | Intermediate | Advanced
+  estimated_hours: "10"         # total estimated contact/self-study hours
+  repo_url: "https://github.com/iobis/REPO-NAME"
+  doi: "NA"                     # populate once archived (e.g. Zenodo DOI)
+
+workshop:
+  date: "NA"                    # set for scheduled deliveries, e.g. "2025-06-10"
+  location: "NA"                # city or "Online"
+  instructors: "NA"             # comma-separated names
+
+maintainer:
+  name: "NA"
+  email: "NA"
+  orcid: "NA"
+
+license: "CC BY 4.0"
+license_url: "https://creativecommons.org/licenses/by/4.0/"

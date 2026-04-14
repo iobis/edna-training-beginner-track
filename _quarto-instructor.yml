@@ -1,0 +1,26 @@
+profile:
+  group: instructor
+
+website:
+  title: "{{< var track.title >}} — Instructor View"
+  navbar:
+    right:
+      - text: "Instructor Notes"
+        href: instructor/index.qmd
+      - icon: github
+        href: "{{< var track.repo_url >}}"
+        aria-label: GitHub
+  page-footer:
+    left: |
+      **Instructor view** — not intended for learner distribution.
+      Lesson design follows [The Carpentries](https://carpentries.org) pedagogical framework.
+
+format:
+  html:
+    theme:
+      light: [flatly, _extensions/obis-workshop/obis-workshop.scss, _extensions/obis-workshop/obis-instructor.scss]
+      dark:  [darkly, _extensions/obis-workshop/obis-workshop.scss, _extensions/obis-workshop/obis-instructor.scss]
+
+# Show instructor-only divs in this profile
+# In episode files, use:  ::: {.instructor-only}  ...  :::
+# They are hidden in the learner build and visible here.

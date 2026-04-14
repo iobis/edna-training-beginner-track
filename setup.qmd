@@ -1,0 +1,85 @@
+---
+title: "Setup"
+---
+
+Complete these steps **before** the first episode. If you run into problems, please open an
+issue on the [GitHub repository]({{< var track.repo_url >}}/issues) or ask your instructor.
+
+## Software
+
+### R and RStudio
+
+This track requires **R ≥ 4.2** and **RStudio ≥ 2023.06** (or another IDE of your choice).
+
+- [Download R](https://cran.r-project.org/)
+- [Download RStudio Desktop](https://posit.co/download/rstudio-desktop/)
+
+## R packages
+
+Install the required packages by running the following in your R console:
+
+```{r}
+#| label: install-packages
+#| eval: false
+
+# Replace with the actual packages needed for this track
+install.packages(c(
+  "tidyverse",
+  "here"
+  # add packages here
+))
+```
+
+Verify installation:
+
+```{r}
+#| label: verify-packages
+#| eval: false
+
+# Replace with the actual packages needed for this track
+library(tidyverse)
+library(here)
+# add checks here
+
+cat("All packages loaded successfully.\n")
+```
+
+## Example data
+
+<!-- Describe what the example dataset is and where it comes from. -->
+
+Download the example dataset for this track:
+
+```{r}
+#| label: download-data
+#| eval: false
+
+# Replace with the actual data download for this track
+download.file(
+  url = "NA",   # replace with actual URL
+  destfile = here("data", "example-data.csv")
+)
+```
+
+::: {.callout-note}
+## About the example dataset
+
+Replace this with a brief description of the dataset used in this track:
+what it contains, where it comes from, and any important caveats or
+licensing information.
+:::
+
+## Verify your setup
+
+Run the following chunk to confirm everything is working before Episode 1:
+
+```{r}
+#| label: verify-setup
+#| eval: false
+
+# Replace with a meaningful check for this track
+cat("R version:", R.version$major, ".", R.version$minor, "\n", sep = "")
+# add further checks as needed
+```
+
+If all checks pass, you are ready to begin [Episode 1](episodes/01-episode.qmd).

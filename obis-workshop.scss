@@ -1,0 +1,92 @@
+/*-- obis-workshop.scss ------------------------------------------
+   OBIS brand variables layered on top of Bootstrap/Flatly.
+   Uses the colour palette from obis.org.
+   ---------------------------------------------------------------- */
+
+/*-- OBIS brand colours (from obis.org CSS) ---------------------- */
+$obis-blue:              #2f6fef;
+$obis-highlight:         #B1B695;
+$obis-highlight-bg:      #cddee7;
+$obis-mof:               #648DB3;
+$obis-dna:               #DA6C6C;
+$obis-taxon:             #BA487F;
+$obis-light-grey:        #f6f6f6;
+
+/*-- Override Flatly/Darkly primary colour ----------------------- */
+$primary:    $obis-blue;
+$link-color: $obis-blue;
+
+/*-- Navbar ------------------------------------------------------ */
+$navbar-bg:        #ffffff;
+$navbar-fg:        #212529;
+$navbar-hl:        $obis-blue;
+
+/*-- Code -------------------------------------------------------- */
+$code-color:       $obis-highlight;
+$code-font-weight: bold;
+
+/*-- TOC --------------------------------------------------------- */
+$toc-color:        $obis-blue;
+
+/*-- Headings ---------------------------------------------------- */
+$headings-font-weight: 500;
+
+/*== Quarto/Bootstrap overrides applied after import ============ */
+
+/*-- Navbar logo sizing ----------------------------------------- */
+.navbar-brand img {
+  height: 36px;
+  width: auto;
+}
+
+/*-- Two logos side by side in navbar --------------------------- */
+.navbar-logos {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.navbar-logos img {
+  height: 36px;
+  width: auto;
+}
+
+/*-- Footer logos ----------------------------------------------- */
+.footer-logos {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.footer-logos img {
+  height: 32px;
+  width: auto;
+}
+
+/*-- Instructor-only blocks (hidden in learner build) ----------- */
+.instructor-only {
+  display: none;
+}
+
+/*-- Active TOC link colour ------------------------------------- */
+#TOC a.active {
+  color: $obis-blue;
+  font-weight: 500;
+}
+
+/*-- Inline code ------------------------------------------------ */
+code:not(.sourceCode) {
+  color: $obis-highlight;
+  font-weight: bold;
+  background-color: $obis-light-grey;
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+}
+
+/*-- Progress bar (e.g. for episodic navigation) ---------------- */
+.progress-bar {
+  background-color: $obis-highlight;
+}
+
+/*-- Tag badges ------------------------------------------------- */
+.tag-dna   { background-color: $obis-dna;    color: #fff; }
+.tag-mof   { background-color: $obis-mof;    color: #fff; }
+.tag-taxon { background-color: $obis-taxon;  color: #fff; }

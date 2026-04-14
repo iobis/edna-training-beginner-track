@@ -1,0 +1,66 @@
+---
+title: "Instructor Guide"
+subtitle: "{{< var track.title >}}"
+---
+
+::: {.callout-warning}
+This page and the linked instructor notes are part of the **instructor build** and are
+not intended for learner distribution. Do not share the instructor site URL with participants.
+:::
+
+## Track overview for instructors
+
+<!-- Brief notes on the overall design intent of this track. Why were these five episodes
+     chosen? What story are they telling together? -->
+
+## Suggested schedule
+
+<!-- Adapt this for your delivery context (half-day, full-day, multi-day, async, etc.) -->
+
+| Time | Episode | Notes |
+|------|---------|-------|
+| 0:00 | Welcome + Setup check | 15 min |
+| 0:15 | Episode 1 | ~60 min |
+| 1:15 | Break | 15 min |
+| 1:30 | Episode 2 | ~60 min |
+| ... | ... | ... |
+
+## Episode-level instructor notes
+
+| Episode | Notes |
+|---------|-------|
+| [Episode 1](notes-01.qmd) | Link to per-episode notes |
+| [Episode 2](notes-02.qmd) | |
+| [Episode 3](notes-03.qmd) | |
+| [Episode 4](notes-04.qmd) | |
+| [Episode 5](notes-05.qmd) | |
+
+## Adapting this track
+
+These materials are released under {{< var license >}} and may be freely adapted.
+If you teach a modified version, please:
+
+1. Keep the Carpentries acknowledgement in the footer.
+2. Update `_variables.yml` with your name, institution, and delivery date.
+3. Consider opening a pull request if you fix a bug or add an improvement that
+   would benefit others.
+
+## Known issues and gaps
+
+<!-- Document any known errors, outdated content, or gaps in coverage here.
+     This helps future instructors and contributors. -->
+
+- NA (update as issues are found)
+
+## Carpentries pedagogical framework
+
+This track follows the lesson design principles described in the
+[Carpentries Curriculum Development Handbook](https://cdh.carpentries.org), in particular:
+
+- Backward design: episodes are built from learning objectives, not from content outlines.
+- Formative assessment through exercises placed immediately after new concepts.
+- Learning objectives use Bloom's taxonomy action verbs.
+- Key points at the end of each episode reinforce consolidation.
+
+For a deeper orientation to these principles, the handbook is highly recommended reading
+before teaching this material for the first time.
