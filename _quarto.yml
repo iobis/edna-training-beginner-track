@@ -8,6 +8,12 @@ website:
   bread-crumbs: true
   repo-url: "{{< var lesson.repo_url >}}"
   repo-actions: [edit, issue]
+  announcement:
+    icon: exclamation-triangle
+    dismissable: false
+    content: "This lesson is under development and is not ready for use."
+    type: danger
+    position: below-navbar
   navbar:
     logo: assets/logo_simple.png
     logo-alt: "OBIS logo"
