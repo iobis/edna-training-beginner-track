@@ -53,3 +53,19 @@
 .callout-caution .callout-caution > .callout-header {
   background-color: rgba(47, 111, 239, 0.08);
 }
+
+
+/* Development banner */
+body::before {
+  content: "⚠ This lesson is under development and is not ready for use.";
+  display: block;
+  background-color: #DA6C6C;
+  color: #ffffff;
+  text-align: center;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+}

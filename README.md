@@ -125,6 +125,75 @@ GitHub Actions can publish both sites automatically. The learner site goes to
 A starter workflow is available at `.github/workflows/publish.yml`
 (not yet included — raise an issue or PR if you need it).
 
+Here's a new section to add to the README, after the **Local development** section:
+
+```markdown
+## Publishing a lesson branch
+
+When you are ready to share a delivered version of this lesson publicly, follow these
+steps on your branch before publishing.
+
+### 1. Remove the development banner
+
+In `_extensions/obis-workshop/obis-callouts.css`, delete the entire `/* Development banner */`
+block:
+
+```css
+/* Development banner */
+body::before {
+  content: "⚠ This lesson is under development and is not ready for use.";
+  ...
+}
+```
+
+### 2. Enable search indexing
+
+In `_quarto.yml`, change the `robots` line:
+
+```yaml
+robots: index, follow
+```
+
+And in `_metadata.yml`, change the meta tag:
+
+```html
+<meta name="robots" content="index, follow">
+```
+
+### 3. Update `_variables.yml`
+
+Make sure the following fields are filled in and not left as `NA`:
+
+- `lesson.title`
+- `lesson.subtitle`
+- `workshop.date`
+- `workshop.location`
+- `workshop.instructors`
+- `maintainer.name`
+- `maintainer.email`
+
+### 4. Verify the rendered site
+
+```bash
+rm -rf _freeze/
+quarto render
+```
+
+Open `_site/index.html` and check that the development banner is gone, the episode table
+is correct, and the setup instructions reflect the actual packages and data for this lesson.
+
+### 5. Push and publish
+
+Push your branch to GitHub. If GitHub Actions is configured, the learner site will publish
+to GitHub Pages automatically. Confirm the live URL is correct before sharing with participants.
+
+### Note on the `main` branch
+
+The `main` branch is the template and should never be published directly. Keep the development
+banner and `noindex` robots in place on `main` at all times. All public-facing lessons live
+on their own branches.
+```
+
 ## Repository structure
 
 ```

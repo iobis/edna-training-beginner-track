@@ -3,6 +3,7 @@ project:
   output-dir: _site
 
 website:
+  robots: noindex, nofollow
   title: "{{< var lesson.title >}}"
   favicon: assets/favicon.png
   bread-crumbs: true
