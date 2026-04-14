@@ -82,4 +82,4 @@ cat("R version:", R.version$major, ".", R.version$minor, "\n", sep = "")
 # add further checks as needed
 ```
 
-If all checks pass, you are ready to begin [Episode 1](episodes/01-episode.qmd).
+If all checks pass, you are ready to begin [Episode 1](episodes/01-introduction.qmd).

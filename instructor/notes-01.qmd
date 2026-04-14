@@ -4,7 +4,7 @@ title: "Instructor notes: Episode 1"
 
 ::: {.callout-note}
 These notes supplement the inline instructor notes embedded in
-[Episode 1](../episodes/01-episode.qmd). They are only rendered in the instructor build.
+[Episode 1](../episodes/01-introduction.qmd). They are only rendered in the instructor build.
 :::
 
 ## Summary

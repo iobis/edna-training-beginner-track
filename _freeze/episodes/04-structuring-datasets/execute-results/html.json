@@ -1,0 +1,19 @@
+{
+  "hash": "82b81f0fa159e453e82ac86c8f37798e",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Structuring Your First eDNA Dataset\"\ndescription: \"One sentence description.\"\ntime: \"~60 min\"\n---\n\n\n\n::: {.callout-note icon=false}\n## {{< fa bullseye >}} Learning objectives\n\nBy the end of this episode, you will be able to:\n\n- Objective one\n- Objective two\n- Objective three\n:::\n\n::: {.callout-important icon=false collapse=true}\n## Prerequisites for this episode\n\n- Completed [Episode 3: Data Standards for eDNA](03-data-standards.qmd)\n- Prerequisite placeholder.\n:::\n\n::: {.callout-note}\n## About the dataset\n\nThis episode uses the Marine Detection Tool (MDT) output format as a worked example.\nPlaceholder — describe the specific example dataset used here.\n:::\n\n---\n\n## Section heading\n\nContent placeholder.\n\n---\n\n::: {.callout-caution icon=false}\n## 🧪 Exercise 4.1: Exercise title\n\nExercise placeholder.\n\n::: {.callout-caution icon=false collapse=true}\n## Solution\n\nSolution placeholder.\n:::\n:::\n\n---\n\n::: {.instructor-only}\n::: {.callout-warning icon=false}\n## {{< fa chalkboard-teacher >}} Instructor notes\n\n**Estimated time:** NA minutes\n\n**Pacing notes:**\n\n- Note placeholder.\n\n**Common errors:**\n\n- Error placeholder.\n\n**Discussion prompts:**\n\n- Discussion prompt placeholder.\n:::\n:::\n\n---\n\n::: {.callout-tip icon=false}\n## {{< fa key >}} Key points\n\n- Key point one.\n- Key point two.\n- Key point three.\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {
+      "include-in-header": [
+        "<link href=\"../site_libs/pagedtable-1.1/css/pagedtable.css\" rel=\"stylesheet\" />\n<script src=\"../site_libs/pagedtable-1.1/js/pagedtable.js\"></script>\n"
+      ]
+    },
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
