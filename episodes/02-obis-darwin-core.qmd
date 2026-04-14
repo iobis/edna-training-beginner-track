@@ -1,5 +1,7 @@
 ---
-title: "Episode 2: OBIS & Darwin Core: What They Are and Why They Matter"
+title: "OBIS & Darwin Core: What They Are and Why They Matter"
+description: "One sentence description."
+time: "~60 min"
 ---
 
 ```{r}

@@ -1,5 +1,7 @@
 ---
-title: "Episode 4: Structuring Your First eDNA Dataset"
+title: "Structuring Your First eDNA Dataset"
+description: "One sentence description."
+time: "~60 min"
 ---
 
 ```{r}

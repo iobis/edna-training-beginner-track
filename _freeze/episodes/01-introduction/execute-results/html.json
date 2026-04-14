@@ -1,0 +1,19 @@
+{
+  "hash": "837b35f4d99096961c9cf6b397ccd514",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Introduction to eDNA & Biodiversity Data\"\ndescription: \"One sentence description.\"\ntime: \"~60 min\"\n---\n\n\n\n::: {.callout-note icon=false}\n## {{< fa bullseye >}} Learning objectives\n\nBy the end of this episode, you will be able to:\n\n- Objective one\n- Objective two\n- Objective three\n:::\n\n---\n\n## Section heading\n\nContent placeholder.\n\n---\n\n::: {.callout-caution icon=false}\n## 🧪 Exercise 1.1: Exercise title\n\nExercise placeholder.\n\n::: {.callout-caution icon=false collapse=true}\n## Solution\n\nSolution placeholder.\n:::\n:::\n\n---\n\n::: {.instructor-only}\n::: {.callout-warning icon=false}\n## {{< fa chalkboard-teacher >}} Instructor notes\n\n**Estimated time:** NA minutes\n\n**Pacing notes:**\n\n- Note placeholder.\n\n**Common errors:**\n\n- Error placeholder.\n\n**Discussion prompts:**\n\n- Discussion prompt placeholder.\n:::\n:::\n\n---\n\n::: {.callout-tip icon=false}\n## {{< fa key >}} Key points\n\n- Key point one.\n- Key point two.\n- Key point three.\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {
+      "include-in-header": [
+        "<link href=\"../site_libs/pagedtable-1.1/css/pagedtable.css\" rel=\"stylesheet\" />\n<script src=\"../site_libs/pagedtable-1.1/js/pagedtable.js\"></script>\n"
+      ]
+    },
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

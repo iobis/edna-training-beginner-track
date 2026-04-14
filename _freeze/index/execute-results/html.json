@@ -1,0 +1,19 @@
+{
+  "hash": "b36e324c8412cdbf8aba44fb2dcaee66",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"{{< var lesson.title >}}\"\nsubtitle: \"{{< var lesson.subtitle >}}\"\n---\n\n<!-- Replace the banner image below with a relevant one for your lesson -->\n![](figures/banner.png){fig-alt=\"A descriptive alt text for the banner image.\" width=100%}\n\n## Overview\n\n<!-- Write 2–4 sentences introducing the lesson. What is it about? Why does it matter for the eDNA / OBIS community? -->\n\nReplace this text with a brief, welcoming introduction to the lesson. Describe the problem or\nworkflow it addresses and why it is relevant to biodiversity data practitioners.\n\n## Learning outcomes\n\nBy the end of this lesson, you will be able to:\n\n- Outcome one — use an active verb (e.g. *construct*, *apply*, *interpret*).\n- Outcome two.\n- Outcome three.\n- Outcome four.\n- Outcome five.\n\n## Prerequisites\n\n::: {.callout-important icon=false}\n## Prerequisites\n\nBefore starting this lesson, you should be comfortable with:\n\n- Item one (link to resource if possible)\n- Item two\n\nIf you are new to R, we recommend working through the\n[Introduction to R episode](setup.qmd) in the setup materials first.\n:::\n\n## Episodes\n\n\n::: {.cell layout-align=\"center\"}\n\n|  #|Episode                                                                  |Description               |Time    |\n|--:|:------------------------------------------------------------------------|:-------------------------|:-------|\n|  1|[Introduction to eDNA & Biodiversity Data](episodes/01-introduction.qmd) |One sentence description. |~60 min |\n|  2|[OBIS & Darwin Core: What They Are and Why They Matter](episodes/02-obis-darwin-core.qmd)|One sentence description. |~60 min |\n|  3|[Data Standards for eDNA: DwC-A, MIxS, and the DNA Derived Data Extension](episodes/03-data-standards.qmd)|One sentence description. |~60 min |\n|  4|[Structuring Your First eDNA Dataset](episodes/04-structuring-datasets.qmd)|One sentence description. |~60 min |\n|  5|[Metadata: Field Sampling, Protocols, and Documentation](episodes/05-metadata.qmd)|One sentence description. |~60 min |\n:::\n\n\n\n## Setup\n\nBefore the first episode, please complete the [Setup instructions](setup.qmd).\nThese cover software installation, package installation, and downloading the example dataset.\n\n## How to use these materials\n\nThese materials can be used for **self-paced study** or as part of an **instructor-led workshop**.\n\n- **Self-paced:** Work through each episode in order. Exercises marked 🧪 are for your own\n  practice; there is no submission required.\n- **Instructor-led:** Your instructor will guide the pace. Exercises will be worked through\n  together or in small groups.\n\nTip boxes, challenge boxes, and key-point summaries appear throughout. Take time to read them —\nthey highlight common mistakes and the most important concepts.\n\n## Acknowledgements\n\nThis lesson was developed for the [Ocean Biodiversity Information System (OBIS)](https://obis.org)\ntraining programme.\n\nLesson design follows the pedagogical framework of\n[The Carpentries](https://carpentries.org), whose\n[Curriculum Development Handbook](https://cdh.carpentries.org) informed the structure of these\nmaterials. Content is original and independent; this is not an official Carpentries lesson.\n\nMaintained by {{< var maintainer.name >}}. Licensed {{< var license >}}.\n\n---\n\n*This lesson was last rendered on 2026-04-14.*\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {
+      "include-in-header": [
+        "<link href=\"site_libs/pagedtable-1.1/css/pagedtable.css\" rel=\"stylesheet\" />\n<script src=\"site_libs/pagedtable-1.1/js/pagedtable.js\"></script>\n"
+      ]
+    },
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

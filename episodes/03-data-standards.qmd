@@ -1,5 +1,7 @@
 ---
-title: "Episode 3: Data Standards for eDNA: DwC-A, MIxS, and the DNA Derived Data Extension"
+title: "Data Standards for eDNA: DwC-A, MIxS, and the DNA Derived Data Extension"
+description: "One sentence description."
+time: "~60 min"
 ---
 
 ```{r}

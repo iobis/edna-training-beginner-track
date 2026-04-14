@@ -39,15 +39,35 @@ If you are new to R, we recommend working through the
 
 ## Episodes
 
-| # | Episode | Description | Time |
-|---|---------|-------------|------|
-| 1 | [Episode title](episodes/01-episode.qmd) | One sentence description. | ~60 min |
-| 2 | [Episode title](episodes/02-episode.qmd) | One sentence description. | ~60 min |
-| 3 | [Episode title](episodes/03-episode.qmd) | One sentence description. | ~60 min |
-| 4 | [Episode title](episodes/04-episode.qmd) | One sentence description. | ~60 min |
-| 5 | [Episode title](episodes/05-episode.qmd) | One sentence description. | ~60 min |
+```{r}
+#| label: episode-table
+#| echo: false
+#| results: asis
 
-: {tbl-colwidths="[5,25,55,15]"}
+files <- sort(list.files("episodes", pattern = "\\.qmd$", full.names = FALSE))
+
+rows <- lapply(seq_along(files), function(i) {
+  path <- file.path("episodes", files[i])
+  lines <- readLines(path, n = 20)
+  
+  get_field <- function(field) {
+    line <- grep(paste0("^", field, ":"), lines, value = TRUE)[1]
+    if (is.na(line)) return("NA")
+    trimws(gsub(paste0("^", field, ":\\s*[\"']?|[\"']?$"), "", line))
+  }
+  
+  data.frame(
+    `#` = i,
+    Episode = sprintf("[%s](%s)", get_field("title"), path),
+    Description = get_field("description"),
+    Time = get_field("time"),
+    check.names = FALSE
+  )
+})
+
+knitr::kable(do.call(rbind, rows))
+```
+
 
 ## Setup
 

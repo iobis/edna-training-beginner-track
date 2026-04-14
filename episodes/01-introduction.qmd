@@ -1,5 +1,7 @@
 ---
-title: "Episode 1: Introduction to eDNA & Biodiversity Data"
+title: "Introduction to eDNA & Biodiversity Data"
+description: "One sentence description."
+time: "~60 min"
 ---
 
 ```{r}

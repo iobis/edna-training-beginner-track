@@ -1,5 +1,7 @@
 ---
-title: "Episode 5: Metadata: Field Sampling, Protocols, and Documentation"
+title: "Metadata: Field Sampling, Protocols, and Documentation"
+description: "One sentence description."
+time: "~60 min"
 ---
 
 ```{r}
