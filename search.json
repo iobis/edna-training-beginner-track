@@ -1,0 +1,219 @@
+[
+  {
+    "objectID": "index.html#overview",
+    "href": "index.html#overview",
+    "title": "eDNA Data Management Course",
+    "section": "Overview",
+    "text": "Overview\n\nReplace this text with a brief, welcoming introduction to the lesson. Describe the problem or workflow it addresses and why it is relevant to biodiversity data practitioners."
+  },
+  {
+    "objectID": "index.html#learning-outcomes",
+    "href": "index.html#learning-outcomes",
+    "title": "eDNA Data Management Course",
+    "section": "Learning outcomes",
+    "text": "Learning outcomes\nBy the end of this lesson, you will be able to:\n\nOutcome one — use an active verb (e.g. construct, apply, interpret).\nOutcome two.\nOutcome three.\nOutcome four.\nOutcome five."
+  },
+  {
+    "objectID": "index.html#prerequisites",
+    "href": "index.html#prerequisites",
+    "title": "eDNA Data Management Course",
+    "section": "Prerequisites",
+    "text": "Prerequisites\n\n\n\n\n\n\nImportantPrerequisites\n\n\n\nBefore starting this lesson, you should be comfortable with:\n\nItem one (link to resource if possible)\nItem two\n\nIf you are new to R, we recommend working through the Introduction to R episode in the setup materials first."
+  },
+  {
+    "objectID": "index.html#episodes",
+    "href": "index.html#episodes",
+    "title": "eDNA Data Management Course",
+    "section": "Episodes",
+    "text": "Episodes\n\n\n\n\n#\nEpisode\nDescription\nTime\n\n\n\n\n1\nIntroduction to eDNA & Biodiversity Data\nOne sentence description.\n~60 min\n\n\n2\nOBIS & Darwin Core: What They Are and Why They Matter\nOne sentence description.\n~60 min\n\n\n3\nData Standards for eDNA: DwC-A, MIxS, and the DNA Derived Data Extension\nOne sentence description.\n~60 min\n\n\n4\nStructuring Your First eDNA Dataset\nOne sentence description.\n~60 min\n\n\n5\nMetadata: Field Sampling, Protocols, and Documentation\nOne sentence description.\n~60 min"
+  },
+  {
+    "objectID": "index.html#setup",
+    "href": "index.html#setup",
+    "title": "eDNA Data Management Course",
+    "section": "Setup",
+    "text": "Setup\nBefore the first episode, please complete the Setup instructions. These cover software installation, package installation, and downloading the example dataset."
+  },
+  {
+    "objectID": "index.html#how-to-use-these-materials",
+    "href": "index.html#how-to-use-these-materials",
+    "title": "eDNA Data Management Course",
+    "section": "How to use these materials",
+    "text": "How to use these materials\nThese materials can be used for self-paced study or as part of an instructor-led workshop.\n\nSelf-paced: Work through each episode in order. Exercises marked 🧪 are for your own practice; there is no submission required.\nInstructor-led: Your instructor will guide the pace. Exercises will be worked through together or in small groups.\n\nTip boxes, challenge boxes, and key-point summaries appear throughout. Take time to read them — they highlight common mistakes and the most important concepts."
+  },
+  {
+    "objectID": "index.html#acknowledgements",
+    "href": "index.html#acknowledgements",
+    "title": "eDNA Data Management Course",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nThis lesson was developed for the Ocean Biodiversity Information System (OBIS) training programme.\nLesson design follows the pedagogical framework of The Carpentries, whose Curriculum Development Handbook informed the structure of these materials. Content is original and independent; this is not an official Carpentries lesson.\nMaintained by OBIS. Licensed CC BY 4.0.\n\nThis lesson was last rendered on 2026-04-14."
+  },
+  {
+    "objectID": "setup.html",
+    "href": "setup.html",
+    "title": "Setup",
+    "section": "",
+    "text": "Complete these steps before the first episode. If you run into problems, please open an issue on the GitHub repository or ask your instructor."
+  },
+  {
+    "objectID": "setup.html#software",
+    "href": "setup.html#software",
+    "title": "Setup",
+    "section": "Software",
+    "text": "Software\n\nR and RStudio\nThis lesson requires R ≥ 4.2 and RStudio ≥ 2023.06 (or another IDE of your choice).\n\nDownload R\nDownload RStudio Desktop"
+  },
+  {
+    "objectID": "setup.html#r-packages",
+    "href": "setup.html#r-packages",
+    "title": "Setup",
+    "section": "R packages",
+    "text": "R packages\nInstall the required packages by running the following in your R console:\n\n# Replace with the actual packages needed for this lesson\ninstall.packages(c(\n  \"tidyverse\",\n  \"here\"\n  # add packages here\n))\n\nVerify installation:\n\n# Replace with the actual packages needed for this lesson\nlibrary(tidyverse)\nlibrary(here)\n# add checks here\n\ncat(\"All packages loaded successfully.\\n\")"
+  },
+  {
+    "objectID": "setup.html#example-data",
+    "href": "setup.html#example-data",
+    "title": "Setup",
+    "section": "Example data",
+    "text": "Example data\n\nDownload the example dataset for this lesson:\n\n# Replace with the actual data download for this lesson\ndownload.file(\n  url = \"NA\",   # replace with actual URL\n  destfile = here(\"data\", \"example-data.csv\")\n)\n\n\n\n\n\n\n\nNoteAbout the example dataset\n\n\n\nReplace this with a brief description of the dataset used in this lesson: what it contains, where it comes from, and any important caveats or licensing information."
+  },
+  {
+    "objectID": "setup.html#verify-your-setup",
+    "href": "setup.html#verify-your-setup",
+    "title": "Setup",
+    "section": "Verify your setup",
+    "text": "Verify your setup\nRun the following chunk to confirm everything is working before Episode 1:\n\n# Replace with a meaningful check for this lesson\ncat(\"R version:\", R.version$major, \".\", R.version$minor, \"\\n\", sep = \"\")\n# add further checks as needed\n\nIf all checks pass, you are ready to begin Episode 1."
+  },
+  {
+    "objectID": "episodes/04-structuring-datasets.html",
+    "href": "episodes/04-structuring-datasets.html",
+    "title": "Structuring Your First eDNA Dataset",
+    "section": "",
+    "text": "Note Learning objectives\n\n\n\nBy the end of this episode, you will be able to:\n\nObjective one\nObjective two\nObjective three"
+  },
+  {
+    "objectID": "episodes/04-structuring-datasets.html#section-heading",
+    "href": "episodes/04-structuring-datasets.html#section-heading",
+    "title": "Structuring Your First eDNA Dataset",
+    "section": "Section heading",
+    "text": "Section heading\nContent placeholder.\n\n\n\n\n\n\n\nCaution🧪 Exercise 4.1: Exercise title\n\n\n\nExercise placeholder.\n\n\n\n\n\n\nCautionSolution\n\n\n\n\n\nSolution placeholder.\n\n\n\n\n\n\n\n\n\n\n\n\n\nWarning Instructor notes\n\n\n\nEstimated time: NA minutes\nPacing notes:\n\nNote placeholder.\n\nCommon errors:\n\nError placeholder.\n\nDiscussion prompts:\n\nDiscussion prompt placeholder.\n\n\n\n\n\n\n\n\n\n\n\nTip Key points\n\n\n\n\nKey point one.\nKey point two.\nKey point three."
+  },
+  {
+    "objectID": "episodes/05-metadata.html",
+    "href": "episodes/05-metadata.html",
+    "title": "Metadata: Field Sampling, Protocols, and Documentation",
+    "section": "",
+    "text": "Note Learning objectives\n\n\n\nBy the end of this episode, you will be able to:\n\nObjective one\nObjective two\nObjective three"
+  },
+  {
+    "objectID": "episodes/05-metadata.html#section-heading",
+    "href": "episodes/05-metadata.html#section-heading",
+    "title": "Metadata: Field Sampling, Protocols, and Documentation",
+    "section": "Section heading",
+    "text": "Section heading\nContent placeholder.\n\n\n\n\n\n\n\nTipTip: controlled vocabularies\n\n\n\nPlaceholder — note about using controlled vocabularies for metadata fields.\n\n\n\n\n\n\n\n\n\nCaution🧪 Exercise 5.1: Exercise title\n\n\n\nExercise placeholder.\n\n\n\n\n\n\nCautionSolution\n\n\n\n\n\nSolution placeholder.\n\n\n\n\n\n\n\n\n\n\n\n\n\nWarning Instructor notes\n\n\n\nEstimated time: NA minutes\nPacing notes:\n\nNote placeholder.\n\nCommon errors:\n\nError placeholder.\n\nDiscussion prompts:\n\nDiscussion prompt placeholder.\n\n\n\n\n\n\n\n\n\n\n\nTip Key points\n\n\n\n\nKey point one.\nKey point two.\nKey point three.\n\n\n\n\n\n\n\n\n\nNoteFurther reading\n\n\n\n\n\n\nResource placeholder."
+  },
+  {
+    "objectID": "episodes/03-data-standards.html",
+    "href": "episodes/03-data-standards.html",
+    "title": "Data Standards for eDNA: DwC-A, MIxS, and the DNA Derived Data Extension",
+    "section": "",
+    "text": "Note Learning objectives\n\n\n\nBy the end of this episode, you will be able to:\n\nObjective one\nObjective two\nObjective three"
+  },
+  {
+    "objectID": "episodes/03-data-standards.html#section-heading",
+    "href": "episodes/03-data-standards.html#section-heading",
+    "title": "Data Standards for eDNA: DwC-A, MIxS, and the DNA Derived Data Extension",
+    "section": "Section heading",
+    "text": "Section heading\nContent placeholder.\n\n\n\n\n\n\n\nCaution🧪 Exercise 3.1: Exercise title\n\n\n\nExercise placeholder.\n\n\n\n\n\n\nCautionSolution\n\n\n\n\n\nSolution placeholder.\n\n\n\n\n\n\n\n\n\n\n\n\n\nWarning Instructor notes\n\n\n\nEstimated time: NA minutes\nPacing notes:\n\nNote placeholder.\n\nCommon errors:\n\nError placeholder.\n\nDiscussion prompts:\n\nDiscussion prompt placeholder.\n\n\n\n\n\n\n\n\n\n\n\nTip Key points\n\n\n\n\nKey point one.\nKey point two.\nKey point three."
+  },
+  {
+    "objectID": "episodes/02-obis-darwin-core.html",
+    "href": "episodes/02-obis-darwin-core.html",
+    "title": "OBIS & Darwin Core: What They Are and Why They Matter",
+    "section": "",
+    "text": "Note Learning objectives\n\n\n\nBy the end of this episode, you will be able to:\n\nObjective one\nObjective two\nObjective three"
+  },
+  {
+    "objectID": "episodes/02-obis-darwin-core.html#section-heading",
+    "href": "episodes/02-obis-darwin-core.html#section-heading",
+    "title": "OBIS & Darwin Core: What They Are and Why They Matter",
+    "section": "Section heading",
+    "text": "Section heading\nContent placeholder.\n\n\n\n\n\n\n\nCaution🧪 Exercise 2.1: Exercise title\n\n\n\nExercise placeholder.\n\n\n\n\n\n\nCautionSolution\n\n\n\n\n\nSolution placeholder.\n\n\n\n\n\n\n\n\n\n\n\n\n\nWarning Instructor notes\n\n\n\nEstimated time: NA minutes\nPacing notes:\n\nNote placeholder.\n\nCommon errors:\n\nError placeholder.\n\nDiscussion prompts:\n\nDiscussion prompt placeholder.\n\n\n\n\n\n\n\n\n\n\n\nTip Key points\n\n\n\n\nKey point one.\nKey point two.\nKey point three."
+  },
+  {
+    "objectID": "episodes/01-introduction.html",
+    "href": "episodes/01-introduction.html",
+    "title": "Introduction to eDNA & Biodiversity Data",
+    "section": "",
+    "text": "Note Learning objectives\n\n\n\nBy the end of this episode, you will be able to:\n\nObjective one\nObjective two\nObjective three"
+  },
+  {
+    "objectID": "episodes/01-introduction.html#section-heading",
+    "href": "episodes/01-introduction.html#section-heading",
+    "title": "Introduction to eDNA & Biodiversity Data",
+    "section": "Section heading",
+    "text": "Section heading\nContent placeholder.\n\n\n\n\n\n\n\nCaution🧪 Exercise 1.1: Exercise title\n\n\n\nExercise placeholder.\n\n\n\n\n\n\nCautionSolution\n\n\n\n\n\nSolution placeholder.\n\n\n\n\n\n\n\n\n\n\n\n\n\nWarning Instructor notes\n\n\n\nEstimated time: NA minutes\nPacing notes:\n\nNote placeholder.\n\nCommon errors:\n\nError placeholder.\n\nDiscussion prompts:\n\nDiscussion prompt placeholder.\n\n\n\n\n\n\n\n\n\n\n\nTip Key points\n\n\n\n\nKey point one.\nKey point two.\nKey point three."
+  },
+  {
+    "objectID": "instructor/notes-01.html",
+    "href": "instructor/notes-01.html",
+    "title": "Instructor notes: Episode 1",
+    "section": "",
+    "text": "Note\n\n\n\nThese notes supplement the inline instructor notes embedded in Episode 1. They are only rendered in the instructor build."
+  },
+  {
+    "objectID": "instructor/notes-01.html#summary",
+    "href": "instructor/notes-01.html#summary",
+    "title": "Instructor notes: Episode 1",
+    "section": "Summary",
+    "text": "Summary"
+  },
+  {
+    "objectID": "instructor/notes-01.html#estimated-time",
+    "href": "instructor/notes-01.html#estimated-time",
+    "title": "Instructor notes: Episode 1",
+    "section": "Estimated time",
+    "text": "Estimated time\n\n\n\nComponent\nTime\n\n\n\n\nIntroduction\nXX min\n\n\nSection 1\nXX min\n\n\nExercise 1.1\nXX min\n\n\nSection 2\nXX min\n\n\nWrap-up / key points\nXX min\n\n\nTotal\nXX min"
+  },
+  {
+    "objectID": "instructor/notes-01.html#learning-objectives-instructor-read",
+    "href": "instructor/notes-01.html#learning-objectives-instructor-read",
+    "title": "Instructor notes: Episode 1",
+    "section": "Learning objectives — instructor read",
+    "text": "Learning objectives — instructor read\n\n\nObjective 1: …\nObjective 2: …\nObjective 3: …"
+  },
+  {
+    "objectID": "instructor/notes-01.html#before-you-teach-this-episode",
+    "href": "instructor/notes-01.html#before-you-teach-this-episode",
+    "title": "Instructor notes: Episode 1",
+    "section": "Before you teach this episode",
+    "text": "Before you teach this episode\n\n\nConfirm dataset is downloaded and accessible.\nNote any version-sensitive code (which package version was used?).\nSuggest opening the exercise solution in a separate script so you can refer to it quickly during the session."
+  },
+  {
+    "objectID": "instructor/notes-01.html#common-learner-errors",
+    "href": "instructor/notes-01.html#common-learner-errors",
+    "title": "Instructor notes: Episode 1",
+    "section": "Common learner errors",
+    "text": "Common learner errors\n\n\n\nError\nLikely cause\nSuggested response\n\n\n\n\nError message here\nCause\nWhat to say/do"
+  },
+  {
+    "objectID": "instructor/notes-01.html#discussion-and-reflection-prompts",
+    "href": "instructor/notes-01.html#discussion-and-reflection-prompts",
+    "title": "Instructor notes: Episode 1",
+    "section": "Discussion and reflection prompts",
+    "text": "Discussion and reflection prompts\n\n\nAfter the introduction: “Before we dive in — has anyone encountered X before? What did you use?”\nAfter Exercise 1.1: “What surprised you about the output? Was it what you expected?”"
+  },
+  {
+    "objectID": "instructor/notes-01.html#modifications-and-adaptations",
+    "href": "instructor/notes-01.html#modifications-and-adaptations",
+    "title": "Instructor notes: Episode 1",
+    "section": "Modifications and adaptations",
+    "text": "Modifications and adaptations\n\nIf time is short: Skip Exercise 1.1 and walk through the solution instead.\nIf audience is more advanced: Replace Exercise 1.1 with the following extension task:\n# Extension exercise here"
+  },
+  {
+    "objectID": "instructor/notes-01.html#notes-from-past-deliveries",
+    "href": "instructor/notes-01.html#notes-from-past-deliveries",
+    "title": "Instructor notes: Episode 1",
+    "section": "Notes from past deliveries",
+    "text": "Notes from past deliveries\n\n\nNA"
+  }
+]

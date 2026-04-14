@@ -1,0 +1,71 @@
+/* obis-callouts.css
+   Custom styling for the four pedagogical callout types.
+   These complement the Quarto built-in callout types.
+   ---------------------------------------------------------------- */
+
+/* ---- Learning objectives (callout-note, no icon) ------------- */
+.callout-note:not(.no-icon) {
+  border-left-color: #2f6fef;
+}
+
+/* ---- Key points (callout-tip, no icon) ----------------------- */
+.callout-tip {
+  border-left-color: #B1B695;
+}
+.callout-tip > .callout-header {
+  background-color: rgba(177, 182, 149, 0.15);
+}
+
+/* ---- Exercise / challenge (callout-caution) ------------------ */
+.callout-caution {
+  border-left-color: #648DB3;
+}
+.callout-caution > .callout-header {
+  background-color: rgba(100, 141, 179, 0.12);
+}
+
+/* ---- Instructor notes (callout-warning) ---------------------- */
+.callout-warning {
+  border-left-color: #DA6C6C;
+}
+.callout-warning > .callout-header {
+  background-color: rgba(218, 108, 108, 0.12);
+}
+
+/* ---- Prerequisites (callout-important) ----------------------- */
+.callout-important {
+  border-left-color: #BA487F;
+}
+.callout-important > .callout-header {
+  background-color: rgba(186, 72, 127, 0.1);
+}
+
+/* ---- General callout header typography ----------------------- */
+.callout-header {
+  font-weight: 500;
+}
+
+/* ---- Nested solution callouts (inside exercise callouts) ----- */
+.callout-caution .callout-caution {
+  margin-top: 1rem;
+  border-left-color: #2f6fef;
+}
+.callout-caution .callout-caution > .callout-header {
+  background-color: rgba(47, 111, 239, 0.08);
+}
+
+
+/* Development banner */
+body::before {
+  content: "⚠ This lesson is under development and is not ready for use.";
+  display: block;
+  background-color: #DA6C6C;
+  color: #ffffff;
+  text-align: center;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+}
