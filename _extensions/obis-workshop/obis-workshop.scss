@@ -1,7 +1,4 @@
-/*-- obis-workshop.scss ------------------------------------------
-   OBIS brand variables layered on top of Bootstrap/Flatly.
-   Uses the colour palette from obis.org.
-   ---------------------------------------------------------------- */
+/*-- scss:defaults --*/
 
 /*-- OBIS brand colours (from obis.org CSS) ---------------------- */
 $obis-blue:              #2f6fef;
@@ -31,7 +28,7 @@ $toc-color:        $obis-blue;
 /*-- Headings ---------------------------------------------------- */
 $headings-font-weight: 500;
 
-/*== Quarto/Bootstrap overrides applied after import ============ */
+/*-- scss:rules --*/
 
 /*-- Navbar logo sizing ----------------------------------------- */
 .navbar-brand img {
