@@ -44,15 +44,78 @@ Per-episode instructor notes live in `instructor/notes-NN.qmd`. These are only
 rendered in the instructor build. Use them for pacing guidance, common errors,
 discussion prompts, and notes from past deliveries.
 
-### 6. Build and preview
+## Local development
+
+### Prerequisites
+
+You will need the following installed:
+
+- [R](https://cran.r-project.org/) ≥ 4.2
+- [RStudio](https://posit.co/download/rstudio-desktop/) or another IDE
+- [Quarto](https://quarto.org/docs/get-started/) ≥ 1.4
+- [Font Awesome extension](https://github.com/quarto-ext/fontawesome) (install once per repo, see below)
+
+### First-time setup
+
+After cloning the repo, install the Font Awesome extension and any required R packages:
 
 ```bash
-# Learner site (default)
-quarto preview
+quarto add quarto-ext/fontawesome
+```
 
-# Instructor site
+```r
+install.packages(c("tidyverse", "here", "knitr"))
+# add any additional packages required by the lesson
+```
+
+### Preview the learner site
+
+```bash
+quarto preview
+```
+
+This starts a local server at `http://localhost:XXXX` and watches for changes. Code chunks
+are executed and their output is cached in `_freeze/` — on subsequent previews, only changed
+files are re-executed.
+
+### Force a full re-render
+
+If you change YAML front matter, `_variables.yml`, or suspect the cache is stale:
+
+```bash
+rm -rf _freeze/
+quarto preview
+```
+
+### Preview the instructor site
+
+```bash
 quarto preview --profile instructor
 ```
+
+The instructor site reveals all `.instructor-only` blocks and adds a red "INSTRUCTOR VIEW"
+banner to the navbar. Do not share the instructor site URL with learners.
+
+### Render to static files (no live server)
+
+```bash
+# Learner site
+quarto render
+
+# Instructor site  
+quarto render --profile instructor
+```
+
+Output goes to `_site/` (learner) by default. You can open `_site/index.html` locally to
+inspect the final output before pushing.
+
+### Adding or renaming episodes
+
+1. Create the new file in `episodes/` following the naming convention `NN-short-name.qmd`.
+2. Copy the episode template scaffold from an existing episode.
+3. Add the `title`, `description`, and `time` fields to the YAML front matter.
+4. Add the episode to the navbar menu in `_quarto.yml`.
+5. The episode table on `index.qmd` updates automatically.
 
 ### 7. Publish
 
