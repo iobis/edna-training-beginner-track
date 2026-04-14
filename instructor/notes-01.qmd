@@ -9,7 +9,7 @@ These notes supplement the inline instructor notes embedded in
 
 ## Summary
 
-<!-- One short paragraph on what this episode covers and where it fits in the track arc. -->
+<!-- One short paragraph on what this episode covers and where it fits in the lesson arc. -->
 
 ## Estimated time
 

@@ -1,12 +1,12 @@
 # _variables.yml
 # -------------------------------------------------------
-# Track metadata — edit this file to customise the site.
+# Lesson metadata — edit this file to customise the site.
 # All values are injected via {{< var ... >}} shortcodes.
 # -------------------------------------------------------
 
-track:
-  title: "Track Title Here"
-  subtitle: "A short sentence describing what this track covers."
+lesson:
+  title: "Lesson Title Here"
+  subtitle: "A short sentence describing what this lesson covers."
   audience: "Beginner"          # Beginner | Intermediate | Advanced
   estimated_hours: "10"         # total estimated contact/self-study hours
   repo_url: "https://github.com/iobis/REPO-NAME"

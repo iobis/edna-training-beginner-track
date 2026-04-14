@@ -3,13 +3,13 @@ project:
   output-dir: _site
 
 website:
-  title: "{{< var track.title >}}"
-  favicon: https://raw.githubusercontent.com/iobis/obis-website/master/assets/favicon.png
+  title: "{{< var lesson.title >}}"
+  favicon: assets/favicon.png
   bread-crumbs: true
-  repo-url: "{{< var track.repo_url >}}"
+  repo-url: "{{< var lesson.repo_url >}}"
   repo-actions: [edit, issue]
   navbar:
-    logo: https://obis.org/images/logo_simple.png
+    logo: assets/logo_simple.png
     logo-alt: "OBIS logo"
     title: false
     left:
@@ -31,7 +31,7 @@ website:
             href: episodes/05-episode.qmd
     right:
       - icon: github
-        href: "{{< var track.repo_url >}}"
+        href: "{{< var lesson.repo_url >}}"
         aria-label: GitHub
   page-footer:
     border: true
@@ -42,8 +42,8 @@ website:
       - text: ""
         href: ""
     right: |
-      [![IOC-UNESCO logo](https://obis.org/images/logo_ioc_w.svg){height=32px}](https://ioc.unesco.org)
-      [![IODE logo](https://obis.org/images/logo_iode.png){height=32px}](https://www.iode.org)
+      [![IOC-UNESCO logo](assets/logo_ioc_w.svg){height=32px}](https://ioc.unesco.org)
+      [![IODE logo](assets/logo_iode.png){height=32px}](https://www.iode.org)
 
 format:
   html:

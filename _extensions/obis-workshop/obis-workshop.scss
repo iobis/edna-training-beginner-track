@@ -58,6 +58,17 @@ $headings-font-weight: 500;
   width: auto;
 }
 
+/*-- Footer ----------------------------------------------------- */
+.nav-footer {
+  background-color: var(--bs-gray-dark);
+  color: #ffffff;
+}
+
+.nav-footer a {
+  color: #ffffff;
+  opacity: 0.8;
+}
+
 /*-- Instructor-only blocks (hidden in learner build) ----------- */
 .instructor-only {
   display: none;

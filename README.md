@@ -1,6 +1,6 @@
-# Track Title Here
+# Lesson Title Here
 
-<!-- Replace the above and the description below with your track's details. -->
+<!-- Replace the above and the description below with your lesson's details. -->
 
 Training materials for [OBIS](https://obis.org) and the eDNA community.
 
@@ -13,7 +13,7 @@ Fork this repository to your own GitHub account, or use it as a template
 
 ### 2. Edit `_variables.yml`
 
-Open `_variables.yml` and fill in the track title, your name, the repo URL, and
+Open `_variables.yml` and fill in the lesson title, your name, the repo URL, and
 any other metadata. These values are injected throughout the site — you only need
 to update them in one place.
 
@@ -36,7 +36,7 @@ pedagogical contract with learners.
 ### 4. Add packages and data to `setup.qmd`
 
 Edit `setup.qmd` with the actual R packages and data download instructions for
-your track. Test that a clean R environment can follow these steps from scratch.
+your lesson. Test that a clean R environment can follow these steps from scratch.
 
 ### 5. Add extended instructor notes
 
@@ -65,11 +65,11 @@ A starter workflow is available at `.github/workflows/publish.yml`
 ## Repository structure
 
 ```
-track-name/
+lesson-name/
 ├── _quarto.yml                    # Learner site config
 ├── _quarto-instructor.yml         # Instructor profile overrides
-├── _variables.yml                 # Track metadata — edit this
-├── index.qmd                      # Track landing page
+├── _variables.yml                 # Lesson metadata — edit this
+├── index.qmd                      # Lesson landing page
 ├── setup.qmd                      # R setup instructions
 ├── episodes/
 │   ├── 01-episode.qmd             # Episode template (copy for each episode)
@@ -98,7 +98,7 @@ This lesson design follows the principles of
 - **Key points** — every episode ends with a summary that mirrors the objectives.
 
 These materials are not official Carpentries lessons, but the Carpentries framework
-is acknowledged in the site footer and on the track landing page.
+is acknowledged in the site footer and on the lesson landing page.
 
 ## Licence
 
@@ -108,5 +108,5 @@ You are free to adapt and reuse with attribution.
 ## Contributing
 
 Bug reports and improvements are welcome. Please open an issue or pull request on
-the GitHub repository. If you teach an adapted version of this track, consider
+the GitHub repository. If you teach an adapted version of this lesson, consider
 sharing what worked and what didn't by opening an issue labelled `delivery-notes`.

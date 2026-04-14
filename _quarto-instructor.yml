@@ -2,13 +2,13 @@ profile:
   group: instructor
 
 website:
-  title: "{{< var track.title >}} — Instructor View"
+  title: "{{< var lesson.title >}} — Instructor View"
   navbar:
     right:
       - text: "Instructor Notes"
         href: instructor/index.qmd
       - icon: github
-        href: "{{< var track.repo_url >}}"
+        href: "{{< var lesson.repo_url >}}"
         aria-label: GitHub
   page-footer:
     left: |

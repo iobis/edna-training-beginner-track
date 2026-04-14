@@ -33,7 +33,7 @@ By the end of this episode, you will be able to:
 
 <!-- ============================================================
      PREREQUISITES  — include only if this episode requires
-     something beyond the track-level prerequisites (setup.qmd).
+     something beyond the lesson-level prerequisites (setup.qmd).
      Remove this block if not needed.
      ============================================================ -->
 

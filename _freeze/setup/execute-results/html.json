@@ -1,0 +1,19 @@
+{
+  "hash": "f4056e39e7e916fd4198b863ceebb1e7",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Setup\"\n---\n\nComplete these steps **before** the first episode. If you run into problems, please open an\nissue on the [GitHub repository]({{< var track.repo_url >}}/issues) or ask your instructor.\n\n## Software\n\n### R and RStudio\n\nThis track requires **R ≥ 4.2** and **RStudio ≥ 2023.06** (or another IDE of your choice).\n\n- [Download R](https://cran.r-project.org/)\n- [Download RStudio Desktop](https://posit.co/download/rstudio-desktop/)\n\n## R packages\n\nInstall the required packages by running the following in your R console:\n\n\n::: {.cell layout-align=\"center\"}\n\n```{.r .cell-code}\n# Replace with the actual packages needed for this track\ninstall.packages(c(\n  \"tidyverse\",\n  \"here\"\n  # add packages here\n))\n```\n:::\n\n\nVerify installation:\n\n\n::: {.cell layout-align=\"center\"}\n\n```{.r .cell-code}\n# Replace with the actual packages needed for this track\nlibrary(tidyverse)\nlibrary(here)\n# add checks here\n\ncat(\"All packages loaded successfully.\\n\")\n```\n:::\n\n\n## Example data\n\n<!-- Describe what the example dataset is and where it comes from. -->\n\nDownload the example dataset for this track:\n\n\n::: {.cell layout-align=\"center\"}\n\n```{.r .cell-code}\n# Replace with the actual data download for this track\ndownload.file(\n  url = \"NA\",   # replace with actual URL\n  destfile = here(\"data\", \"example-data.csv\")\n)\n```\n:::\n\n\n::: {.callout-note}\n## About the example dataset\n\nReplace this with a brief description of the dataset used in this track:\nwhat it contains, where it comes from, and any important caveats or\nlicensing information.\n:::\n\n## Verify your setup\n\nRun the following chunk to confirm everything is working before Episode 1:\n\n\n::: {.cell layout-align=\"center\"}\n\n```{.r .cell-code}\n# Replace with a meaningful check for this track\ncat(\"R version:\", R.version$major, \".\", R.version$minor, \"\\n\", sep = \"\")\n# add further checks as needed\n```\n:::\n\n\nIf all checks pass, you are ready to begin [Episode 1](episodes/01-episode.qmd).\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {
+      "include-in-header": [
+        "<link href=\"site_libs/pagedtable-1.1/css/pagedtable.css\" rel=\"stylesheet\" />\n<script src=\"site_libs/pagedtable-1.1/js/pagedtable.js\"></script>\n"
+      ]
+    },
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

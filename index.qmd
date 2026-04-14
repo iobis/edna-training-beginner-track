@@ -1,21 +1,21 @@
 ---
-title: "{{< var track.title >}}"
-subtitle: "{{< var track.subtitle >}}"
+title: "{{< var lesson.title >}}"
+subtitle: "{{< var lesson.subtitle >}}"
 ---
 
-<!-- Replace the banner image below with a relevant one for your track -->
+<!-- Replace the banner image below with a relevant one for your lesson -->
 ![](figures/banner.png){fig-alt="A descriptive alt text for the banner image." width=100%}
 
 ## Overview
 
-<!-- Write 2–4 sentences introducing the track. What is it about? Why does it matter for the eDNA / OBIS community? -->
+<!-- Write 2–4 sentences introducing the lesson. What is it about? Why does it matter for the eDNA / OBIS community? -->
 
-Replace this text with a brief, welcoming introduction to the track. Describe the problem or
+Replace this text with a brief, welcoming introduction to the lesson. Describe the problem or
 workflow it addresses and why it is relevant to biodiversity data practitioners.
 
 ## Learning outcomes
 
-By the end of this track, you will be able to:
+By the end of this lesson, you will be able to:
 
 - Outcome one — use an active verb (e.g. *construct*, *apply*, *interpret*).
 - Outcome two.
@@ -28,7 +28,7 @@ By the end of this track, you will be able to:
 ::: {.callout-important icon=false}
 ## Prerequisites
 
-Before starting this track, you should be comfortable with:
+Before starting this lesson, you should be comfortable with:
 
 - Item one (link to resource if possible)
 - Item two
@@ -80,4 +80,4 @@ Maintained by {{< var maintainer.name >}}. Licensed {{< var license >}}.
 
 ---
 
-*This track was last rendered on `r Sys.Date()`.*
+*This lesson was last rendered on `r Sys.Date()`.*
