@@ -1,0 +1,38 @@
+# Quarto build output
+/_site/
+/_site-instructor/
+/.quarto/
+
+# Quarto freeze cache (commit this if you want reproducible frozen output,
+# ignore it if you prefer a clean repo and always re-execute on render)
+# /episodes/_freeze/
+# /_freeze/
+
+# R
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+
+# R package library (if using renv)
+/renv/library/
+/renv/staging/
+renv/local/
+renv/python/
+
+# knitr cache
+*_cache/
+/cache/
+
+# Rendered figures from knitr (safe to regenerate)
+*_files/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+*.swp
+*.swo
