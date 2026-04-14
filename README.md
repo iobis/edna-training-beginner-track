@@ -135,26 +135,19 @@ steps on your branch before publishing.
 
 ### 1. Remove the development banner
 
-In `_extensions/obis-workshop/obis-callouts.css`, delete the entire `/* Development banner */`
-block:
-
-```css
-/* Development banner */
-body::before {
-  content: "⚠ This lesson is under development and is not ready for use.";
-  ...
-}
-```
-
-### 2. Enable search indexing
-
-In `_quarto.yml`, change the `robots` line:
+In `_quarto.yml`, delete
 
 ```yaml
-robots: index, follow
+announcement:
+    icon: exclamation-triangle
+    dismissable: false
+    content: "This lesson is under development and is not ready for use."
+    type: danger
+    position: below-navbar
 ```
+### 2. Enable search indexing
 
-And in `_metadata.yml`, change the meta tag:
+In `_metadata.yml`, change the meta tag:
 
 ```html
 <meta name="robots" content="index, follow">
