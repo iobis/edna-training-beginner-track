@@ -19,16 +19,16 @@ website:
         href: setup.qmd
       - text: "Episodes"
         menu:
-          - text: "Episode 1"
-            href: episodes/01-episode.qmd
-          - text: "Episode 2"
-            href: episodes/02-episode.qmd
-          - text: "Episode 3"
-            href: episodes/03-episode.qmd
-          - text: "Episode 4"
-            href: episodes/04-episode.qmd
-          - text: "Episode 5"
-            href: episodes/05-episode.qmd
+          - text: "Episode 1: Introduction to eDNA"
+            href: episodes/01-introduction.qmd
+          - text: "Episode 2: OBIS & Darwin Core"
+            href: episodes/02-obis-darwin-core.qmd
+          - text: "Episode 3: Data Standards"
+            href: episodes/03-data-standards.qmd
+          - text: "Episode 4: Structuring Datasets"
+            href: episodes/04-structuring-datasets.qmd
+          - text: "Episode 5: Metadata"
+            href: episodes/05-metadata.qmd
     right:
       - icon: github
         href: "{{< var lesson.repo_url >}}"

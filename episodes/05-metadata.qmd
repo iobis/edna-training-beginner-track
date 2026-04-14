@@ -1,0 +1,93 @@
+---
+title: "Episode 5: Metadata: Field Sampling, Protocols, and Documentation"
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+# Add packages as needed
+```
+
+::: {.callout-note icon=false}
+## {{< fa bullseye >}} Learning objectives
+
+By the end of this episode, you will be able to:
+
+- Objective one
+- Objective two
+- Objective three
+:::
+
+::: {.callout-important icon=false collapse=true}
+## Prerequisites for this episode
+
+- Completed [Episode 4: Structuring Your First eDNA Dataset](04-structuring-datasets.qmd)
+- Prerequisite placeholder.
+:::
+
+---
+
+## Section heading
+
+Content placeholder.
+
+---
+
+::: {.callout-tip}
+## Tip: controlled vocabularies
+
+Placeholder — note about using controlled vocabularies for metadata fields.
+:::
+
+---
+
+::: {.callout-caution icon=false}
+## 🧪 Exercise 5.1: Exercise title
+
+Exercise placeholder.
+
+::: {.callout-caution icon=false collapse=true}
+## Solution
+
+Solution placeholder.
+:::
+:::
+
+---
+
+::: {.instructor-only}
+::: {.callout-warning icon=false}
+## {{< fa chalkboard-teacher >}} Instructor notes
+
+**Estimated time:** NA minutes
+
+**Pacing notes:**
+
+- Note placeholder.
+
+**Common errors:**
+
+- Error placeholder.
+
+**Discussion prompts:**
+
+- Discussion prompt placeholder.
+:::
+:::
+
+---
+
+::: {.callout-tip icon=false}
+## {{< fa key >}} Key points
+
+- Key point one.
+- Key point two.
+- Key point three.
+:::
+
+::: {.callout-note icon=false collapse=true}
+## Further reading
+
+- Resource placeholder.
+:::

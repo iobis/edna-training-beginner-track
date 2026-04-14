@@ -1,0 +1,86 @@
+---
+title: "Episode 4: Structuring Your First eDNA Dataset"
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+# Add packages as needed
+```
+
+::: {.callout-note icon=false}
+## {{< fa bullseye >}} Learning objectives
+
+By the end of this episode, you will be able to:
+
+- Objective one
+- Objective two
+- Objective three
+:::
+
+::: {.callout-important icon=false collapse=true}
+## Prerequisites for this episode
+
+- Completed [Episode 3: Data Standards for eDNA](03-data-standards.qmd)
+- Prerequisite placeholder.
+:::
+
+::: {.callout-note}
+## About the dataset
+
+This episode uses the Marine Detection Tool (MDT) output format as a worked example.
+Placeholder — describe the specific example dataset used here.
+:::
+
+---
+
+## Section heading
+
+Content placeholder.
+
+---
+
+::: {.callout-caution icon=false}
+## 🧪 Exercise 4.1: Exercise title
+
+Exercise placeholder.
+
+::: {.callout-caution icon=false collapse=true}
+## Solution
+
+Solution placeholder.
+:::
+:::
+
+---
+
+::: {.instructor-only}
+::: {.callout-warning icon=false}
+## {{< fa chalkboard-teacher >}} Instructor notes
+
+**Estimated time:** NA minutes
+
+**Pacing notes:**
+
+- Note placeholder.
+
+**Common errors:**
+
+- Error placeholder.
+
+**Discussion prompts:**
+
+- Discussion prompt placeholder.
+:::
+:::
+
+---
+
+::: {.callout-tip icon=false}
+## {{< fa key >}} Key points
+
+- Key point one.
+- Key point two.
+- Key point three.
+:::
