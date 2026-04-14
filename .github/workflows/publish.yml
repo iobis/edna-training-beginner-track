@@ -4,36 +4,27 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
-  build-deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/quarto-dev/quarto:latest
-    permissions:
-      contents: write
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Install R
-        run: |
-          apt-get update
-          apt-get install -y r-base
-
-      - name: Install R packages
-        run: Rscript -e "install.packages(c('knitr', 'rmarkdown'), repos='https://cloud.r-project.org')"
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
 
       - name: Install Quarto extensions
         run: quarto add quarto-ext/fontawesome --no-prompt
 
-      - name: Render learner site
+      - name: Render site
         run: quarto render --no-execute
 
-      - name: Publish to GitHub Pages
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_site
-          publish_branch: gh-pages
