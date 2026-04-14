@@ -67,5 +67,5 @@ body::before {
   font-weight: 500;
   position: sticky;
   top: 0;
-  z-index: 9999;
+  z-index: 1019;
 }
