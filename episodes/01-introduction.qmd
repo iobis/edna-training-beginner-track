@@ -23,14 +23,6 @@ By the end of this episode, you will be able to:
 
 ---
 
-## This is the dna_data.md from the OBIS Manual
-
-The quarto code is `{{< include /_includes/obis-manual/dna_data.md >}}`
-
-::: {.column-page}
-{{< include /_includes/obis-manual/dna_data.md >}}
-:::
-
 ## Section heading
 
 Content placeholder.

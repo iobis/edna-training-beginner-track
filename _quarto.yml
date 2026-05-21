@@ -1,8 +1,6 @@
 project:
   type: website
   output-dir: _site
-  pre-render:
-    - scripts/fetch-includes-obis-manual.sh
 
 website:
   title: "{{< var lesson.title >}}"
