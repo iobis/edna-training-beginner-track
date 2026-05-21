@@ -41,7 +41,9 @@ Placeholder — describe the specific example dataset used here.
 
 The quarto code is `{{< include /_includes/obis-manual/checklist.md >}}`
 
+::: {.column-body-outset}
 {{< include /_includes/obis-manual/checklist.md >}}
+:::
 
 
 ## Section heading

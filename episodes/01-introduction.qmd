@@ -27,7 +27,9 @@ By the end of this episode, you will be able to:
 
 The quarto code is `{{< include /_includes/obis-manual/dna_data.md >}}`
 
+::: {.column-page}
 {{< include /_includes/obis-manual/dna_data.md >}}
+:::
 
 ## Section heading
 
