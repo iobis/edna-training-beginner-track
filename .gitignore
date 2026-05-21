@@ -2,6 +2,7 @@
 /_site/
 /_site-instructor/
 /.quarto/
+_includes/
 
 # Quarto freeze cache (commit this if you want reproducible frozen output,
 # ignore it if you prefer a clean repo and always re-execute on render)
