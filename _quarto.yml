@@ -61,6 +61,7 @@ format:
       light: [flatly, _extensions/obis-workshop/obis-workshop.scss]
       dark:  [darkly, _extensions/obis-workshop/obis-workshop.scss]
     css: _extensions/obis-workshop/obis-callouts.css
+    include-in-header: _extensions/obis-workshop/lang-toggle.html
     toc: true
     toc-depth: 3
     toc-title: "On this page"
