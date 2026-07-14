@@ -4,7 +4,7 @@
     "href": "setup.html",
     "title": "Setup",
     "section": "",
-    "text": "Complete these steps before the first episode. If you run into problems, please open an issue on the GitHub repository or ask your instructor."
+    "text": "Complete these steps before the fourth episode. If you run into problems, please open an issue on the GitHub repository or ask your instructor."
   },
   {
     "objectID": "setup.html#software",
@@ -18,70 +18,70 @@
     "href": "setup.html#r-packages",
     "title": "Setup",
     "section": "R packages",
-    "text": "R packages\nInstall the required packages by running the following in your R console:\n\n# Replace with the actual packages needed for this lesson\ninstall.packages(c(\n  \"tidyverse\",\n  \"here\"\n  # add packages here\n))\n\nVerify installation:\n\n# Replace with the actual packages needed for this lesson\nlibrary(tidyverse)\nlibrary(here)\n# add checks here\n\ncat(\"All packages loaded successfully.\\n\")"
+    "text": "R packages\nInstall the required packages by running the following in your R console:\n\n# Use this code to install the custom R package r-dwc-writer\nremotes::install_github(\"pieterprovoost/r-dwca-writer\")\n\ninstall.packages(c(\n  \"tidyverse\",\n  \"here\",\n  \"dplyr\",\n  \"readxl\",\n  \"rmarkdown\",\n  \"lubridate\",\n  \"tidyr\",\n  \"purrr\",\n  \"leaflet\",\n  \"Biostrings\",\n  \"dwcawriter\"\n))\n\nVerify installation:\n\n# Replace with the actual packages needed for this lesson\nlibrary(tidyverse)\nlibrary(here)\nlibrary(dplyr)\nlibrary(readxl)\nlibrary(rmarkdown)\nlibrary(lubridate)\nlibrary(tidyr)\nlibrary(purrr)\nlibrary(leaflet)\nlibrary(Biostrings)\nlibrary(dwcawriter)\n\ncat(\"All packages loaded successfully.\\n\")"
   },
   {
     "objectID": "setup.html#example-data",
     "href": "setup.html#example-data",
     "title": "Setup",
     "section": "Example data",
-    "text": "Example data\n\nDownload the example dataset for this lesson:\n\n# Replace with the actual data download for this lesson\ndownload.file(\n  url = \"NA\",   # replace with actual URL\n  destfile = here(\"data\", \"example-data.csv\")\n)\n\n\n\n\n\n\n\nNoteAbout the example dataset\n\n\n\nReplace this with a brief description of the dataset used in this lesson: what it contains, where it comes from, and any important caveats or licensing information."
+    "text": "Example data\nThe dataset we will work with is an eDNA metabarcoding dataset, obtained from eDNA Expeditions. This example is adapted from training resources developed for OBON in 2024, created by Pieter Provoost and can be found in https://github.com/iobis/obon-2024-dna-training.\nYou can either download the dataset files directly from https://github.com/iobis/edna-training-beginner-track/tree/main/data, or use the following code to download them:\n\n# Replace with the actual data download for this lesson\ndownload.file(\n  url = \"https://github.com/iobis/edna-training-beginner-track/tree/main/data\",   # replace with actual URL\n  destfile = here(\"data\", \"edna-data.csv\")\n)\n\n\n\n\n\n\n\nNoteAbout the example dataset\n\n\n\nThere are six files in the \\data folder, four output files from the DNA pipeline (samples.csv, seqtab.csv, sequences.fasta, and taxonomy.txt), a data dictionary file we have created to provide definitions of each column in the samples file, and a methods.txt file which provides free text you may commonly encounter that contains important metadata and information we will record in the DNA Derived Data extension table."
   },
   {
     "objectID": "setup.html#verify-your-setup",
     "href": "setup.html#verify-your-setup",
     "title": "Setup",
     "section": "Verify your setup",
-    "text": "Verify your setup\nRun the following chunk to confirm everything is working before Episode 1:\n\n# Replace with a meaningful check for this lesson\ncat(\"R version:\", R.version$major, \".\", R.version$minor, \"\\n\", sep = \"\")\n# add further checks as needed\n\nIf all checks pass, you are ready to begin Episode 1."
+    "text": "Verify your setup\nRun the following chunk to confirm everything is working before Episode 1:\n\n# Replace with a meaningful check for this lesson\ncat(\"R version:\", R.version$major, \".\", R.version$minor, \"\\n\", sep = \"\")\n# add further checks as needed\n\nIf all checks pass, you are ready to begin Episode 4."
   },
   {
     "objectID": "index.html#overview",
     "href": "index.html#overview",
     "title": "eDNA Data Management Course",
     "section": "Overview",
-    "text": "Overview\n\nReplace this text with a brief, welcoming introduction to the lesson. Describe the problem or workflow it addresses and why it is relevant to biodiversity data practitioners."
+    "text": "Overview\n\nThis online course is aimed at beginners who are new to publishing eDNA data to OBIS and GBIF. It is meant to provide an introduction to DNA data and its management. We cover topics including background information on what eDNA is, the key aspects of collecting, extracting, and sequencing DNA data, and an example of how to format DNA data table outputs into Darwin Core for publishing to OBIS.\nThis course is not meant to provide advanced knowledge and instead focuses on providing a solid foundation for DNA data.\n\n\n\n\n\n\nTipSupporting Slides\n\n\n\nSupporting slides used by instructors can be found: https://github.com/iobis/obis_edna_slides."
   },
   {
     "objectID": "index.html#learning-outcomes",
     "href": "index.html#learning-outcomes",
     "title": "eDNA Data Management Course",
     "section": "Learning outcomes",
-    "text": "Learning outcomes\nBy the end of this lesson, you will be able to:\n\nOutcome one — use an active verb (e.g. construct, apply, interpret).\nOutcome two.\nOutcome three.\nOutcome four.\nOutcome five."
+    "text": "Learning outcomes\nBy the end of these lessons, you should be able to:\n\nDefine environmental DNA (eDNA) and explain how it differs from traditional biodiversity surveys\nUnderstand the typical output from DNA pipelines - ASV tables, FASTA files for sequences, taxonomy files, and sample metadata - and how to load them into R.\nExplain the “wide to long” transformation from raw sequencing outputs to Darwin Core occurrence records.\nCombine DNA output tables into Darwin Core tables, mapping raw fields to Darwin Core terms.\nDescribe how taxon matching against WoRMS works, and what to do when a sequence has no match."
   },
   {
     "objectID": "index.html#prerequisites",
     "href": "index.html#prerequisites",
     "title": "eDNA Data Management Course",
     "section": "Prerequisites",
-    "text": "Prerequisites\n\n\n\n\n\n\nImportantPrerequisites\n\n\n\nBefore starting this lesson, you should be comfortable with:\n\nItem one (link to resource if possible)\nItem two\n\nIf you are new to R, we recommend working through the Introduction to R episode in the setup materials first."
+    "text": "Prerequisites\n\n\n\n\n\n\nImportantPrerequisites\n\n\n\nThis course assumes you have a basic understanding of:\n\nDarwin Core data formatting\nCoding in R"
   },
   {
     "objectID": "index.html#episodes",
     "href": "index.html#episodes",
     "title": "eDNA Data Management Course",
     "section": "Episodes",
-    "text": "Episodes\n\n\n\n\n#\nEpisode\nDescription\nTime\n\n\n\n\n1\nIntroduction to eDNA & Biodiversity Data\nOne sentence description.\n~60 min\n\n\n2\nOBIS & Darwin Core: What They Are and Why They Matter\nOne sentence description.\n~60 min\n\n\n3\nData Standards for eDNA: DwC-A, MIxS, and the DNA Derived Data Extension\nOne sentence description.\n~60 min\n\n\n4\nStructuring Your First eDNA Dataset\nOne sentence description.\n~60 min\n\n\n5\nMetadata: Field Sampling, Protocols, and Documentation\nOne sentence description.\n~60 min"
+    "text": "Episodes\n\n\n\n\n#\nEpisode\nDescription\nTime\n\n\n\n\n1\nIntroduction to eDNA & Biodiversity Data\nA conceptual introduction to what eDNA is and how it becomes biodiversity data.\n~60 min\n\n\n2\nOBIS & Darwin Core: What They Are and Why They Matter\nMeet OBIS, the global network behind it, and see why publishing your eDNA data through it matters.\n~60 min\n\n\n3\nData Standards for eDNA: DwC-A, MIxS, and the DNA Derived Data Extension\nLearn the vocabulary and table structures that turn raw sequencing outputs into a publishable Darwin Core Archive.\n~60 min\n\n\n4\nStructure an eDNA Dataset\nTransform raw DNA data into a Darwin Core-compliant dataset.\n~90 min\n\n\n5\nMetadata: Field Sampling, Protocols, and Documentation\nOne sentence description.\n~60 min"
   },
   {
     "objectID": "index.html#setup",
     "href": "index.html#setup",
     "title": "eDNA Data Management Course",
     "section": "Setup",
-    "text": "Setup\nBefore the first episode, please complete the Setup instructions. These cover software installation, package installation, and downloading the example dataset."
+    "text": "Setup\nMost of the content in this course is conceptual, however Episode 4 provides a data formatting example with R. Before the fourth episode, please complete the Setup instructions. These cover software installation, package installation, and downloading the example dataset."
   },
   {
     "objectID": "index.html#how-to-use-these-materials",
     "href": "index.html#how-to-use-these-materials",
     "title": "eDNA Data Management Course",
     "section": "How to use these materials",
-    "text": "How to use these materials\nThese materials can be used for self-paced study or as part of an instructor-led workshop.\n\nSelf-paced: Work through each episode in order. Exercises marked 🧪 are for your own practice; there is no submission required.\nInstructor-led: Your instructor will guide the pace. Exercises will be worked through together or in small groups.\n\nTip boxes, challenge boxes, and key-point summaries appear throughout. Take time to read them — they highlight common mistakes and the most important concepts."
+    "text": "How to use these materials\nThese materials can be used for self-paced study or as part of an instructor-led workshop.\n\nSelf-paced: Work through each episode in order.\nInstructor-led: Your instructor will guide the pace. Exercises will be worked through together or in small groups.\n\nTip boxes, challenge boxes, and key-point summaries appear throughout. Take time to read them - they highlight common mistakes and the most important concepts."
   },
   {
     "objectID": "index.html#acknowledgements",
     "href": "index.html#acknowledgements",
     "title": "eDNA Data Management Course",
     "section": "Acknowledgements",
-    "text": "Acknowledgements\nThis lesson was developed for the Ocean Biodiversity Information System (OBIS) training programme.\nLesson design follows the pedagogical framework of The Carpentries, whose Curriculum Development Handbook informed the structure of these materials. Content is original and independent; this is not an official Carpentries lesson.\nMaintained by OBIS. Licensed CC BY 4.0.\n\nThis lesson was last rendered on 2026-04-14."
+    "text": "Acknowledgements\nThis course was developed as part of the Ocean Biodiversity Information System (OBIS) training programme.\nLesson design follows the pedagogical framework of The Carpentries, whose Curriculum Development Handbook informed the structure of these materials. Content is original and independent; this is not an official Carpentries lesson.\nMaintained by OBIS. Licensed CC BY 4.0.\n\nThis lesson was last rendered on 2026-07-14."
   },
   {
     "objectID": "episodes/04-structuring-datasets.html",
@@ -123,7 +123,7 @@
     "href": "episodes/04-structuring-datasets.html#adding-metadata",
     "title": "Structure an eDNA Dataset",
     "section": "Adding metadata",
-    "text": "Adding metadata\nThere are a few links documenting Populate samplingProtocol with a link to the eDNA Expeditions protocol used to collect these samples.\noccurrence$samplingProtocol &lt;- \"https://github.com/BeBOP-OBON/UNESCO_protocol_collection\""
+    "text": "Adding metadata\nPopulate samplingProtocol with a link to the eDNA Expeditions protocol used to collect these samples.\noccurrence$samplingProtocol &lt;- \"https://github.com/BeBOP-OBON/UNESCO_protocol_collection\""
   },
   {
     "objectID": "episodes/04-structuring-datasets.html#taxon-matching",
