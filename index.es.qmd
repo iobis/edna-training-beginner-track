@@ -1,0 +1,114 @@
+---
+title: "{{< var lesson.title >}}"
+subtitle: "{{< var lesson.subtitle >}}"
+lang: es
+---
+
+<!-- Replace the banner image below with a relevant one for your lesson -->
+![](assets/ednaworkflow.png){fig-alt="Un ejemplo de flujos de trabajo de eDNA, comenzando con el muestreo del ambiente y terminando con la asignación taxonómica y los análisis ecológicos." width=100%}
+
+## Resumen
+
+Este curso en línea está dirigido a quienes se inician en la publicación de datos de eDNA en OBIS y GBIF. Su objetivo es ofrecer una introducción a los datos de ADN y su gestión. Cubrimos temas como información de fondo sobre qué es el eDNA, los aspectos clave de la recolección, extracción y secuenciación de datos de ADN, y un ejemplo de cómo dar formato a las tablas de salida de datos de ADN en Darwin Core para su publicación en OBIS.
+
+Este curso no pretende ofrecer conocimientos avanzados, sino más bien construir una base sólida sobre los datos de ADN.
+
+::: {.callout-tip}
+## Diapositivas de apoyo
+
+Las diapositivas de apoyo utilizadas por el equipo docente se pueden encontrar en: <https://github.com/iobis/obis_edna_slides>.
+:::
+
+## Resultados de aprendizaje
+
+Al finalizar estas lecciones, usted podrá:
+
+- Definir el ADN ambiental (eDNA) y explicar en qué se diferencia de los muestreos tradicionales de biodiversidad.
+- Comprender la salida típica de los flujos de trabajo de ADN — tablas de ASV, archivos FASTA de secuencias, archivos de taxonomía y metadatos de muestra — y cómo cargarlos en R.
+- Explicar la transformación de "ancho a largo" desde los resultados brutos de secuenciación hasta los registros de ocurrencia de Darwin Core.
+- Combinar tablas de salida de ADN en tablas de Darwin Core, mapeando los campos originales a los términos de Darwin Core.
+- Describir cómo funciona el emparejamiento de taxones con WoRMS, y qué hacer cuando una secuencia no tiene coincidencia.
+
+## Prerrequisitos
+
+::: {.callout-important icon=false}
+## Prerrequisitos
+
+Este curso asume que usted tiene un entendimiento básico de:
+
+- El formato de datos de Darwin Core
+- Programación en R
+:::
+
+## Episodios
+
+```{r}
+#| label: episode-table
+#| echo: false
+#| results: asis
+
+lang <- rmarkdown::metadata$lang
+if (is.null(lang)) lang <- "en"
+
+# Canonical (English) episode files only - translated ".es.qmd" counterparts
+# are matched below, not listed as separate episodes.
+files <- sort(list.files("episodes", pattern = "\\.qmd$", full.names = FALSE))
+files <- files[!grepl("\\.[a-z]{2}\\.qmd$", files)]
+
+rows <- lapply(seq_along(files), function(i) {
+  base <- files[i]
+  translated <- sub("\\.qmd$", paste0(".", lang, ".qmd"), base)
+  use_translated <- lang != "en" && file.exists(file.path("episodes", translated))
+  file <- if (use_translated) translated else base
+  path <- file.path("episodes", file)
+  lines <- readLines(path, n = 20)
+
+  get_field <- function(field) {
+    line <- grep(paste0("^", field, ":"), lines, value = TRUE)[1]
+    if (is.na(line)) return("NA")
+    trimws(gsub(paste0("^", field, ":\\s*[\"']?|[\"']?$"), "", line))
+  }
+
+  data.frame(
+    `#` = i,
+    Episode = sprintf("[%s](%s)", get_field("title"), path),
+    Description = get_field("description"),
+    Time = get_field("time"),
+    check.names = FALSE
+  )
+})
+
+knitr::kable(do.call(rbind, rows))
+```
+
+
+## Preparación
+
+La mayor parte del contenido de este curso es conceptual; sin embargo, el Episodio 4 ofrece un ejemplo práctico de formateo de datos con R. Antes de llegar al cuarto episodio, complete las [instrucciones de preparación](setup.qmd).
+Estas cubren la instalación del software, la instalación de paquetes y la descarga del conjunto de datos de ejemplo.
+
+## Cómo usar estos materiales
+
+Estos materiales pueden usarse para **estudio autodirigido** o como parte de un **taller guiado por un instructor**.
+
+- **Autodirigido:** Trabaje cada episodio en orden.
+- **Guiado por instructor:** Su instructor marcará el ritmo. Los ejercicios se trabajarán
+  en conjunto o en grupos pequeños.
+
+A lo largo del curso encontrará recuadros de consejos, de desafíos y resúmenes de puntos clave. Tómese el tiempo de leerlos:
+resaltan los errores más comunes y los conceptos más importantes.
+
+## Agradecimientos
+
+Este curso fue desarrollado como parte del programa de capacitación del [Sistema de Información sobre la Biodiversidad Oceánica (OBIS)](https://obis.org).
+
+El diseño de la lección sigue el marco pedagógico de
+[The Carpentries](https://carpentries.org), cuyo
+[Manual de Desarrollo Curricular](https://cdh.carpentries.org) inspiró la estructura de estos
+materiales. El contenido es original e independiente; esta no es una lección oficial de Carpentries.
+
+Mantenido por {{< var maintainer.name >}}. Licenciado bajo {{< var license >}}.
+
+---
+
+*Esta lección se renderizó por última vez el `r Sys.Date()`.*

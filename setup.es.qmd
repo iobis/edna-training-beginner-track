@@ -1,0 +1,102 @@
+---
+title: "Preparación"
+lang: es
+---
+
+Complete estos pasos **antes** del **cuarto** episodio. Si tiene algún problema, por favor abra un
+issue en el [repositorio de GitHub]({{< var lesson.repo_url >}}/issues) o consulte a su instructor.
+
+## Software
+
+### R y RStudio
+
+Esta lección requiere **R ≥ 4.2** y **RStudio ≥ 2023.06** (u otro IDE de su elección).
+
+- [Descargar R](https://cran.r-project.org/)
+- [Descargar RStudio Desktop](https://posit.co/download/rstudio-desktop/)
+
+## Paquetes de R
+
+Instale los paquetes necesarios ejecutando lo siguiente en su consola de R:
+
+```{r}
+#| label: install-packages
+#| eval: false
+
+# Use this code to install the custom R package r-dwc-writer
+remotes::install_github("pieterprovoost/r-dwca-writer")
+
+install.packages(c(
+  "tidyverse",
+  "here",
+  "dplyr",
+  "readxl",
+  "rmarkdown",
+  "lubridate",
+  "tidyr",
+  "purrr",
+  "leaflet",
+  "Biostrings",
+  "dwcawriter"
+))
+```
+
+Verifique la instalación:
+
+```{r}
+#| label: verify-packages
+#| eval: false
+
+# Replace with the actual packages needed for this lesson
+library(tidyverse)
+library(here)
+library(dplyr)
+library(readxl)
+library(rmarkdown)
+library(lubridate)
+library(tidyr)
+library(purrr)
+library(leaflet)
+library(Biostrings)
+library(dwcawriter)
+
+cat("All packages loaded successfully.\n")
+```
+
+## Datos de ejemplo
+
+El conjunto de datos con el que trabajaremos es un conjunto de datos de metabarcoding de eDNA, obtenido de eDNA Expeditions. Este ejemplo está adaptado de materiales de capacitación desarrollados para OBON en 2024, creados por Pieter Provoost, y se puede encontrar en <https://github.com/iobis/obon-2024-dna-training>.
+
+Puede descargar los archivos del conjunto de datos directamente desde <https://github.com/iobis/edna-training-beginner-track/tree/main/data>, o usar el siguiente código para descargarlos:
+
+```{r}
+#| label: download-data
+#| eval: false
+
+# Replace with the actual data download for this lesson
+download.file(
+  url = "https://github.com/iobis/edna-training-beginner-track/tree/main/data",   # replace with actual URL
+  destfile = here("data", "edna-data.csv")
+)
+```
+
+::: {.callout-note}
+## Sobre el conjunto de datos de ejemplo
+
+Hay seis archivos en la carpeta `\data`: cuatro archivos de salida del pipeline de ADN (`samples.csv`, `seqtab.csv`, `sequences.fasta`, y `taxonomy.txt`), un archivo de diccionario de datos que hemos creado para proporcionar definiciones de cada columna en el archivo samples, y un archivo `methods.txt` que contiene texto libre que suele incluir metadatos e información importante que registraremos en la tabla de la extensión DNA Derived Data.
+:::
+
+## Verifique su configuración
+
+Ejecute el siguiente bloque para confirmar que todo funciona correctamente antes del Episodio 1:
+
+```{r}
+#| label: verify-setup
+#| eval: false
+
+# Replace with a meaningful check for this lesson
+cat("R version:", R.version$major, ".", R.version$minor, "\n", sep = "")
+# add further checks as needed
+```
+
+Si todas las verificaciones son exitosas, está listo para comenzar el [Episodio 4](episodes/04-structuring-datasets.es.qmd).

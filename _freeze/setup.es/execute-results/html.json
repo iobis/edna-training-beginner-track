@@ -1,0 +1,19 @@
+{
+  "hash": "0f8d3e5e5c2559d1ef162b7a556db78b",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Preparación\"\nlang: es\n---\n\nComplete estos pasos **antes** del **cuarto** episodio. Si tiene algún problema, por favor abra un\nissue en el [repositorio de GitHub]({{< var lesson.repo_url >}}/issues) o consulte a su instructor.\n\n## Software\n\n### R y RStudio\n\nEsta lección requiere **R ≥ 4.2** y **RStudio ≥ 2023.06** (u otro IDE de su elección).\n\n- [Descargar R](https://cran.r-project.org/)\n- [Descargar RStudio Desktop](https://posit.co/download/rstudio-desktop/)\n\n## Paquetes de R\n\nInstale los paquetes necesarios ejecutando lo siguiente en su consola de R:\n\n\n::: {.cell layout-align=\"center\"}\n\n```{.r .cell-code}\n# Use this code to install the custom R package r-dwc-writer\nremotes::install_github(\"pieterprovoost/r-dwca-writer\")\n\ninstall.packages(c(\n  \"tidyverse\",\n  \"here\",\n  \"dplyr\",\n  \"readxl\",\n  \"rmarkdown\",\n  \"lubridate\",\n  \"tidyr\",\n  \"purrr\",\n  \"leaflet\",\n  \"Biostrings\",\n  \"dwcawriter\"\n))\n```\n:::\n\n\nVerifique la instalación:\n\n\n::: {.cell layout-align=\"center\"}\n\n```{.r .cell-code}\n# Replace with the actual packages needed for this lesson\nlibrary(tidyverse)\nlibrary(here)\nlibrary(dplyr)\nlibrary(readxl)\nlibrary(rmarkdown)\nlibrary(lubridate)\nlibrary(tidyr)\nlibrary(purrr)\nlibrary(leaflet)\nlibrary(Biostrings)\nlibrary(dwcawriter)\n\ncat(\"All packages loaded successfully.\\n\")\n```\n:::\n\n\n## Datos de ejemplo\n\nEl conjunto de datos con el que trabajaremos es un conjunto de datos de metabarcoding de eDNA, obtenido de eDNA Expeditions. Este ejemplo está adaptado de materiales de capacitación desarrollados para OBON en 2024, creados por Pieter Provoost, y se puede encontrar en <https://github.com/iobis/obon-2024-dna-training>.\n\nPuede descargar los archivos del conjunto de datos directamente desde <https://github.com/iobis/edna-training-beginner-track/tree/main/data>, o usar el siguiente código para descargarlos:\n\n\n::: {.cell layout-align=\"center\"}\n\n```{.r .cell-code}\n# Replace with the actual data download for this lesson\ndownload.file(\n  url = \"https://github.com/iobis/edna-training-beginner-track/tree/main/data\",   # replace with actual URL\n  destfile = here(\"data\", \"edna-data.csv\")\n)\n```\n:::\n\n\n::: {.callout-note}\n## Sobre el conjunto de datos de ejemplo\n\nHay seis archivos en la carpeta `\\data`: cuatro archivos de salida del pipeline de ADN (`samples.csv`, `seqtab.csv`, `sequences.fasta`, y `taxonomy.txt`), un archivo de diccionario de datos que hemos creado para proporcionar definiciones de cada columna en el archivo samples, y un archivo `methods.txt` que contiene texto libre que suele incluir metadatos e información importante que registraremos en la tabla de la extensión DNA Derived Data.\n:::\n\n## Verifique su configuración\n\nEjecute el siguiente bloque para confirmar que todo funciona correctamente antes del Episodio 1:\n\n\n::: {.cell layout-align=\"center\"}\n\n```{.r .cell-code}\n# Replace with a meaningful check for this lesson\ncat(\"R version:\", R.version$major, \".\", R.version$minor, \"\\n\", sep = \"\")\n# add further checks as needed\n```\n:::\n\n\nSi todas las verificaciones son exitosas, está listo para comenzar el [Episodio 4](episodes/04-structuring-datasets.es.qmd).\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {
+      "include-in-header": [
+        "<link href=\"site_libs/pagedtable-1.1/css/pagedtable.css\" rel=\"stylesheet\" />\n<script src=\"site_libs/pagedtable-1.1/js/pagedtable.js\"></script>\n"
+      ]
+    },
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
