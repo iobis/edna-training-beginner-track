@@ -2,7 +2,7 @@
 title: "Setup"
 ---
 
-Complete these steps **before** the first episode. If you run into problems, please open an
+Complete these steps **before** the **fourth** episode. If you run into problems, please open an
 issue on the [GitHub repository]({{< var lesson.repo_url >}}/issues) or ask your instructor.
 
 ## Software
@@ -22,11 +22,21 @@ Install the required packages by running the following in your R console:
 #| label: install-packages
 #| eval: false
 
-# Replace with the actual packages needed for this lesson
+# Use this code to install the custom R package r-dwc-writer
+remotes::install_github("pieterprovoost/r-dwca-writer")
+
 install.packages(c(
   "tidyverse",
-  "here"
-  # add packages here
+  "here",
+  "dplyr",
+  "readxl",
+  "rmarkdown",
+  "lubridate",
+  "tidyr",
+  "purrr",
+  "leaflet",
+  "Biostrings",
+  "dwcawriter"
 ))
 ```
 
@@ -39,16 +49,24 @@ Verify installation:
 # Replace with the actual packages needed for this lesson
 library(tidyverse)
 library(here)
-# add checks here
+library(dplyr)
+library(readxl)
+library(rmarkdown)
+library(lubridate)
+library(tidyr)
+library(purrr)
+library(leaflet)
+library(Biostrings)
+library(dwcawriter)
 
 cat("All packages loaded successfully.\n")
 ```
 
 ## Example data
 
-<!-- Describe what the example dataset is and where it comes from. -->
+The dataset we will work with is an eDNA metabarcoding dataset, obtained from eDNA Expeditions. This example is adapted from training resources developed for OBON in 2024, created by Pieter Provoost and can be found in <https://github.com/iobis/obon-2024-dna-training>. 
 
-Download the example dataset for this lesson:
+You can either download the dataset files directly from <https://github.com/iobis/edna-training-beginner-track/tree/main/data>, or use the following code to download them:
 
 ```{r}
 #| label: download-data
@@ -56,17 +74,15 @@ Download the example dataset for this lesson:
 
 # Replace with the actual data download for this lesson
 download.file(
-  url = "NA",   # replace with actual URL
-  destfile = here("data", "example-data.csv")
+  url = "https://github.com/iobis/edna-training-beginner-track/tree/main/data",   # replace with actual URL
+  destfile = here("data", "edna-data.csv")
 )
 ```
 
 ::: {.callout-note}
 ## About the example dataset
 
-Replace this with a brief description of the dataset used in this lesson:
-what it contains, where it comes from, and any important caveats or
-licensing information.
+There are six files in the `\data` folder, four output files from the DNA pipeline (`samples.csv`, `seqtab.csv`, `sequences.fasta`, and `taxonomy.txt`), a data dictionary file we have created to provide definitions of each column in the samples file, and a `methods.txt` file which provides free text you may commonly encounter that contains important metadata and information we will record in the DNA Derived Data extension table.
 :::
 
 ## Verify your setup
@@ -82,4 +98,4 @@ cat("R version:", R.version$major, ".", R.version$minor, "\n", sep = "")
 # add further checks as needed
 ```
 
-If all checks pass, you are ready to begin [Episode 1](episodes/01-introduction.qmd).
+If all checks pass, you are ready to begin [Episode 4](episodes/04-structuring-datasets.qmd).

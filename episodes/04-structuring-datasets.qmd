@@ -278,7 +278,7 @@ rmarkdown::paged_table(occurrence)
 
 ## Adding metadata
 
-There are a few links documenting Populate `samplingProtocol` with a link to the eDNA Expeditions protocol used to collect these samples.
+Populate `samplingProtocol` with a link to the eDNA Expeditions protocol used to collect these samples.
 
 ```r
 occurrence$samplingProtocol <- "https://github.com/BeBOP-OBON/UNESCO_protocol_collection"

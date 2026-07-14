@@ -4,37 +4,41 @@ subtitle: "{{< var lesson.subtitle >}}"
 ---
 
 <!-- Replace the banner image below with a relevant one for your lesson -->
-![](figures/banner.png){fig-alt="A descriptive alt text for the banner image." width=100%}
+![](assets/ednaworkflow.png){fig-alt="An example of eDNA workflows beginning with sampling the environment and ending with taxonomic assignment and ecological analyses." width=100%}
 
 ## Overview
 
 <!-- Write 2–4 sentences introducing the lesson. What is it about? Why does it matter for the eDNA / OBIS community? -->
 
-Replace this text with a brief, welcoming introduction to the lesson. Describe the problem or
-workflow it addresses and why it is relevant to biodiversity data practitioners.
+This online course is aimed at beginners who are new to publishing eDNA data to OBIS and GBIF. It is meant to provide an introduction to DNA data and its management. We cover topics including background information on what eDNA is, the key aspects of collecting, extracting, and sequencing DNA data, and an example of how to format DNA data table outputs into Darwin Core for publishing to OBIS.
+
+This course is not meant to provide advanced knowledge and instead focuses on providing a solid foundation for DNA data.
+
+::: {.callout-tip}
+## Supporting Slides
+
+Supporting slides used by instructors can be found: <https://github.com/iobis/obis_edna_slides>.
+:::
 
 ## Learning outcomes
 
-By the end of this lesson, you will be able to:
+By the end of these lessons, you should be able to:
 
-- Outcome one — use an active verb (e.g. *construct*, *apply*, *interpret*).
-- Outcome two.
-- Outcome three.
-- Outcome four.
-- Outcome five.
+- Define environmental DNA (eDNA) and explain how it differs from traditional biodiversity surveys
+- Understand the typical output from DNA pipelines - ASV tables, FASTA files for sequences, taxonomy files, and sample metadata - and how to load them into R.
+- Explain the "wide to long" transformation from raw sequencing outputs to Darwin Core occurrence records.
+- Combine DNA output tables into Darwin Core tables, mapping raw fields to Darwin Core terms.
+- Describe how taxon matching against WoRMS works, and what to do when a sequence has no match.
 
 ## Prerequisites
 
 ::: {.callout-important icon=false}
 ## Prerequisites
 
-Before starting this lesson, you should be comfortable with:
+This course assumes you have a basic understanding of:
 
-- Item one (link to resource if possible)
-- Item two
-
-If you are new to R, we recommend working through the
-[Introduction to R episode](setup.qmd) in the setup materials first.
+- Darwin Core data formatting
+- Coding in R
 :::
 
 ## Episodes
@@ -44,18 +48,28 @@ If you are new to R, we recommend working through the
 #| echo: false
 #| results: asis
 
+lang <- rmarkdown::metadata$lang
+if (is.null(lang)) lang <- "en"
+
+# Canonical (English) episode files only - translated ".es.qmd" counterparts
+# are matched below, not listed as separate episodes.
 files <- sort(list.files("episodes", pattern = "\\.qmd$", full.names = FALSE))
+files <- files[!grepl("\\.[a-z]{2}\\.qmd$", files)]
 
 rows <- lapply(seq_along(files), function(i) {
-  path <- file.path("episodes", files[i])
+  base <- files[i]
+  translated <- sub("\\.qmd$", paste0(".", lang, ".qmd"), base)
+  use_translated <- lang != "en" && file.exists(file.path("episodes", translated))
+  file <- if (use_translated) translated else base
+  path <- file.path("episodes", file)
   lines <- readLines(path, n = 20)
-  
+
   get_field <- function(field) {
     line <- grep(paste0("^", field, ":"), lines, value = TRUE)[1]
     if (is.na(line)) return("NA")
     trimws(gsub(paste0("^", field, ":\\s*[\"']?|[\"']?$"), "", line))
   }
-  
+
   data.frame(
     `#` = i,
     Episode = sprintf("[%s](%s)", get_field("title"), path),
@@ -71,24 +85,23 @@ knitr::kable(do.call(rbind, rows))
 
 ## Setup
 
-Before the first episode, please complete the [Setup instructions](setup.qmd).
+Most of the content in this course is conceptual, however Episode 4 provides a data formatting example with R. Before the fourth episode, please complete the [Setup instructions](setup.qmd).
 These cover software installation, package installation, and downloading the example dataset.
 
 ## How to use these materials
 
 These materials can be used for **self-paced study** or as part of an **instructor-led workshop**.
 
-- **Self-paced:** Work through each episode in order. Exercises marked 🧪 are for your own
-  practice; there is no submission required.
+- **Self-paced:** Work through each episode in order.
 - **Instructor-led:** Your instructor will guide the pace. Exercises will be worked through
   together or in small groups.
 
-Tip boxes, challenge boxes, and key-point summaries appear throughout. Take time to read them —
+Tip boxes, challenge boxes, and key-point summaries appear throughout. Take time to read them -
 they highlight common mistakes and the most important concepts.
 
 ## Acknowledgements
 
-This lesson was developed for the [Ocean Biodiversity Information System (OBIS)](https://obis.org)
+This course was developed as part of the [Ocean Biodiversity Information System (OBIS)](https://obis.org)
 training programme.
 
 Lesson design follows the pedagogical framework of
