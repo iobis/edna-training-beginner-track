@@ -1,7 +1,7 @@
 ---
-title: "Structuring Your First eDNA Dataset"
-description: "One sentence description."
-time: "~60 min"
+title: "Structure an eDNA Dataset"
+description: "Transform raw DNA data into a Darwin Core-compliant dataset."
+time: "~90 min"
 ---
 
 ```{r}
@@ -16,64 +16,634 @@ time: "~60 min"
 
 By the end of this episode, you will be able to:
 
-- Objective one
-- Objective two
-- Objective three
+- Read a raw ASV table, taxonomy file, and sample metadata sheet into R.
+- Combine these tables into a Darwin Core Occurrence table, mapping raw fields to Darwin Core terms.
+- Use the `obistools` package to match taxon names against WoRMS, and check coordinates, dates, and required fields.
+- Build the ExtendedMeasurementOrFact and DNADerivedData extension tables.
+- Write out a complete Darwin Core Archive.
 :::
 
 ::: {.callout-important icon=false collapse=true}
 ## Prerequisites for this episode
 
 - Completed [Episode 3: Data Standards for eDNA](03-data-standards.qmd)
-- Prerequisite placeholder.
 :::
 
 ::: {.callout-note}
-## About the dataset
+## About the data
 
-This episode uses the Marine Detection Tool (MDT) output format as a worked example.
-Placeholder — describe the specific example dataset used here.
+The dataset we will work with is an eDNA metabarcoding dataset, obtained from eDNA Expeditions. This example is adapted from training resources developed for OBON in 2024, created by Pieter Provoost and can be found in <https://github.com/iobis/obon-2024-dna-training>.
+
+Download the files from <https://github.com/iobis/edna-training-beginner-track/tree/main/data>
 :::
 
 ---
 
-## Section heading
+## Overview
 
-Content placeholder.
+We will process a typical eDNA metabarcoding dataset into a Darwin Core Archive using R. The files include an **ASV table**, a **taxonomy file**, a **fasta file for sequences**, and a sample of how **metadata is often be reported**. The general steps for this process include:
+
+1. Determine which core and extension tables you will need
+2. Create DwC tables: Combine the ASV table, the taxonomy table, and the sample metadata into a Darwin Core Occurrence table. Keep in mind that any ASV can occur in multiple samples!
+3. Taxon matching with `obistools`, and optionally fix some of the non-matching names manually.
+4. Create an ExtendedMeasurementOrFact table for sequence reads, sample size, and DNA concentration.
+5. Create a DNADerivedData table using the sequencing metadata.
+6. Quality Control: `obistools` to check coordinates, dates, and required fields
+7. Write the tables to a `dwc/<yourname>` directory and package them as a Darwin Core Archive with [r-dwca-writer](https://github.com/pieterprovoost/r-dwca-writer).
+
+::: {.callout-tip}
+## New to R?
+
+Throughout this episode, look for tips like this one that explain the R syntax being used. If you're already comfortable with `dplyr` and `tidyr`, feel free to skip them.
+:::
+
+--- 
+
+## Set up R environment
+
+To set up your R environment, first load some dependencies and create the output directory:
+
+```r
+library(dplyr)
+library(readxl)
+library(rmarkdown)
+library(lubridate)
+library(tidyr)
+library(purrr)
+library(leaflet)
+library(Biostrings)
+#remotes::install_github("pieterprovoost/r-dwca-writer")
+library(dwcawriter)
+
+# make sure to change the output directory to your own
+output_dir <- "./dwc/saara"
+dir.create(output_dir)
+
+# limit number of rows in notebook output
+options(repr.matrix.max.rows = 10, repr.matrix.max.cols = 20)
+```
+You may need to install some packages. We will use the output_dir in the final step of this tutorial.
 
 ---
 
-::: {.callout-caution icon=false}
-## 🧪 Exercise 4.1: Exercise title
+## 1. Read the dataset
 
-Exercise placeholder.
+Make sure you have downloaded the DNA files in the `/data` folder from this training's repository: (<https://github.com/iobis/edna-training-beginner-track>). 
+
+Set your working directory to wherever you have downloaded the data. Confirm it is set by listing the files available to you in the `data/` folder.
+
+```r
+#setwd(dir = "../dna-training/")
+list.files("./data", full.names = TRUE)
+```
+
 
 ::: {.callout-caution icon=false collapse=true}
 ## Solution
 
-Solution placeholder.
+You should see six files: `data_dictionary.csv`, `methods.txt`, `samples.csv`, `seqtab.txt`, `sequences.fasta`, and `taxonomy.txt`. Each will be used at a different point in this episode.
 :::
+
+Next we are going to take a closer look at each of the tables to understand what it's in them, starting with the ASV table.
+
+### 1.1 Read the ASV table
+
+`seqtab.txt` is the ASV (Amplicon Sequence Variant) table: one row per ASV, and one column per sample containing the number of sequence reads.
+
+```r
+seqtab <- read.table("./data/seqtab.txt", sep = "\t", header = TRUE)
+rmarkdown::paged_table(seqtab)
+```
+
+::: {.callout-tip}
+## `read.table()`
+
+`read.table()` reads a delimited text file into a data frame. `sep = "\t"` tells R the file is tab-delimited, and `header = TRUE` tells it the first row contains column names.
+:::
+
+### 1.2 Read the taxonomy file
+
+`taxonomy.txt` gives a taxon name for each ASV, as assigned by the reference database used during bioinformatic processing.
+
+```r
+taxonomy <- read.table("./data/taxonomy.txt", sep = "\t", header = TRUE)
+rmarkdown::paged_table(head(taxonomy))
+```
+
+These names come straight from the reference database, so they still need to be matched against WoRMS - we'll do that later.
+
+### 1.3 Read the sample metadata
+
+`samples.csv` contains one row per sample, with sampling event details. Take a look a what information is recorded. Note that column headers do not align with DwC terms! 
+
+```r
+samples <- read.csv("./data/samples.csv")
+samples
+```
+
+::: {.callout-note}
+## Check the data dictionary
+
+`data_dictionary.csv` documents what each column in `samples.csv` means and its units. It's worth a quick look before we start mapping fields in step two. In some cases, you may have to confirm with the data provider what a column header means.
+
+```r
+read.csv("./data/data_dictionary.csv")[, 1:2]
+```
+:::
+
+### 1.4 Determine core and extension tables
+
+Now that we've loaded all the tables into our workspace, we should do some thinking about which DwC tables we will actually need. Because we are working with DNA data we know right away we will need the **DNA-Derived Data extension**. Now we should decide which **core** table we will need: Event core or Occurrence core?
+
+Ask yourself the following questions:
+
+1. Is there information or are there measurements linked to the *sample* itself, rather than to each individual DNA sequence? E.g. temperature or DNA concentration of the water sampled.
+2. Can a single sample produce *many* occurrence records - one per detected ASV? If so, would repeating that sample's date, coordinates, and depth on every single one of those rows be redundant?
+3. Do you want a clear, one-row-per-sampling-event record of *how* and *where* each sample was collected, independent of what was (or wasn't) detected in it?
+
+::: {.callout-caution icon=false collapse=true}
+## Solution
+
+Yes to all three! Each of our two samples (`EE0493`, `EE0495` in the samples.csv file) produce many occurrence rows - one per ASV detected in the `seqtab.csv` file - and each sample also carries its own sample-level measurements (temperature, DNA concentration, sample volume). Repeating those fields across every ASV row would be redundant and prone to errors.
+
+That means we need **four linked DwC tables**:
+
+- **Event core**: one row per sample, with `eventDate`, coordinates, depth, and other sampling-event details
+- **Occurrence extension**: one row per detected ASV per sample, linked to its event via `eventID`
+- **eMoF extension**: measurements such as temperature, linked via `eventID` and/or `occurrenceID`
+- **DNADerivedData extension**: sequence and sequencing-method information, linked via `occurrenceID`
+:::
+
+::: {.callout-note}
+## A note on past guidelines
+
+Previously, both OBIS and GBIF recommended eDNA datasets to be published with **Occurrence core only**, including event-level fields like coordinates and date alongside each occurrence row. This was largely because the ingestion pipelines didn't yet fully support Event core datasets with a DNA extension attached to the Occurrence extension table. This has since changed and OBIS can now ingest **Event core** eDNA datasets! 
+
+So if your data has many occurrences per sampling event, as our example does, Event core may be the better, less redundant structure.
 :::
 
 ---
+
+## 2. Joining the tables
+
+At this point we might think about starting quality control on the individual tables, but it's easier to first join and map everything to Darwin Core terms, then do DwC mapping and quality control on the combined table. We will start with the Event data.
+
+### 2.1 Event table
+
+The `samples.csv` table has identifiers (`name`), time (`event_begin`), coordinates (`area_longitude` and `area_latitude`), coordinate uncertainty (`area_uncertainty`), locality (`area_name`), and higher geography (`parent_area_name`), all of which map onto Darwin Core terms. We will keep `dna` and `temperature` aside for the extendedMeasurementOrFact extension later, but we will retain the columns in our table for now.
+
+```r
+event <- samples %>%
+    select(
+        eventID = name,
+        materialSampleID = name,
+        eventDate = event_begin,
+        locality = area_name,
+        decimalLongitude = area_longitude,
+        decimalLatitude = area_latitude,
+        coordinateUncertaintyInMeters = area_uncertainty,
+        higherGeography = parent_area_name,
+        minimumDepthInMeters = depth,
+        maximumDepthInMeters = depth,
+        sampleSizeValue = size,
+        dna,
+        temperature
+    ) %>%
+    mutate(sampleSizeUnit = "ml")
+event
+```
+
+::: {.callout-tip}
+## `select()`, `mutate()`, and the pipe
+
+`select()` picks and optionally renames columns (`newName = oldName`). 
+
+`mutate()` creates a new column. 
+
+`%>%` is the pipe operator, which passes the result of one function into the next — read `a %>% f()` as "take `a`, then apply `f()`".
+:::
+
+### 2.2 Occurrence table
+
+The ASV table is in "wide" format, with one column per sample. We need "long" format instead: one row per occurrence, with the number of reads recorded as `organismQuantity`. The `eventID` will be the sample identifier, and `occurrenceID` will combine the sample identifier and the ASV number.
+
+**IMPORTANT NOTE**: in this step, we must **exclude** all ASV occurrences that have a read of zero. We cannot include these as absence records - just because an ASV was not detected in a sample, does not necessarily mean it was *not* present, it just wasn't detected. So, we only include ASVs with a read count > 0.
+
+```r
+occurrence <- seqtab %>%
+    gather(eventID, organismQuantity, 2:3) %>%
+    filter(organismQuantity > 0) %>%
+    mutate(
+        occurrenceID = paste0(eventID, "_", asv),
+        organismQuantityType = "sequence reads"
+    )
+rmarkdown::paged_table(occurrence)
+```
+
+::: {.callout-tip}
+## Wide to long
+
+Using `gather()` from the `tidyr` package reshapes a wide table into a long one. Here, columns 2 and 3 (the sample columns `EE0493` and `EE0495`) are stacked into two new columns: `eventID` and `organismQuantity`. `filter(organismQuantity > 0)` drops ASVs that weren't detected in a sample, and `paste0()` concatenates character strings.
+:::
+
+Now we add the taxonomic names, as they were originally recorded. We will use the DwC term `verbatimIdentification` for this. We will use WoRMS later to obtain names we can put into the `scientificName` column.
+
+```r
+taxonomy <- taxonomy %>%
+    select(asv, verbatimIdentification = taxonomy)
+
+occurrence <- occurrence %>%
+    left_join(taxonomy, by = "asv")
+rmarkdown::paged_table(occurrence)
+```
+
+::: {.callout-tip}
+## `left_join()`
+
+`left_join()` merges two data frames by matching values in a shared column (given in `by =`), keeping all rows from the left-hand table.
+:::
+
+### 2.3 Joining event and occurrence fields
+
+Now we ensure all our occurrences are linked to the correct eventID, indicating which sample a given detection originated from.
+
+```r
+occurrence <- event %>%
+    #Note to update - add select so only necessary event fields added to occ
+    left_join(occurrence, by = "eventID")
+rmarkdown::paged_table(occurrence)
+```
+
+---
+
+## Adding metadata
+
+There are a few links documenting Populate `samplingProtocol` with a link to the eDNA Expeditions protocol used to collect these samples.
+
+```r
+occurrence$samplingProtocol <- "https://github.com/BeBOP-OBON/UNESCO_protocol_collection"
+```
+
+---
+
+## 3. Taxon matching
+
+We learned previously that OBIS uses WoRMS as the taxonomic backbone. So, we must ensure our taxon names have matches to WoRMS.
+
+Let's match the taxa to WoRMS using `obistools`. WoRMS names use spaces rather than underscores (which is how our names are recorded in `verbatimIdentification`), so we replace those first.
+
+```r
+taxon_names <- stringr::str_replace(occurrence$verbatimIdentification, "_", " ")
+```
+
+Now we run the `match_taxa` function to obtain a list of matched species names.
+
+```r
+matched <- obistools::match_taxa(taxon_names, ask = FALSE) %>%
+    select(scientificName, scientificNameID)
+rmarkdown::paged_table(matched)
+```
+
+Finally, we bind our matched names to our Occurrence table, adding both `scientificName` and `scientificNameID`.
+
+```r
+occurrence <- bind_cols(occurrence, matched)
+rmarkdown::paged_table(occurrence)
+```
+
+### Find the non-matching names
+
+This is a very important step in DNA datasets! Not every verbatim name will match a WoRMS record automatically, e.g. broad names like "Eukaryota" have no exact taxonomic match. Use tidyr::filter to help you list the distinct `verbatimIdentification` values that failed to match, with a count of how often each occurs.
+
+::: {.callout-caution icon=false collapse=true}
+## Solution
+
+```r
+non_matches <- occurrence %>%
+    filter(is.na(scientificNameID)) %>%
+    group_by(verbatimIdentification) %>%
+    summarize(n = n()) %>%
+    arrange(desc(n))
+
+write.table(non_matches, file = file.path(output_dir, "nonmatches.txt"), sep = "\t", row.names = FALSE, na = "", quote = FALSE)
+rmarkdown::paged_table(non_matches)
+```
+:::
+
+
+Normally we would resolve these names one by one, but for this exercise we'll just fix the most common case: records annotated only as `Eukaryota` (or left blank) can be populated with `scientificName = "Incertae sedis"` and `scientificNameID = "urn:lsid:marinespecies.org:taxname:12"`.
+
+```r
+occurrence <- occurrence %>%
+    mutate(
+        scientificName = case_when(verbatimIdentification %in% c("Eukaryota", "undef_Eukaryota", "") ~ "Incertae sedis", .default = scientificName),
+        scientificNameID = case_when(verbatimIdentification %in% c("Eukaryota", "undef_Eukaryota", "") ~ "urn:lsid:marinespecies.org:taxname:12", .default = scientificNameID)
+    )
+```
+
+::: {.callout-note icon=false collapse=true}
+## Optional but recommended: add higher taxonomic levels
+
+OBIS automatically links higher taxonomic levels based on the AphiaID in `scientificNameID`, so this step isn't required. But it can be good practice, especially when publishing to both OBIS and GBIF, to include them in your own table. See code below:
+
+```r
+dummy_data <- occurrence %>%
+  select(scientificName, scientificNameID) %>%
+  mutate(aphiaid = as.numeric(stringr::str_extract(scientificNameID, "\\d+$")))
+
+taxonomy_worms <- map(unique(dummy_data$aphiaid[!is.na(dummy_data$aphiaid)]), worrms::wm_record) %>%
+  bind_rows() %>%
+  select(AphiaID, kingdom, phylum, class, order, family, genus, scientificname, rank)
+
+dummy_data <- dummy_data %>%
+  left_join(taxonomy_worms, by = c("aphiaid" = "AphiaID"))
+
+occurrence <- bind_cols(occurrence, dummy_data %>% select(kingdom, phylum, class, order, family, genus, rank))
+```
+:::
+
+
+---
+
+## 4. The extendedMeasurementOrFact (eMoF) extension
+
+Several measurements can be added to the extendedMeasurementOrFact (eMoF) extension: sequence reads, sample volume, DNA extract concentration, and seawater temperature. Each measurement type needs a `measurementType`, and ideally a standard `measurementTypeID`/`measurementUnitID` from a vocabulary like NERC's [NVS](http://vocab.nerc.ac.uk/). See the OBIS Manual for more guidance on [controlled vocabulary](https://manual.obis.org/vocabulary.html).
+
+```r
+mof_reads <- occurrence %>%
+    select(occurrenceID, measurementValue = organismQuantity) %>%
+    mutate(
+        measurementType = "sequence reads"
+    )
+
+mof_samplesize <- occurrence %>%
+    select(occurrenceID, measurementValue = sampleSizeValue, measurementUnit = sampleSizeUnit) %>%
+    mutate(
+        measurementType = "sample size",
+        measurementTypeID = "http://vocab.nerc.ac.uk/collection/P01/current/VOLWBSMP/",
+        measurementUnit = "ml",
+        measurementUnitID = "http://vocab.nerc.ac.uk/collection/P06/current/VVML/"
+    )
+
+mof_dna <- occurrence %>%
+    select(occurrenceID, measurementValue = dna) %>%
+    mutate(
+        measurementType = "DNA concentration",
+        measurementTypeID = "http://vocab.nerc.ac.uk/collection/P01/current/A260DNAX/",
+        measurementUnit = "ng/µl",
+        measurementUnitID = "http://vocab.nerc.ac.uk/collection/P06/current/UNUL/"
+    )
+
+mof_temperature <- occurrence %>%
+    select(occurrenceID, measurementValue = temperature) %>%
+    mutate(
+        measurementType = "seawater temperature",
+        measurementTypeID = "http://vocab.nerc.ac.uk/collection/P01/current/TEMPPR01/",
+        measurementUnit = "degrees Celsius",
+        measurementUnitID = "http://vocab.nerc.ac.uk/collection/P06/current/UPAA/"
+    )
+
+mof <- bind_rows(mof_reads, mof_samplesize, mof_dna, mof_temperature)
+rmarkdown::paged_table(mof)
+```
+
+---
+
+## 5. The DNADerivedData extension
+
+### 5.1 Reading sequence data
+
+`sequences.fasta` holds the actual ASV sequences. This is one of the most important pieces of information we want to include in our DNA table!
+Note you need the readDNAStringSet R package to read fasta files.
+
+```r
+fasta_file <- readDNAStringSet("./data/sequences.fasta")
+fasta <- data.frame(asv = names(fasta_file), DNA_sequence = paste(fasta_file))
+rmarkdown::paged_table(fasta)
+```
+Once loaded, we join the relevant fields from the Occurrence table - the `occurrenceID`, the `asv` column so we can use it in joining, and we will finally rename the `dna` column (not to be confused with the newly created `dna` data table!) to the DwC DNA term: `concentration`.
+```r
+dna <- occurrence %>%
+    select(occurrenceID, samp_name = eventID, asv, concentration = dna, sampleSizeValue) %>%
+    left_join(fasta, by = "asv")
+
+rmarkdown::paged_table(dna)
+```
+
+### 5.2 Adding sequencing metadata
+
+`methods.txt` describes how the samples were amplified and sequenced. Read it to find the values needed for the DNADerivedData extension.
+
+```r
+cat(paste0(readLines("./data/methods.txt"), collapse = "\n"))
+```
+
+Using the text in the file (and the sampling protocol it links to), we want to add the following columns to our DNA table:
+
+* `sop`, `target_gene`, `pcr_primer_forward`, `pcr_primer_reverse`, `pcr_primer_name_forward`, `pcr_primer_name_reverse`, `pcr_primer_reference`, `lib_layout`, `seq_meth`, `concentrationUnit`, `samp_size`, `samp_vol_we_dna_ext`, `env_broad_scale`, `env_local_scale`, `env_medium`, `project_name`, `nucl_acid_ext`, and `nucl_acid_amp`.
+
+Use the DwC DNA derived data extension schema as a reference for definitions of each of these terms: <https://rs.gbif.org/extension/gbif/1.0/dna_derived_data_2024-07-11.xml>.
+
+::: {.callout-caution icon=false collapse=true}
+## Solution
+
+| DwC DNA term | Where it comes from in `methods.txt` |
+|---|---|
+| `target_gene`, `pcr_primer_name_forward/reverse`, `pcr_primer_forward/reverse`, `pcr_primer_reference` | "...targeting the cytochrome c oxidase subunit I (**COI**) gene using the primer pair **mlCOIintF** (forward: **GGWACWGGWTGAACWGTWTAYCCYCC**) and **dgHCO2198** (reverse: **TANACYTCNGGRTGNCCRAARAAYCA**) (Leray et al., 2013; **doi:10.1186/1742-9994-10-34**)" |
+| `lib_layout`, `seq_meth` | "Libraries were prepared in a **paired**-end layout and sequenced on an **Illumina NovaSeq 6000** platform" |
+| `nucl_acid_ext`, `nucl_acid_amp` | "For full details, see protocol: [eDNA_expeditions_protocols_EN.pdf](https://www.unesco.org/sites/default/files/medias/fichiers/2024/12/eDNA_expeditions_protocols_EN.pdf?hub=66910)" - this SOP covers both extraction and amplification, so both terms will point to it |
+| `project_name` | "Sequence reads have been deposited in NCBI under **BioProject PRJNA1119392**" |
+| `sop` | "Sequences were processed on the PacMAN bioinformatic pipeline" (**github.com/iobis/PacMAN-pipeline)** |
+| `samp_size`, `env_broad_scale`, `env_local_scale`, `env_medium` | Not in `methods.txt` itself! These come from the linked sampling protocol (total water volume collected), and the `env_` fields are filled with [ENVO](https://www.ebi.ac.uk/ols4/ontologies/envo) terms for a coastal marine site |
+| `concentrationUnit` | Matches the unit of the `concentration` column we already mapped from `dna` in `samples.csv` |
+| `samp_vol_we_dna_ext` | Already in our table as `sampleSizeValue` (the `size` column from `samples.csv`) — just needs its unit appended |
+
+So, putting it together we would use the following code:
+
+```r
+dna <- dna %>%
+    mutate(
+        sop = "https://github.com/iobis/PacMAN-pipeline",
+        target_gene = "COI",
+        pcr_primer_forward = "GGWACWGGWTGAACWGTWTAYCCYCC",
+        pcr_primer_reverse = "TANACYTCNGGRTGNCCRAARAAYCA",
+        pcr_primer_name_forward = "mlCOIintF",
+        pcr_primer_name_reverse = "dgHCO2198",
+        pcr_primer_reference = "https://doi.org/10.1186/1742-9994-10-34",
+        lib_layout = "paired",
+        seq_meth = "Illumina NovaSeq 6000",
+        concentrationUnit = "ng/µl",
+        samp_size = "2000 milliliter",
+        samp_vol_we_dna_ext = paste(sampleSizeValue, "milliliter"),
+        env_broad_scale = "marine biome (ENVO:00000447)",
+        env_local_scale = "coastal water (ENVO:00001250)",
+        env_medium = "waterborne particulate matter (ENVO:01000436)",
+        project_name = "BioProject PRJNA1119392",
+        nucl_acid_ext = "https://www.unesco.org/sites/default/files/medias/fichiers/2024/12/eDNA_expeditions_protocols_EN.pdf?hub=66910",
+        nucl_acid_amp = "https://www.unesco.org/sites/default/files/medias/fichiers/2024/12/eDNA_expeditions_protocols_EN.pdf?hub=66910"
+    ) %>%
+    select(-asv, -sampleSizeValue)
+
+rmarkdown::paged_table(dna)
+```
+:::
+
+---
+
+## 6. Quality Control Check fields
+
+There are few quality control checks we should run before putting all our files together into a DwC-Archive. We will use `obistools` to check coordinates, dates, and required fields!
+
+### 6.1 Location
+
+Let's check the coordinates by plotting the distinct coordinate pairs on a map.
+
+```r
+stations <- occurrence %>%
+    distinct(locality, decimalLongitude, decimalLatitude)
+stations
+
+leaflet() %>%
+    addTiles() %>%
+    addMarkers(lng = stations$decimalLongitude, lat = stations$decimalLatitude, popup = stations$locality)
+```
+
+#### What's wrong with the map?
+
+Both sampling stations are supposed to be at Aldabra Atoll, in the Seychelles — well south of the equator. Look at the map above. What's wrong with the coordinates, and how would you fix it?
+
+::: {.callout-caution icon=false collapse=true}
+## Solution
+
+Longitude looks correct, but latitude has the wrong sign — the points are plotted north of the equator instead of south. Flipping the sign of `decimalLatitude` fixes it:
+
+```r
+occurrence <- occurrence %>%
+    mutate(decimalLatitude = -decimalLatitude)
+
+stations <- occurrence %>%
+    distinct(locality, decimalLongitude, decimalLatitude)
+stations
+
+leaflet() %>%
+    addTiles() %>%
+    addMarkers(lng = stations$decimalLongitude, lat = stations$decimalLatitude, popup = stations$locality)
+```
+:::
+
+### 6.2 Time
+
+Now, ket's check the event dates using `obistools::check_eventdate()`. As a reminder, Darwin Core requires eventDate to be formatted in ISO 8601 - i.e. `YYYY-MM-DD`.
+
+```r
+obistools::check_eventdate(occurrence)
+```
+
+`eventDate` isn't in the correct format! We will use `lubridate` to parse the current `DD/MM/YYYY` format and convert it. As a quick aside, if you decide to fix dates manually in Excel, be careful! Excel is notorious for misinterpreting and reformatting dates.
+
+```r
+occurrence <- occurrence %>%
+    mutate(eventDate = format_ISO8601(parse_date_time(eventDate, "%d/%m/%Y"), precision = "ymd", usetz = FALSE))
+
+unique(occurrence$eventDate)
+```
+
+### 6.3 Missing fields
+
+Finally, we will check whether any required Darwin Core fields are missing.
+
+```r
+obistools::check_fields(occurrence)
+obistools::check_fields(event)
+```
+
+We are missing two required fields from our Occurrence table: `occurrenceStatus` and `basisOfRecord`. Because all our occurrences have an organismQuantity > 0, we know the `occurrenceStatus` will be `present`. basisOfRecord must be filled with [controlled vocabulary](https://rs.gbif.org/vocabulary/dwc/basis_of_record_2024-02-19.xml). Because all our occurrences are based on DNA samples, we will use MaterialSample.
+
+```r
+occurrence <- occurrence %>%
+    mutate(
+        occurrenceStatus = "present",
+        basisOfRecord = "MaterialSample"
+    )
+```
+
+---
+
+## 7. Writing the output
+
+Finally, we are ready to export our files. First, let's drop the helper columns we no longer need, then write each table to a text file, and package everything as a Darwin Core Archive. Alternatively, you could export files as csv.
+
+```r
+occurrence <- occurrence %>%
+    select(-asv, -dna, -temperature)
+
+write.table(occurrence, file = file.path(output_dir, "occurrence.txt"), sep = "\t", row.names = FALSE, na = "", quote = FALSE)
+write.table(mof, file = file.path(output_dir, "measurementorfact.txt"), sep = "\t", row.names = FALSE, na = "", quote = FALSE)
+write.table(dna, file = file.path(output_dir, "dnaderiveddata.txt"), sep = "\t", row.names = FALSE, na = "", quote = FALSE)
+```
+As a reminder, Darwin Core-Archives include an EML metadata file. The code below will create an EML file.
+```r
+#| eval: false
+archive <- list(
+    eml = '<eml:eml packageId="https://obis.org/dummydataset/v1.0" scope="system" system="http://gbif.org" xml:lang="en" xmlns:dc="http://purl.org/dc/terms/" xmlns:eml="eml://ecoinformatics.org/eml-2.1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="eml://ecoinformatics.org/eml-2.1.1 http://rs.gbif.org/schema/eml-gbif-profile/1.2/eml.xsd">
+        <dataset>
+        <title xml:lang="en">Dummy Dataset</title>
+        </dataset>
+    </eml:eml>',
+    core = list(
+        name = "event",
+        type = "https://rs.gbif.org/core/dwc_event_2025-07-10.xml",
+        index = which(names(event) == "eventID"),
+        data = event
+    ),
+    extensions = list(
+        list(
+            name = "occurrence",
+            type = "https://rs.gbif.org/core/dwc_occurrence_2022-02-02.xml",
+            index = which(names(occurrence) == "occurrenceID"),
+            data = occurrence
+        ),
+        list(
+            name = "measurementorfact",
+            type = "https://rs.gbif.org/extension/obis/extended_measurement_or_fact_2023-08-28.xml",
+            index = which(names(mof) == "eventID"),
+            data = mof
+        ),
+        list(
+            name = "dnaderiveddata",
+            type = "https://rs.gbif.org/extension/gbif/1.0/dna_derived_data_2022-02-23.xml",
+            index = which(names(dna) == "occurrenceID"),
+            data = dna
+        )
+    )
+)
+
+write_dwca(archive, file.path(output_dir, "archive.zip"))
+```
+
+You should now have an `occurrence.txt`, `measurementorfact.txt`, `dnaderiveddata.txt`, and `archive.zip` in your `dwc/yourname` directory — a complete Darwin Core Archive ready to be published or shared.
 
 ::: {.instructor-only}
 ::: {.callout-warning icon=false}
 ## {{< fa chalkboard-teacher >}} Instructor notes
 
-**Estimated time:** NA minutes
+**Estimated time:** 90 minutes
 
 **Pacing notes:**
 
-- Note placeholder.
+- The taxon matching step (`match_taxa`) can take a few minutes to run against the WoRMS web service; consider having learners run it once and share the result, or provide a pre-computed `matched` table as a fallback if the network is slow or unavailable.
+- The latitude sign bug (Exercise 4.3) is the key "aha" moment of this episode — let learners spot it from the map rather than pointing it out immediately.
 
 **Common errors:**
 
-- Error placeholder.
+- Forgetting to update `2:3` in `gather()` if working with a dataset that has a different number of sample columns.
+- Running `obistools::check_eventdate()` before converting `eventDate`, then being confused by the warning — this is expected and is what drives the next step.
+- Network/proxy issues blocking `match_taxa()`'s calls to the WoRMS API.
 
 **Discussion prompts:**
 
-- Discussion prompt placeholder.
+- Why is it useful to join all tables into one Occurrence table *before* running quality control, rather than checking each source file separately?
+- What other measurements from your own eDNA workflows might belong in an ExtendedMeasurementOrFact table?
 :::
 :::
 
@@ -82,7 +652,8 @@ Solution placeholder.
 ::: {.callout-tip icon=false}
 ## {{< fa key >}} Key points
 
-- Key point one.
-- Key point two.
-- Key point three.
+- A raw ASV table, taxonomy file, and sample sheet can be joined into a single Darwin Core Occurrence table, with the ASV table reshaped from wide to long format.
+- `obistools` provides ready-made checks for taxon matching, coordinates, dates, and required fields - always run them before publishing!
+- Measurements like sequence reads, sample size, and DNA concentration belong in the extendedMeasurementOrFact extension; sequencing methods and primers belong in the DNADerivedData extension.
+- The final output is a set of Darwin Core text files packaged into a Darwin Core Archive (`.zip`).
 :::

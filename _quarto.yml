@@ -1,6 +1,10 @@
 project:
   type: website
   output-dir: _site
+  render:
+    - "*.qmd"
+    - "episodes/*.qmd"
+    - "!process-code.Rmd"
 
 website:
   title: "{{< var lesson.title >}}"
@@ -31,7 +35,7 @@ website:
             href: episodes/02-obis-darwin-core.qmd
           - text: "Episode 3: Data Standards"
             href: episodes/03-data-standards.qmd
-          - text: "Episode 4: Structuring Datasets"
+          - text: "Episode 4: Structure an eDNA Dataset"
             href: episodes/04-structuring-datasets.qmd
           - text: "Episode 5: Metadata"
             href: episodes/05-metadata.qmd
