@@ -1,14 +1,15 @@
 ---
 title: "OBIS & Darwin Core: What They Are and Why They Matter"
-description: "One sentence description."
+description: "Meet OBIS, the global network behind it, and see why publishing your eDNA data through it matters."
 time: "~60 min"
 ---
 
 ```{r}
 #| label: setup
 #| include: false
+#| eval: false
 
-# Add packages as needed
+library(robis)
 ```
 
 ::: {.callout-note icon=false}
@@ -16,37 +17,121 @@ time: "~60 min"
 
 By the end of this episode, you will be able to:
 
-- Objective one
-- Objective two
-- Objective three
+- Explain what OBIS is and how it relates to GBIF and UNESCO's Intergovernmental Oceanographic Commission (IOC).
+- Describe why publishing eDNA data through a standardized system like OBIS matters, beyond simply depositing sequences in NCBI.
+- Give examples of how eDNA data already published in OBIS is being reused.
+- Query OBIS for existing DNA-derived occurrence records using the `robis` package.
 :::
 
 ::: {.callout-important icon=false collapse=true}
 ## Prerequisites for this episode
 
 - Completed [Episode 1: Introduction to eDNA & Biodiversity Data](01-introduction.qmd)
-- Prerequisite placeholder.
 :::
 
 ---
 
-## Section heading
+## What is OBIS?
 
-Content placeholder.
+**OBIS — the Ocean Biodiversity Information System** — is a global, open-access data system for marine life.
+
+- Endorsed by UNESCO's Intergovernmental Oceanographic Commission (IOC).
+- Holds more than 199 million occurrence records from over 7,000 datasets.
+- Data published in OBIS also flows to [GBIF](https://gbif.org) — publish once, reach both networks.
+- Free to use, free to contribute to.
+
+🌐 [obis.org](https://obis.org) · 📖 [manual.obis.org](https://manual.obis.org)
+
+OBIS is not just a repository. It actively feeds into global biodiversity assessments, climate analyses, and conservation planning — for example the IPBES Global Assessment, UN World Ocean Assessments, and the CBD's Kunming-Montreal Global Biodiversity Framework.
+
+### A mature, global community
+
+OBIS is the world's largest open-access repository for marine biodiversity data, built by a genuinely global network:
+
+- **36 nodes** across **99 countries**
+- Representing **1,000+ institutions**
+- And **6,000+ scientists**
+
+OBIS sits within UNESCO's IOC (IODE, established 1961), and works alongside partners including GBIF, TDWG, EMODnet, GOOS, and DataONE. Find your regional OBIS node at [obis.org/nodes](https://obis.org/nodes) — most contributors publish through their node's Integrated Publishing Toolkit (IPT) rather than running their own infrastructure.
 
 ---
 
-::: {.callout-caution icon=false}
-## 🧪 Exercise 2.1: Exercise title
+## Why publish eDNA data through OBIS?
 
-Exercise placeholder.
+eDNA captures biodiversity signals that other survey methods often miss:
+
+- Cryptic and rare marine taxa
+- Non-invasive, scalable sampling
+- Community-level biodiversity signals
+
+But raw sequences alone aren't enough. **Sequences deposited only in NCBI/GenBank cannot be searched by species, in time, or in space** — there's no link to coordinates or sampling dates, so they can't support distribution maps, trend analyses, or Marine Protected Area assessments.
+
+Publishing through OBIS (and GBIF) turns a sequence into reusable biodiversity data:
+
+| Benefit | Why it matters |
+|---|---|
+| Open DOI | Citable in publications |
+| Long-term archive | FAIR data |
+| Global reach | OBIS + GBIF |
+| Sequence search | Reuse & reanalysis |
+
+**Your sequences become findable** — OBIS's sequence search tools let others search for similar sequences across all published datasets, but only because the data is submitted in a standardized form. That standardization is the subject of the next episode.
+
+### eDNA is already in OBIS — and being used
+
+OBIS currently holds around 128 datasets containing eDNA-derived occurrences, totaling roughly 44.5 million records and about 2 million distinct sequences. That's only ~2% of all datasets in OBIS, but they contribute **25% of all occurrence records** — eDNA datasets tend to be large.
+
+Real eDNA datasets already published include eDNA surveys from Monterey Bay, 16S rRNA metabarcoding of pico- to mesoplankton, and fish eDNA surveys across multiple ocean basins. This data is being used for species distribution modeling, biodiversity assessments, MPA baseline studies, and global meta-analyses.
+
+You can query these records directly from R using the [`robis`](https://iobis.github.io/robis/) package, filtering for the DNA extension:
+
+```{r}
+#| eval: false
+library(robis)
+
+# occurrence records that include the DNA Derived Data extension
+occurrence(
+  hasextensions = "DNADerivedData",
+  taxonid = 127160  # e.g. Actinopteri
+)
+```
+
+::: {.callout-caution icon=false}
+## 🧪 Exercise 2.1: Explore DNA-derived occurrences in OBIS
+
+Using `robis::occurrence()`, retrieve DNA-derived occurrence records for a marine group you're interested in (look up its WoRMS AphiaID first, or search by `scientificname` instead of `taxonid`). How many records do you get back, and which datasets do they come from?
 
 ::: {.callout-caution icon=false collapse=true}
 ## Solution
 
-Solution placeholder.
+```{r}
+#| eval: false
+library(robis)
+
+recs <- occurrence(
+  scientificname = "Actinopteri",
+  hasextensions = "DNADerivedData"
+)
+
+nrow(recs)
+unique(recs$datasetName)
+```
+
+Try changing `scientificname` to a taxon of your own interest — the AphiaID or scientific name both work with `occurrence()`.
 :::
 :::
+
+---
+
+## Resources and community
+
+| Resource | Link |
+|---|---|
+| OBIS Manual (DNA chapter) | [manual.obis.org/dna_data.html](https://manual.obis.org/dna_data.html) |
+| GBIF DNA publishing guide | [doi.org/10.35035/DOC-VF1A-NR22](https://doi.org/10.35035/DOC-VF1A-NR22) |
+| OBIS helpdesk | helpdesk@obis.org |
+
+The OBIS community is genuinely welcoming to beginners, and the helpdesk responds quickly if you get stuck formatting your own dataset.
 
 ---
 
@@ -54,19 +139,22 @@ Solution placeholder.
 ::: {.callout-warning icon=false}
 ## {{< fa chalkboard-teacher >}} Instructor notes
 
-**Estimated time:** NA minutes
+**Estimated time:** 60 minutes
 
 **Pacing notes:**
 
-- Note placeholder.
+- Spend more time on "why publish through OBIS" than on OBIS trivia — the NCBI-is-not-enough argument (no space/time link) is the point learners most need to internalize before the standards episode.
+- If running Exercise 2.1 live, warn learners that `robis::occurrence()` requires an internet connection and can be slow for very common taxa; suggest picking a narrower group.
 
 **Common errors:**
 
-- Error placeholder.
+- Confusing an AphiaID with a GBIF taxon key — `robis` wants the AphiaID (or a plain scientific name).
+- Expecting `occurrence()` results to already contain sequence data — the DNA sequences themselves live in the DNADerivedData extension, fetched separately with `occurrence(..., extensions = "DNADerivedData")` if needed.
 
 **Discussion prompts:**
 
-- Discussion prompt placeholder.
+- What biodiversity questions could *not* be answered if eDNA data stayed only in NCBI/GenBank?
+- Why might publishing through a regional OBIS node be easier than running your own IPT?
 :::
 :::
 
@@ -75,7 +163,8 @@ Solution placeholder.
 ::: {.callout-tip icon=false}
 ## {{< fa key >}} Key points
 
-- Key point one.
-- Key point two.
-- Key point three.
+- OBIS is a global, UNESCO IOC-endorsed system for marine biodiversity data that also feeds data to GBIF; you publish once and reach both.
+- Raw sequences in NCBI alone can't answer *where* or *when* a species was detected — publishing through OBIS links sequences to space, time, and method.
+- eDNA datasets are a small fraction of OBIS's holdings by dataset count, but a large fraction of its records, and are already used in real biodiversity assessments.
+- `robis::occurrence(hasextensions = "DNADerivedData")` lets you query existing DNA-derived occurrence records directly from R.
 :::
