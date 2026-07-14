@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="One sentence description.">
+<meta name="description" content="Learn the vocabulary and table structures that turn raw sequencing outputs into a publishable Darwin Core Archive.">
 
 <title>Data Standards for eDNA: DwC-A, MIxS, and the DNA Derived Data Extension – eDNA Data Management Course</title>
 <style>
@@ -362,7 +362,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#section-heading" id="toc-section-heading" class="nav-link active" data-scroll-target="#section-heading">Section heading</a></li>
+  <li><a href="#darwin-core-the-dna-derived-data-extension" id="toc-darwin-core-the-dna-derived-data-extension" class="nav-link active" data-scroll-target="#darwin-core-the-dna-derived-data-extension">Darwin Core + the DNA Derived Data extension</a></li>
+  <li><a href="#which-data-category-fits-your-data" id="toc-which-data-category-fits-your-data" class="nav-link" data-scroll-target="#which-data-category-fits-your-data">Which data category fits your data?</a></li>
+  <li><a href="#from-raw-outputs-to-long-format" id="toc-from-raw-outputs-to-long-format" class="nav-link" data-scroll-target="#from-raw-outputs-to-long-format">From raw outputs to long format</a></li>
+  <li><a href="#key-fields-to-include" id="toc-key-fields-to-include" class="nav-link" data-scroll-target="#key-fields-to-include">Key fields to include</a>
+  <ul class="collapse">
+  <li><a href="#occurrence-core" id="toc-occurrence-core" class="nav-link" data-scroll-target="#occurrence-core">Occurrence core</a></li>
+  <li><a href="#dna-derived-data-extension" id="toc-dna-derived-data-extension" class="nav-link" data-scroll-target="#dna-derived-data-extension">DNA Derived Data extension</a></li>
+  </ul></li>
+  <li><a href="#table-structure-options" id="toc-table-structure-options" class="nav-link" data-scroll-target="#table-structure-options">Table structure options</a></li>
+  <li><a href="#the-emof-extension" id="toc-the-emof-extension" class="nav-link" data-scroll-target="#the-emof-extension">The eMoF extension</a>
+  <ul class="collapse">
+  <li><a href="#controlled-vocabulary" id="toc-controlled-vocabulary" class="nav-link" data-scroll-target="#controlled-vocabulary">Controlled vocabulary</a></li>
+  </ul></li>
+  <li><a href="#taxon-matching-with-worms" id="toc-taxon-matching-with-worms" class="nav-link" data-scroll-target="#taxon-matching-with-worms">Taxon matching with WoRMS</a></li>
+  <li><a href="#key-metadata-by-data-type" id="toc-key-metadata-by-data-type" class="nav-link" data-scroll-target="#key-metadata-by-data-type">Key metadata by data type</a></li>
+  <li><a href="#quality-control-before-you-publish" id="toc-quality-control-before-you-publish" class="nav-link" data-scroll-target="#quality-control-before-you-publish">Quality control, before you publish</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="{{< var lesson.repo_url >}}/edit/main/episodes/03-data-standards.qmd" class="toc-action"><i class="bi bi-git"></i>Edit this page</a></li><li><a href="{{< var lesson.repo_url >}}/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -377,7 +392,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div>
   <div class="description">
-    One sentence description.
+    Learn the vocabulary and table structures that turn raw sequencing outputs into a publishable Darwin Core Archive.
   </div>
 </div>
 
@@ -406,9 +421,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="callout-body-container callout-body">
 <p>By the end of this episode, you will be able to:</p>
 <ul>
-<li>Objective one</li>
-<li>Objective two</li>
-<li>Objective three</li>
+<li>Describe what a Darwin Core Archive (DwC-A) is and how the DNA Derived Data extension incorporates MIxS terms.</li>
+<li>Identify which of GBIF’s five DNA data categories fits your own dataset.</li>
+<li>Explain the “wide to long” transformation from raw sequencing outputs to Darwin Core occurrence records.</li>
+<li>List the key fields expected in the Occurrence core, the DNA extension, and the eMoF extension.</li>
+<li>Choose between an Occurrence Core and an Event Core table structure for your dataset.</li>
+<li>Describe how taxon matching against WoRMS works, and what to do when a sequence has no match.</li>
 </ul>
 </div>
 </div>
@@ -426,15 +444,403 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="callout-body-container callout-body">
 <ul>
 <li>Completed <a href="../episodes/02-obis-darwin-core.html">Episode 2: OBIS &amp; Darwin Core</a></li>
-<li>Prerequisite placeholder.</li>
 </ul>
 </div>
 </div>
 </div>
 <hr>
-<section id="section-heading" class="level2">
-<h2 class="anchored" data-anchor-id="section-heading">Section heading</h2>
-<p>Content placeholder.</p>
+<section id="darwin-core-the-dna-derived-data-extension" class="level2">
+<h2 class="anchored" data-anchor-id="darwin-core-the-dna-derived-data-extension">Darwin Core + the DNA Derived Data extension</h2>
+<p><strong>Darwin Core (DwC)</strong> is a shared vocabulary for biodiversity data — a standard set of term names (<code>scientificName</code>, <code>eventDate</code>, <code>decimalLatitude</code>, and so on) so that data from any source can be combined and compared. The <strong>DNA Derived Data extension</strong> adds terms from <strong>MIxS</strong> (Minimum Information about any (x) Sequence) to capture sequences, primers, and methods. It was developed jointly by GBIF, OBIS, and the genomics community, so the same fields used for INSDC/GenBank submissions can be reused here.</p>
+<p>A published dataset takes the form of a <strong>Darwin Core Archive (DwC-A)</strong>: a zip file containing a few linked pieces:</p>
+<ul>
+<li><strong><code>meta.xml</code></strong> — links all the tables together</li>
+<li><strong><code>eml.xml</code></strong> — dataset-level metadata (who, what, where, when, how)</li>
+<li><strong><code>occurrence.csv</code></strong> — the occurrence records (the core table)</li>
+<li><strong><code>dna_derived.csv</code></strong> — the DNA extension, linked to occurrence by <code>occurrenceID</code></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/dwca.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>Structure of a Darwin Core Archive with a DNA Derived Data extension</figcaption>
+</figure>
+</div>
+<p>For the full specification and worked examples, see the <a href="https://doi.org/10.35035/DOC-VF1A-NR22">DNA publishing guide</a>, <em>Publishing DNA-derived data through biodiversity data platforms</em>, produced jointly by GBIF and OBIS.</p>
+<hr>
+</section>
+<section id="which-data-category-fits-your-data" class="level2">
+<h2 class="anchored" data-anchor-id="which-data-category-fits-your-data">Which data category fits your data?</h2>
+<p>Before mapping any fields, figure out which of GBIF’s five DNA data categories describes your dataset:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Category</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>1</strong></td>
+<td><strong>DNA-derived occurrences</strong></td>
+<td>Metabarcoding (ASVs/OTUs assigned to taxa)</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Enriched occurrences</td>
+<td>Voucher specimen + barcoded</td>
+</tr>
+<tr class="odd">
+<td><strong>3</strong></td>
+<td><strong>Targeted species detection</strong></td>
+<td>qPCR / ddPCR assays</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Name references</td>
+<td>Sequence in GenBank only</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Metadata only</td>
+<td>Dataset without sequences</td>
+</tr>
+</tbody>
+</table>
+<p>Categories 1 and 3 are by far the most common for eDNA researchers: Category 1 covers metabarcoding, Category 3 covers targeted detection methods like qPCR/ddPCR where no sequences are produced. Use the <a href="https://docs.gbif.org/publishing-dna-derived-data/1.0/en/#data-packaging-and-mapping">GBIF decision tree</a> if you’re not sure which applies to you. The rest of this episode focuses on Category 1 (metabarcoding), which is what the exercise dataset in the next episode represents.</p>
+<hr>
+</section>
+<section id="from-raw-outputs-to-long-format" class="level2">
+<h2 class="anchored" data-anchor-id="from-raw-outputs-to-long-format">From raw outputs to long format</h2>
+<p>DNA data is more complex than a simple latitude/longitude + species name record. A typical metabarcoding pipeline produces:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>File</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>OTU/ASV table</td>
+<td>Sequences × samples (read counts)</td>
+</tr>
+<tr class="even">
+<td>Taxonomy table</td>
+<td>Sequence ID → taxon assignment</td>
+</tr>
+<tr class="odd">
+<td>Sample metadata</td>
+<td>Location, date, method</td>
+</tr>
+<tr class="even">
+<td>FASTA file</td>
+<td>The actual DNA sequences</td>
+</tr>
+</tbody>
+</table>
+<p>The core transformation to remember for the rest of this training:</p>
+<blockquote class="blockquote">
+<p>One row = one unique sequence <strong>in</strong> one sample = one occurrence record</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/DNA_4tables-to-one.jpg" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption>From four raw files to one occurrence table</figcaption>
+</figure>
+</div>
+<p>The most common stumbling block when formatting eDNA data is exactly this “wide to long” transformation — turning an ASV table with one column per sample into one row per detection. We’ll do this transformation by hand with <code>tidyr::gather()</code> in the next episode; if you’re processing many datasets, the <a href="https://github.com/iobis/mdt">Metabarcoding Data Toolkit</a> can automate it for common pipeline outputs.</p>
+<hr>
+</section>
+<section id="key-fields-to-include" class="level2">
+<h2 class="anchored" data-anchor-id="key-fields-to-include">Key fields to include</h2>
+<section id="occurrence-core" class="level3">
+<h3 class="anchored" data-anchor-id="occurrence-core">Occurrence core</h3>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Mandatory fields</strong></p>
+<ul>
+<li><code>occurrenceID</code> — unique, stable ID</li>
+<li><code>scientificName</code> — matched via WoRMS</li>
+<li><code>basisOfRecord</code> = <code>"MaterialSample"</code></li>
+<li><code>eventDate</code>, <code>decimalLatitude</code>, <code>decimalLongitude</code></li>
+<li><code>occurrenceStatus</code> = <code>"present"</code></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Strongly recommended fields</strong></p>
+<ul>
+<li><code>scientificNameID</code> (WoRMS AphiaID)</li>
+<li><code>organismQuantity</code> (read count of the sequence)</li>
+<li><code>organismQuantityType</code> = <code>"DNA sequence reads"</code></li>
+<li><code>associatedSequences</code> (link to e.g.&nbsp;GenBank/ENA accession)</li>
+<li><code>sampleSizeValue</code> / <code>sampleSizeUnit</code> (total reads in the sample)</li>
+<li><code>samplingProtocol</code> (link to your SOP)</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="dna-derived-data-extension" class="level3">
+<h3 class="anchored" data-anchor-id="dna-derived-data-extension">DNA Derived Data extension</h3>
+<ul>
+<li><code>DNA_sequence</code> — the ASV/OTU sequence itself</li>
+<li><code>target_gene</code> — e.g.&nbsp;<code>"COI"</code>, <code>"18S rRNA"</code></li>
+<li><code>pcr_primer_name_forward</code> / <code>pcr_primer_name_reverse</code></li>
+<li><code>seq_meth</code> — e.g.&nbsp;<code>"Illumina MiSeq"</code></li>
+<li><code>otu_class_appr</code> — e.g.&nbsp;<code>"DADA2 v1.18"</code></li>
+<li><code>otu_db</code> — the reference database used</li>
+<li><code>sop</code> — link to your protocol</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/eDNA_quickguide.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption>Quick reference for DNA extension fields</figcaption>
+</figure>
+</div>
+<p>More detail: <a href="https://manual.obis.org/dna_data.html#quick-start-guide">manual.obis.org/dna_data.html#quick-start-guide</a>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Unidentified sequences still count
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Every marine occurrence should ideally carry a WoRMS AphiaID as its <code>scientificNameID</code>. But sequences that can’t be identified shouldn’t be dropped — include them with the highest taxonomic rank you can confidently assign (see <a href="#taxon-matching-with-worms">Taxon matching</a> below), since they can be re-identified later as reference databases improve.</p>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="table-structure-options" class="level2">
+<h2 class="anchored" data-anchor-id="table-structure-options">Table structure options</h2>
+<p>There are two common ways to structure your tables:</p>
+<p><strong>Option A — Occurrence Core</strong></p>
+<pre><code>occurrence.csv
+  └── dna_derived.csv  (linked via occurrenceID)
+  └── emof.csv         (linked via occurrenceID)</code></pre>
+<p><strong>Option B — Event Core</strong> <em>(recommended for eDNA)</em></p>
+<pre><code>event.csv
+  └── occurrence.csv        (linked via eventID)
+       └── dna_derived.csv  (linked via occurrenceID)
+  └── emof.csv              (linked via eventID or occurrenceID)</code></pre>
+<p><strong>Why Event Core?</strong> Sample-level metadata — location, date, method — is recorded <strong>once</strong> per sampling event rather than repeated on every row. For a survey with 500 samples × 2,000 ASVs, that’s 1 million occurrence rows: repeating location and date on every single one is wasteful and error-prone.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/dna_data_event_core_structure.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>Event Core structure linking event, occurrence, and DNA extension tables</figcaption>
+</figure>
+</div>
+<p>Concretely, a dataset built this way is three (or four) linked tables:</p>
+<div class="columns">
+<div class="column" style="width:33%;">
+<p><strong>Event Core</strong> — the where, when &amp; how of collection</p>
+<ul>
+<li><code>eventID</code>, <code>eventDate</code></li>
+<li><code>decimalLatitude</code>, <code>decimalLongitude</code></li>
+<li><code>env_medium</code>, <code>samplingProtocol</code></li>
+</ul>
+</div><div class="column" style="width:33%;">
+<p><strong>Occurrence Extension</strong> — what organism was detected</p>
+<ul>
+<li><code>occurrenceID</code>, <code>eventID</code></li>
+<li><code>scientificName</code>, <code>taxonID</code> (WoRMS)</li>
+<li><code>basisOfRecord</code>, <code>occurrenceStatus</code></li>
+</ul>
+</div><div class="column" style="width:33%;">
+<p><strong>DNA Derived Data Ext.</strong> — the molecular context</p>
+<ul>
+<li><code>occurrenceID</code></li>
+<li><code>DNA_sequence</code>, <code>target_gene</code></li>
+<li><code>pcr_primer_forward/reverse</code>, <code>seq_meth</code></li>
+</ul>
+</div>
+</div>
+<p>Tables are linked by <code>eventID</code> and <code>occurrenceID</code>. An optional fourth table, <strong>eMoF</strong>, carries measurements and facts (see below).</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Which structure will this training use?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In the next episode you’ll build an <strong>Occurrence Core</strong> dataset (Option A) — it’s simpler for a first dataset with only two samples. Once you’re comfortable with the mapping, switching to an Event Core is mostly a matter of splitting the sample-level columns into their own table.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="the-emof-extension" class="level2">
+<h2 class="anchored" data-anchor-id="the-emof-extension">The eMoF extension</h2>
+<p>The Extended MeasurementOrFact (eMoF) table records <strong>all types of measurements</strong> — abiotic, biotic, environmental, or related to sampling effort — in long format, linked to an <code>eventID</code> and/or <code>occurrenceID</code>. Each measurement is one row with a <code>measurementType</code>, <code>measurementValue</code>, and <code>measurementUnit</code>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>eventID</th>
+<th>occurrenceID</th>
+<th>measurementType</th>
+<th>measurementValue</th>
+<th>measurementUnit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>YEARsite1samp1</td>
+<td></td>
+<td>temperature</td>
+<td>25</td>
+<td>°C</td>
+</tr>
+</tbody>
+</table>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>measurementTypeID</th>
+<th>measurementUnitID</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>http://vocab.nerc.ac.uk/collection/P01/current/TEMPPR01/</code></td>
+<td><code>http://vocab.nerc.ac.uk/collection/P06/current/UPAA/</code></td>
+</tr>
+</tbody>
+</table>
+<p>Linking sampling info to <code>eventID</code> instead of repeating it per occurrence decreases duplication — the same principle as the Event Core structure above.</p>
+<section id="controlled-vocabulary" class="level3">
+<h3 class="anchored" data-anchor-id="controlled-vocabulary">Controlled vocabulary</h3>
+<p>Wherever possible, attach a <strong>controlled vocabulary identifier</strong> to each eMoF column:</p>
+<ul>
+<li><code>measurementTypeID</code></li>
+<li><code>measurementUnitID</code></li>
+<li><code>measurementValueID</code> (for non-numeric values)</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/vocab-components.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption>What a vocabulary term should capture</figcaption>
+</figure>
+</div>
+<p>Using identifiers rather than free text facilitates data understanding, enables data aggregation across datasets, and decreases the potential for misuse or misinterpretation. <strong>OBIS recommends using <a href="http://vocab.nerc.ac.uk/">NERC vocabulary</a> terms</strong> wherever a suitable one exists.</p>
+<hr>
+</section>
+</section>
+<section id="taxon-matching-with-worms" class="level2">
+<h2 class="anchored" data-anchor-id="taxon-matching-with-worms">Taxon matching with WoRMS</h2>
+<p>Every <code>scientificName</code> in a marine dataset should resolve to a <strong>WoRMS</strong> (World Register of Marine Species) AphiaID. You can do this:</p>
+<ul>
+<li>Interactively with the <a href="https://www.marinespecies.org/aphia.php?p=match">WoRMS Taxon Match Tool</a></li>
+<li>Programmatically, with <a href="https://iobis.github.io/obistools/#taxon-matching"><code>obistools::match_taxa</code></a>, <a href="https://docs.ropensci.org/worrms/reference/wm_records_taxamatch.html"><code>worrms::wm_records_taxamatch</code></a>, or <a href="https://github.com/iobis/pyworms"><code>pyworms</code></a> in Python</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/worms-dropdown.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption>WoRMS taxon match tool</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>No exact WoRMS match?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use the highest-rank taxon that <em>does</em> have a match (e.g.&nbsp;family or order) rather than leaving the record out. Keep the sequence — it can be re-identified later as reference databases improve.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Still no match at all?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Record completely unidentifiable sequences as:</p>
+<ul>
+<li><code>scientificName</code> = <code>"Biota incertae sedis"</code></li>
+<li><code>scientificNameID</code> = <code>urn:lsid:marinespecies.org:taxname:12</code></li>
+</ul>
+</div>
+</div>
+<p>We’ll put this into practice with <code>obistools::match_taxa()</code> on a real dataset in the next episode.</p>
+<hr>
+</section>
+<section id="key-metadata-by-data-type" class="level2">
+<h2 class="anchored" data-anchor-id="key-metadata-by-data-type">Key metadata by data type</h2>
+<p>The fields you need to capture depend on which stage of the workflow — and which method — produced your data.</p>
+<p><strong>eDNA metabarcoding</strong> (Category 1), from field to taxonomy:</p>
+<ul>
+<li>⛵ <strong>Field sampling</strong> — date, coordinates, environmental measurements</li>
+<li>🧬 <strong>DNA extraction</strong> — concentration, extraction method, extracted amount</li>
+<li>🧪 <strong>Biomarker/PCR</strong> — primer sequence and reference, target gene, PCR conditions, product length, concentration</li>
+<li>💻 <strong>Sequences &amp; taxonomy</strong> — sequencing platform, library layout, public repository ID (NCBI/ENA), taxonomy, annotation confidence and reference, pipeline, reference library</li>
+</ul>
+<p><strong>Quantitative PCR / qPCR</strong> (Category 3) adds detection-specific fields on top of field sampling and DNA extraction:</p>
+<ul>
+<li>🎯 <strong>Target &amp; quantity</strong> — target gene region, primers, copy number, concentration, limit of detection (LOD), quantification cycle (Cq), baseline</li>
+</ul>
+<p>qPCR differs from metabarcoding in one important way: because you’re detecting one specific taxon, <code>scientificName</code> and <code>scientificNameID</code> are required from the start (rather than being resolved after the fact via taxon matching). Both use <code>basisOfRecord = "MaterialSample"</code>.</p>
+<hr>
+</section>
+<section id="quality-control-before-you-publish" class="level2">
+<h2 class="anchored" data-anchor-id="quality-control-before-you-publish">Quality control, before you publish</h2>
+<p>Whichever structure and category you use, check the following before publishing:</p>
+<ul>
+<li>✅ Taxonomy matched to WoRMS (AphiaID required for marine taxa)</li>
+<li>✅ Coordinates in decimal degrees, and actually in the ocean</li>
+<li>✅ Dates in ISO 8601 format (<code>YYYY-MM-DD</code>)</li>
+<li>✅ Unique, stable <code>occurrenceID</code> and <code>eventID</code> values</li>
+<li>✅ Table linkages consistent (<code>eventID</code>, <code>occurrenceID</code> match across tables)</li>
+</ul>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Tool</th>
+<th>What it checks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>obistools</code> (R package)</td>
+<td>Taxonomy, geography, required fields</td>
+</tr>
+<tr class="even">
+<td>GBIF data validator</td>
+<td>Darwin Core Archive structure</td>
+</tr>
+<tr class="odd">
+<td>WoRMS taxon match</td>
+<td>Scientific names → AphiaIDs</td>
+</tr>
+</tbody>
+</table>
+<p>We’ll run these checks with real code on a real dataset in <a href="../episodes/04-structuring-datasets.html">Episode 4</a>.</p>
 <hr>
 <div class="callout callout-style-default callout-caution no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -442,13 +848,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Caution</span>🧪 Exercise 3.1: Exercise title
+<span class="screen-reader-only">Caution</span>🧪 Exercise 3.1: Categorize and map your own data
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Exercise placeholder.</p>
+<p>Think of an eDNA dataset you work with (or plan to publish).</p>
+<ol type="1">
+<li>Which of the five GBIF data categories does it fall into?</li>
+<li>Would an Occurrence Core or an Event Core structure suit it better, and why?</li>
+<li>Pick three raw columns from your own data and say which Darwin Core or DNA extension term each one maps to.</li>
+</ol>
 <div class="callout callout-style-default callout-caution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -457,9 +868,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Solution placeholder.</p>
+<p>There’s no single right answer here — it depends on your dataset. As a worked example: a metabarcoding survey with 50 sampling stations, each with multiple ASVs, is <strong>Category 1</strong>, and because sample-level metadata (site, date, depth) would otherwise be repeated across thousands of ASV rows, an <strong>Event Core</strong> structure is the better fit. A raw column like <code>read_count</code> would map to <code>organismQuantity</code> (with <code>organismQuantityType = "DNA sequence reads"</code>), a <code>primer_pair</code> column maps to <code>pcr_primer_name_forward</code>/<code>pcr_primer_name_reverse</code>, and a <code>sample_date</code> column maps to <code>eventDate</code> once reformatted to ISO 8601.</p>
 </div>
 </div>
 </div>
@@ -477,18 +888,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><strong>Estimated time:</strong> NA minutes</p>
+<p><strong>Estimated time:</strong> 60 minutes</p>
 <p><strong>Pacing notes:</strong></p>
 <ul>
-<li>Note placeholder.</li>
+<li>This episode is conceptual — no code is run yet. Keep momentum by tying every concept back to the concrete example dataset learners will process hands-on in Episode 4.</li>
+<li>The Occurrence Core vs.&nbsp;Event Core decision (and the eMoF long-format idea) are the two concepts learners most often need repeated in the next episode — flag them as “you’ll see this again in five minutes.”</li>
 </ul>
 <p><strong>Common errors:</strong></p>
 <ul>
-<li>Error placeholder.</li>
+<li>Confusing <code>organismQuantity</code> (per-occurrence read count) with <code>sampleSizeValue</code> (total reads in the whole sample) — they’re easy to conflate.</li>
+<li>Assuming Category 1 (metabarcoding) and Category 3 (qPCR) always require the same fields — qPCR requires <code>scientificName</code> up front; metabarcoding resolves it after taxon matching.</li>
+<li>Treating “no WoRMS match” as a reason to drop a row instead of using the highest matched rank or <code>Biota incertae sedis</code>.</li>
 </ul>
 <p><strong>Discussion prompts:</strong></p>
 <ul>
-<li>Discussion prompt placeholder.</li>
+<li>Why does long-format data (used throughout DwC and eMoF) generalize better across datasets than a wide table with one column per measurement type?</li>
+<li>What would go wrong if two collaborators independently invented their own <code>measurementType</code> labels instead of using a controlled vocabulary?</li>
 </ul>
 </div>
 </div>
@@ -505,10 +920,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li>Key point one.</li>
-<li>Key point two.</li>
-<li>Key point three.</li>
+<li>A Darwin Core Archive bundles an occurrence core table with extensions (DNA Derived Data, eMoF) and dataset-level EML metadata into one zip file.</li>
+<li>Figure out your GBIF data category (metabarcoding vs.&nbsp;targeted detection are the two most common) before you start mapping fields.</li>
+<li>The core transformation for eDNA data is wide-to-long: one row per sequence, per sample.</li>
+<li>Use an Event Core structure when sample-level metadata would otherwise be repeated across many occurrence rows.</li>
+<li>Every scientific name should resolve to a WoRMS AphiaID where possible; unmatched sequences are kept, not dropped.</li>
 </ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Further reading
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li><a href="https://doi.org/10.35035/DOC-VF1A-NR22">Publishing DNA-derived data through biodiversity data platforms</a> — the joint GBIF/OBIS DNA publishing guide</li>
+<li><a href="https://manual.obis.org/dna_data.html">OBIS Manual: DNA data</a></li>
+<li><a href="https://docs.gbif.org/publishing-dna-derived-data/1.0/en/#data-packaging-and-mapping">GBIF decision tree for DNA data categories</a></li>
+</ul>
+</div>
 </div>
 </div>
 
@@ -982,87 +1419,359 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Data Standards for eDNA: DwC-A, MIxS, and the DNA Derived Data Extension"</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "One sentence description."</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">time:</span><span class="co"> "~60 min"</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: setup</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Add packages as needed</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon=false}</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">## {{&lt; fa bullseye &gt;}} Learning objectives</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>By the end of this episode, you will be able to:</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Objective one</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Objective two</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Objective three</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>::: {.callout-important icon=false collapse=true}</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="fu">## Prerequisites for this episode</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Completed <span class="co">[</span><span class="ot">Episode 2: OBIS &amp; Darwin Core</span><span class="co">](02-obis-darwin-core.qmd)</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Prerequisite placeholder.</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="fu">## Section heading</span></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>Content placeholder.</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution icon=false}</span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="fu">## 🧪 Exercise 3.1: Exercise title</span></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>Exercise placeholder.</span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution icon=false collapse=true}</span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>Solution placeholder.</span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>::: {.instructor-only}</span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning icon=false}</span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="fu">## {{&lt; fa chalkboard-teacher &gt;}} Instructor notes</span></span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>**Estimated time:** NA minutes</span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>**Pacing notes:**</span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Note placeholder.</span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>**Common errors:**</span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Error placeholder.</span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>**Discussion prompts:**</span>
-<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Discussion prompt placeholder.</span>
-<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip icon=false}</span>
-<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="fu">## {{&lt; fa key &gt;}} Key points</span></span>
-<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Key point one.</span>
-<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Key point two.</span>
-<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Key point three.</span>
-<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>:::</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Data Standards for eDNA: DwC-A, MIxS, and the DNA Derived Data Extension"</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "Learn the vocabulary and table structures that turn raw sequencing outputs into a publishable Darwin Core Archive."</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="an">time:</span><span class="co"> "~60 min"</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: setup</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Add packages as needed</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon=false}</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="fu">## {{&lt; fa bullseye &gt;}} Learning objectives</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>By the end of this episode, you will be able to:</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Describe what a Darwin Core Archive (DwC-A) is and how the DNA Derived Data extension incorporates MIxS terms.</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Identify which of GBIF's five DNA data categories fits your own dataset.</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Explain the "wide to long" transformation from raw sequencing outputs to Darwin Core occurrence records.</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>List the key fields expected in the Occurrence core, the DNA extension, and the eMoF extension.</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Choose between an Occurrence Core and an Event Core table structure for your dataset.</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Describe how taxon matching against WoRMS works, and what to do when a sequence has no match.</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>::: {.callout-important icon=false collapse=true}</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="fu">## Prerequisites for this episode</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Completed <span class="co">[</span><span class="ot">Episode 2: OBIS &amp; Darwin Core</span><span class="co">](02-obis-darwin-core.qmd)</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="fu">## Darwin Core + the DNA Derived Data extension</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>**Darwin Core (DwC)** is a shared vocabulary for biodiversity data — a standard set of term names (`scientificName`, `eventDate`, `decimalLatitude`, and so on) so that data from any source can be combined and compared. The **DNA Derived Data extension** adds terms from **MIxS** (Minimum Information about any (x) Sequence) to capture sequences, primers, and methods. It was developed jointly by GBIF, OBIS, and the genomics community, so the same fields used for INSDC/GenBank submissions can be reused here.</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>A published dataset takes the form of a **Darwin Core Archive (DwC-A)**: a zip file containing a few linked pieces:</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`meta.xml`** — links all the tables together</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`eml.xml`** — dataset-level metadata (who, what, where, when, how)</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`occurrence.csv`** — the occurrence records (the core table)</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`dna_derived.csv`** — the DNA extension, linked to occurrence by <span class="in">`occurrenceID`</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="al">![Structure of a Darwin Core Archive with a DNA Derived Data extension](../assets/dwca.png)</span>{fig-align="center" width="70%"}</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>For the full specification and worked examples, see the <span class="co">[</span><span class="ot">DNA publishing guide</span><span class="co">](https://doi.org/10.35035/DOC-VF1A-NR22)</span>, *Publishing DNA-derived data through biodiversity data platforms*, produced jointly by GBIF and OBIS.</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="fu">## Which data category fits your data?</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>Before mapping any fields, figure out which of GBIF's five DNA data categories describes your dataset:</span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> # <span class="pp">|</span> Category <span class="pp">|</span> Example <span class="pp">|</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **1** | **DNA-derived occurrences** <span class="pp">|</span> Metabarcoding (ASVs/OTUs assigned to taxa) <span class="pp">|</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 2 <span class="pp">|</span> Enriched occurrences <span class="pp">|</span> Voucher specimen + barcoded <span class="pp">|</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **3** | **Targeted species detection** <span class="pp">|</span> qPCR / ddPCR assays <span class="pp">|</span></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 4 <span class="pp">|</span> Name references <span class="pp">|</span> Sequence in GenBank only <span class="pp">|</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 5 <span class="pp">|</span> Metadata only <span class="pp">|</span> Dataset without sequences <span class="pp">|</span></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>Categories 1 and 3 are by far the most common for eDNA researchers: Category 1 covers metabarcoding, Category 3 covers targeted detection methods like qPCR/ddPCR where no sequences are produced. Use the <span class="co">[</span><span class="ot">GBIF decision tree</span><span class="co">](https://docs.gbif.org/publishing-dna-derived-data/1.0/en/#data-packaging-and-mapping)</span> if you're not sure which applies to you. The rest of this episode focuses on Category 1 (metabarcoding), which is what the exercise dataset in the next episode represents.</span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a><span class="fu">## From raw outputs to long format</span></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>DNA data is more complex than a simple latitude/longitude + species name record. A typical metabarcoding pipeline produces:</span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Content <span class="pp">|</span></span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> OTU/ASV table <span class="pp">|</span> Sequences × samples (read counts) <span class="pp">|</span></span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Taxonomy table <span class="pp">|</span> Sequence ID → taxon assignment <span class="pp">|</span></span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Sample metadata <span class="pp">|</span> Location, date, method <span class="pp">|</span></span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> FASTA file <span class="pp">|</span> The actual DNA sequences <span class="pp">|</span></span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>The core transformation to remember for the rest of this training:</span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; One row = one unique sequence **in** one sample = one occurrence record</span></span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a><span class="al">![From four raw files to one occurrence table](../assets/DNA_4tables-to-one.jpg)</span>{fig-align="center" width="80%"}</span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>The most common stumbling block when formatting eDNA data is exactly this "wide to long" transformation — turning an ASV table with one column per sample into one row per detection. We'll do this transformation by hand with <span class="in">`tidyr::gather()`</span> in the next episode; if you're processing many datasets, the <span class="co">[</span><span class="ot">Metabarcoding Data Toolkit</span><span class="co">](https://github.com/iobis/mdt)</span> can automate it for common pipeline outputs.</span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key fields to include</span></span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a><span class="fu">### Occurrence core</span></span>
+<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a>::: {.columns}</span>
+<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a>::: {.column width="50%"}</span>
+<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a>**Mandatory fields**</span>
+<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`occurrenceID`</span> — unique, stable ID</span>
+<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`scientificName`</span> — matched via WoRMS</span>
+<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`basisOfRecord`</span> = <span class="in">`"MaterialSample"`</span></span>
+<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`eventDate`</span>, <span class="in">`decimalLatitude`</span>, <span class="in">`decimalLongitude`</span></span>
+<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`occurrenceStatus`</span> = <span class="in">`"present"`</span></span>
+<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>::: {.column width="50%"}</span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>**Strongly recommended fields**</span>
+<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`scientificNameID`</span> (WoRMS AphiaID)</span>
+<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`organismQuantity`</span> (read count of the sequence)</span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`organismQuantityType`</span> = <span class="in">`"DNA sequence reads"`</span></span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`associatedSequences`</span> (link to e.g. GenBank/ENA accession)</span>
+<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`sampleSizeValue`</span> / <span class="in">`sampleSizeUnit`</span> (total reads in the sample)</span>
+<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`samplingProtocol`</span> (link to your SOP)</span>
+<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a><span class="fu">### DNA Derived Data extension</span></span>
+<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`DNA_sequence`</span> — the ASV/OTU sequence itself</span>
+<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`target_gene`</span> — e.g. <span class="in">`"COI"`</span>, <span class="in">`"18S rRNA"`</span></span>
+<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`pcr_primer_name_forward`</span> / <span class="in">`pcr_primer_name_reverse`</span></span>
+<span id="cb3-122"><a href="#cb3-122" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`seq_meth`</span> — e.g. <span class="in">`"Illumina MiSeq"`</span></span>
+<span id="cb3-123"><a href="#cb3-123" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`otu_class_appr`</span> — e.g. <span class="in">`"DADA2 v1.18"`</span></span>
+<span id="cb3-124"><a href="#cb3-124" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`otu_db`</span> — the reference database used</span>
+<span id="cb3-125"><a href="#cb3-125" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`sop`</span> — link to your protocol</span>
+<span id="cb3-126"><a href="#cb3-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-127"><a href="#cb3-127" aria-hidden="true" tabindex="-1"></a><span class="al">![Quick reference for DNA extension fields](../assets/eDNA_quickguide.png)</span>{fig-align="center" width="60%"}</span>
+<span id="cb3-128"><a href="#cb3-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-129"><a href="#cb3-129" aria-hidden="true" tabindex="-1"></a>More detail: <span class="co">[</span><span class="ot">manual.obis.org/dna_data.html#quick-start-guide</span><span class="co">](https://manual.obis.org/dna_data.html#quick-start-guide)</span>.</span>
+<span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-131"><a href="#cb3-131" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb3-132"><a href="#cb3-132" aria-hidden="true" tabindex="-1"></a><span class="fu">## Unidentified sequences still count</span></span>
+<span id="cb3-133"><a href="#cb3-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-134"><a href="#cb3-134" aria-hidden="true" tabindex="-1"></a>Every marine occurrence should ideally carry a WoRMS AphiaID as its <span class="in">`scientificNameID`</span>. But sequences that can't be identified shouldn't be dropped — include them with the highest taxonomic rank you can confidently assign (see <span class="co">[</span><span class="ot">Taxon matching</span><span class="co">](#taxon-matching-with-worms)</span> below), since they can be re-identified later as reference databases improve.</span>
+<span id="cb3-135"><a href="#cb3-135" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-136"><a href="#cb3-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-137"><a href="#cb3-137" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-138"><a href="#cb3-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a><span class="fu">## Table structure options</span></span>
+<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a>There are two common ways to structure your tables:</span>
+<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a>**Option A — Occurrence Core**</span>
+<span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a><span class="in">occurrence.csv</span></span>
+<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a><span class="in">  └── dna_derived.csv  (linked via occurrenceID)</span></span>
+<span id="cb3-148"><a href="#cb3-148" aria-hidden="true" tabindex="-1"></a><span class="in">  └── emof.csv         (linked via occurrenceID)</span></span>
+<span id="cb3-149"><a href="#cb3-149" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-150"><a href="#cb3-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-151"><a href="#cb3-151" aria-hidden="true" tabindex="-1"></a>**Option B — Event Core** *(recommended for eDNA)*</span>
+<span id="cb3-152"><a href="#cb3-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-153"><a href="#cb3-153" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-154"><a href="#cb3-154" aria-hidden="true" tabindex="-1"></a><span class="in">event.csv</span></span>
+<span id="cb3-155"><a href="#cb3-155" aria-hidden="true" tabindex="-1"></a><span class="in">  └── occurrence.csv        (linked via eventID)</span></span>
+<span id="cb3-156"><a href="#cb3-156" aria-hidden="true" tabindex="-1"></a><span class="in">       └── dna_derived.csv  (linked via occurrenceID)</span></span>
+<span id="cb3-157"><a href="#cb3-157" aria-hidden="true" tabindex="-1"></a><span class="in">  └── emof.csv              (linked via eventID or occurrenceID)</span></span>
+<span id="cb3-158"><a href="#cb3-158" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-159"><a href="#cb3-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-160"><a href="#cb3-160" aria-hidden="true" tabindex="-1"></a>**Why Event Core?** Sample-level metadata — location, date, method — is recorded **once** per sampling event rather than repeated on every row. For a survey with 500 samples × 2,000 ASVs, that's 1 million occurrence rows: repeating location and date on every single one is wasteful and error-prone.</span>
+<span id="cb3-161"><a href="#cb3-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-162"><a href="#cb3-162" aria-hidden="true" tabindex="-1"></a><span class="al">![Event Core structure linking event, occurrence, and DNA extension tables](../assets/dna_data_event_core_structure.png)</span>{fig-align="center" width="70%"}</span>
+<span id="cb3-163"><a href="#cb3-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-164"><a href="#cb3-164" aria-hidden="true" tabindex="-1"></a>Concretely, a dataset built this way is three (or four) linked tables:</span>
+<span id="cb3-165"><a href="#cb3-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-166"><a href="#cb3-166" aria-hidden="true" tabindex="-1"></a>::: {.columns}</span>
+<span id="cb3-167"><a href="#cb3-167" aria-hidden="true" tabindex="-1"></a>::: {.column width="33%"}</span>
+<span id="cb3-168"><a href="#cb3-168" aria-hidden="true" tabindex="-1"></a>**Event Core** — the where, when &amp; how of collection</span>
+<span id="cb3-169"><a href="#cb3-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-170"><a href="#cb3-170" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`eventID`</span>, <span class="in">`eventDate`</span></span>
+<span id="cb3-171"><a href="#cb3-171" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`decimalLatitude`</span>, <span class="in">`decimalLongitude`</span></span>
+<span id="cb3-172"><a href="#cb3-172" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`env_medium`</span>, <span class="in">`samplingProtocol`</span></span>
+<span id="cb3-173"><a href="#cb3-173" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-174"><a href="#cb3-174" aria-hidden="true" tabindex="-1"></a>::: {.column width="33%"}</span>
+<span id="cb3-175"><a href="#cb3-175" aria-hidden="true" tabindex="-1"></a>**Occurrence Extension** — what organism was detected</span>
+<span id="cb3-176"><a href="#cb3-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-177"><a href="#cb3-177" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`occurrenceID`</span>, <span class="in">`eventID`</span></span>
+<span id="cb3-178"><a href="#cb3-178" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`scientificName`</span>, <span class="in">`taxonID`</span> (WoRMS)</span>
+<span id="cb3-179"><a href="#cb3-179" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`basisOfRecord`</span>, <span class="in">`occurrenceStatus`</span></span>
+<span id="cb3-180"><a href="#cb3-180" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-181"><a href="#cb3-181" aria-hidden="true" tabindex="-1"></a>::: {.column width="33%"}</span>
+<span id="cb3-182"><a href="#cb3-182" aria-hidden="true" tabindex="-1"></a>**DNA Derived Data Ext.** — the molecular context</span>
+<span id="cb3-183"><a href="#cb3-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-184"><a href="#cb3-184" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`occurrenceID`</span></span>
+<span id="cb3-185"><a href="#cb3-185" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`DNA_sequence`</span>, <span class="in">`target_gene`</span></span>
+<span id="cb3-186"><a href="#cb3-186" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`pcr_primer_forward/reverse`</span>, <span class="in">`seq_meth`</span></span>
+<span id="cb3-187"><a href="#cb3-187" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-188"><a href="#cb3-188" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-189"><a href="#cb3-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-190"><a href="#cb3-190" aria-hidden="true" tabindex="-1"></a>Tables are linked by <span class="in">`eventID`</span> and <span class="in">`occurrenceID`</span>. An optional fourth table, **eMoF**, carries measurements and facts (see below).</span>
+<span id="cb3-191"><a href="#cb3-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-192"><a href="#cb3-192" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb3-193"><a href="#cb3-193" aria-hidden="true" tabindex="-1"></a><span class="fu">## Which structure will this training use?</span></span>
+<span id="cb3-194"><a href="#cb3-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-195"><a href="#cb3-195" aria-hidden="true" tabindex="-1"></a>In the next episode you'll build an **Occurrence Core** dataset (Option A) — it's simpler for a first dataset with only two samples. Once you're comfortable with the mapping, switching to an Event Core is mostly a matter of splitting the sample-level columns into their own table.</span>
+<span id="cb3-196"><a href="#cb3-196" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-197"><a href="#cb3-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-198"><a href="#cb3-198" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-199"><a href="#cb3-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-200"><a href="#cb3-200" aria-hidden="true" tabindex="-1"></a><span class="fu">## The eMoF extension</span></span>
+<span id="cb3-201"><a href="#cb3-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-202"><a href="#cb3-202" aria-hidden="true" tabindex="-1"></a>The Extended MeasurementOrFact (eMoF) table records **all types of measurements** — abiotic, biotic, environmental, or related to sampling effort — in long format, linked to an <span class="in">`eventID`</span> and/or <span class="in">`occurrenceID`</span>. Each measurement is one row with a <span class="in">`measurementType`</span>, <span class="in">`measurementValue`</span>, and <span class="in">`measurementUnit`</span>:</span>
+<span id="cb3-203"><a href="#cb3-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-204"><a href="#cb3-204" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> eventID <span class="pp">|</span> occurrenceID <span class="pp">|</span> measurementType <span class="pp">|</span> measurementValue <span class="pp">|</span> measurementUnit <span class="pp">|</span></span>
+<span id="cb3-205"><a href="#cb3-205" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|---|---|</span></span>
+<span id="cb3-206"><a href="#cb3-206" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> YEARsite1samp1 <span class="pp">|</span> <span class="pp">|</span> temperature <span class="pp">|</span> 25 <span class="pp">|</span> °C <span class="pp">|</span></span>
+<span id="cb3-207"><a href="#cb3-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-208"><a href="#cb3-208" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> measurementTypeID <span class="pp">|</span> measurementUnitID <span class="pp">|</span></span>
+<span id="cb3-209"><a href="#cb3-209" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb3-210"><a href="#cb3-210" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`http://vocab.nerc.ac.uk/collection/P01/current/TEMPPR01/`</span> <span class="pp">|</span> <span class="in">`http://vocab.nerc.ac.uk/collection/P06/current/UPAA/`</span> <span class="pp">|</span></span>
+<span id="cb3-211"><a href="#cb3-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-212"><a href="#cb3-212" aria-hidden="true" tabindex="-1"></a>Linking sampling info to <span class="in">`eventID`</span> instead of repeating it per occurrence decreases duplication — the same principle as the Event Core structure above.</span>
+<span id="cb3-213"><a href="#cb3-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-214"><a href="#cb3-214" aria-hidden="true" tabindex="-1"></a><span class="fu">### Controlled vocabulary</span></span>
+<span id="cb3-215"><a href="#cb3-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-216"><a href="#cb3-216" aria-hidden="true" tabindex="-1"></a>Wherever possible, attach a **controlled vocabulary identifier** to each eMoF column:</span>
+<span id="cb3-217"><a href="#cb3-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-218"><a href="#cb3-218" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`measurementTypeID`</span></span>
+<span id="cb3-219"><a href="#cb3-219" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`measurementUnitID`</span></span>
+<span id="cb3-220"><a href="#cb3-220" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`measurementValueID`</span> (for non-numeric values)</span>
+<span id="cb3-221"><a href="#cb3-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-222"><a href="#cb3-222" aria-hidden="true" tabindex="-1"></a><span class="al">![What a vocabulary term should capture](../assets/vocab-components.png)</span>{fig-align="center" width="60%"}</span>
+<span id="cb3-223"><a href="#cb3-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-224"><a href="#cb3-224" aria-hidden="true" tabindex="-1"></a>Using identifiers rather than free text facilitates data understanding, enables data aggregation across datasets, and decreases the potential for misuse or misinterpretation. **OBIS recommends using [NERC vocabulary](http://vocab.nerc.ac.uk/) terms** wherever a suitable one exists.</span>
+<span id="cb3-225"><a href="#cb3-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-226"><a href="#cb3-226" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-227"><a href="#cb3-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-228"><a href="#cb3-228" aria-hidden="true" tabindex="-1"></a><span class="fu">## Taxon matching with WoRMS</span></span>
+<span id="cb3-229"><a href="#cb3-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-230"><a href="#cb3-230" aria-hidden="true" tabindex="-1"></a>Every <span class="in">`scientificName`</span> in a marine dataset should resolve to a **WoRMS** (World Register of Marine Species) AphiaID. You can do this:</span>
+<span id="cb3-231"><a href="#cb3-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-232"><a href="#cb3-232" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Interactively with the <span class="co">[</span><span class="ot">WoRMS Taxon Match Tool</span><span class="co">](https://www.marinespecies.org/aphia.php?p=match)</span></span>
+<span id="cb3-233"><a href="#cb3-233" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Programmatically, with <span class="co">[</span><span class="ot">`obistools::match_taxa`</span><span class="co">](https://iobis.github.io/obistools/#taxon-matching)</span>, <span class="co">[</span><span class="ot">`worrms::wm_records_taxamatch`</span><span class="co">](https://docs.ropensci.org/worrms/reference/wm_records_taxamatch.html)</span>, or <span class="co">[</span><span class="ot">`pyworms`</span><span class="co">](https://github.com/iobis/pyworms)</span> in Python</span>
+<span id="cb3-234"><a href="#cb3-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-235"><a href="#cb3-235" aria-hidden="true" tabindex="-1"></a><span class="al">![WoRMS taxon match tool](../assets/worms-dropdown.png)</span>{fig-align="center" width="60%"}</span>
+<span id="cb3-236"><a href="#cb3-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-237"><a href="#cb3-237" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb3-238"><a href="#cb3-238" aria-hidden="true" tabindex="-1"></a><span class="fu">## No exact WoRMS match?</span></span>
+<span id="cb3-239"><a href="#cb3-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-240"><a href="#cb3-240" aria-hidden="true" tabindex="-1"></a>Use the highest-rank taxon that *does* have a match (e.g. family or order) rather than leaving the record out. Keep the sequence — it can be re-identified later as reference databases improve.</span>
+<span id="cb3-241"><a href="#cb3-241" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-242"><a href="#cb3-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-243"><a href="#cb3-243" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon=false}</span>
+<span id="cb3-244"><a href="#cb3-244" aria-hidden="true" tabindex="-1"></a><span class="fu">## Still no match at all?</span></span>
+<span id="cb3-245"><a href="#cb3-245" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-246"><a href="#cb3-246" aria-hidden="true" tabindex="-1"></a>Record completely unidentifiable sequences as:</span>
+<span id="cb3-247"><a href="#cb3-247" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-248"><a href="#cb3-248" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`scientificName`</span> = <span class="in">`"Biota incertae sedis"`</span></span>
+<span id="cb3-249"><a href="#cb3-249" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`scientificNameID`</span> = <span class="in">`urn:lsid:marinespecies.org:taxname:12`</span></span>
+<span id="cb3-250"><a href="#cb3-250" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-251"><a href="#cb3-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-252"><a href="#cb3-252" aria-hidden="true" tabindex="-1"></a>We'll put this into practice with <span class="in">`obistools::match_taxa()`</span> on a real dataset in the next episode.</span>
+<span id="cb3-253"><a href="#cb3-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-254"><a href="#cb3-254" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-255"><a href="#cb3-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-256"><a href="#cb3-256" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key metadata by data type</span></span>
+<span id="cb3-257"><a href="#cb3-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-258"><a href="#cb3-258" aria-hidden="true" tabindex="-1"></a>The fields you need to capture depend on which stage of the workflow — and which method — produced your data.</span>
+<span id="cb3-259"><a href="#cb3-259" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-260"><a href="#cb3-260" aria-hidden="true" tabindex="-1"></a>**eDNA metabarcoding** (Category 1), from field to taxonomy:</span>
+<span id="cb3-261"><a href="#cb3-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-262"><a href="#cb3-262" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>⛵ **Field sampling** — date, coordinates, environmental measurements</span>
+<span id="cb3-263"><a href="#cb3-263" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>🧬 **DNA extraction** — concentration, extraction method, extracted amount</span>
+<span id="cb3-264"><a href="#cb3-264" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>🧪 **Biomarker/PCR** — primer sequence and reference, target gene, PCR conditions, product length, concentration</span>
+<span id="cb3-265"><a href="#cb3-265" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>💻 **Sequences &amp; taxonomy** — sequencing platform, library layout, public repository ID (NCBI/ENA), taxonomy, annotation confidence and reference, pipeline, reference library</span>
+<span id="cb3-266"><a href="#cb3-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-267"><a href="#cb3-267" aria-hidden="true" tabindex="-1"></a>**Quantitative PCR / qPCR** (Category 3) adds detection-specific fields on top of field sampling and DNA extraction:</span>
+<span id="cb3-268"><a href="#cb3-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-269"><a href="#cb3-269" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>🎯 **Target &amp; quantity** — target gene region, primers, copy number, concentration, limit of detection (LOD), quantification cycle (Cq), baseline</span>
+<span id="cb3-270"><a href="#cb3-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-271"><a href="#cb3-271" aria-hidden="true" tabindex="-1"></a>qPCR differs from metabarcoding in one important way: because you're detecting one specific taxon, <span class="in">`scientificName`</span> and <span class="in">`scientificNameID`</span> are required from the start (rather than being resolved after the fact via taxon matching). Both use <span class="in">`basisOfRecord = "MaterialSample"`</span>.</span>
+<span id="cb3-272"><a href="#cb3-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-273"><a href="#cb3-273" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-274"><a href="#cb3-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-275"><a href="#cb3-275" aria-hidden="true" tabindex="-1"></a><span class="fu">## Quality control, before you publish</span></span>
+<span id="cb3-276"><a href="#cb3-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-277"><a href="#cb3-277" aria-hidden="true" tabindex="-1"></a>Whichever structure and category you use, check the following before publishing:</span>
+<span id="cb3-278"><a href="#cb3-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-279"><a href="#cb3-279" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✅ Taxonomy matched to WoRMS (AphiaID required for marine taxa)</span>
+<span id="cb3-280"><a href="#cb3-280" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✅ Coordinates in decimal degrees, and actually in the ocean</span>
+<span id="cb3-281"><a href="#cb3-281" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✅ Dates in ISO 8601 format (<span class="in">`YYYY-MM-DD`</span>)</span>
+<span id="cb3-282"><a href="#cb3-282" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✅ Unique, stable <span class="in">`occurrenceID`</span> and <span class="in">`eventID`</span> values</span>
+<span id="cb3-283"><a href="#cb3-283" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✅ Table linkages consistent (<span class="in">`eventID`</span>, <span class="in">`occurrenceID`</span> match across tables)</span>
+<span id="cb3-284"><a href="#cb3-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-285"><a href="#cb3-285" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Tool <span class="pp">|</span> What it checks <span class="pp">|</span></span>
+<span id="cb3-286"><a href="#cb3-286" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb3-287"><a href="#cb3-287" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`obistools`</span> (R package) <span class="pp">|</span> Taxonomy, geography, required fields <span class="pp">|</span></span>
+<span id="cb3-288"><a href="#cb3-288" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> GBIF data validator <span class="pp">|</span> Darwin Core Archive structure <span class="pp">|</span></span>
+<span id="cb3-289"><a href="#cb3-289" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> WoRMS taxon match <span class="pp">|</span> Scientific names → AphiaIDs <span class="pp">|</span></span>
+<span id="cb3-290"><a href="#cb3-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-291"><a href="#cb3-291" aria-hidden="true" tabindex="-1"></a>We'll run these checks with real code on a real dataset in <span class="co">[</span><span class="ot">Episode 4</span><span class="co">](04-structuring-datasets.qmd)</span>.</span>
+<span id="cb3-292"><a href="#cb3-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-293"><a href="#cb3-293" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-294"><a href="#cb3-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-295"><a href="#cb3-295" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution icon=false}</span>
+<span id="cb3-296"><a href="#cb3-296" aria-hidden="true" tabindex="-1"></a><span class="fu">## 🧪 Exercise 3.1: Categorize and map your own data</span></span>
+<span id="cb3-297"><a href="#cb3-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-298"><a href="#cb3-298" aria-hidden="true" tabindex="-1"></a>Think of an eDNA dataset you work with (or plan to publish).</span>
+<span id="cb3-299"><a href="#cb3-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-300"><a href="#cb3-300" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Which of the five GBIF data categories does it fall into?</span>
+<span id="cb3-301"><a href="#cb3-301" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Would an Occurrence Core or an Event Core structure suit it better, and why?</span>
+<span id="cb3-302"><a href="#cb3-302" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Pick three raw columns from your own data and say which Darwin Core or DNA extension term each one maps to.</span>
+<span id="cb3-303"><a href="#cb3-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-304"><a href="#cb3-304" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution icon=false collapse=true}</span>
+<span id="cb3-305"><a href="#cb3-305" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
+<span id="cb3-306"><a href="#cb3-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-307"><a href="#cb3-307" aria-hidden="true" tabindex="-1"></a>There's no single right answer here — it depends on your dataset. As a worked example: a metabarcoding survey with 50 sampling stations, each with multiple ASVs, is **Category 1**, and because sample-level metadata (site, date, depth) would otherwise be repeated across thousands of ASV rows, an **Event Core** structure is the better fit. A raw column like <span class="in">`read_count`</span> would map to <span class="in">`organismQuantity`</span> (with <span class="in">`organismQuantityType = "DNA sequence reads"`</span>), a <span class="in">`primer_pair`</span> column maps to <span class="in">`pcr_primer_name_forward`</span>/<span class="in">`pcr_primer_name_reverse`</span>, and a <span class="in">`sample_date`</span> column maps to <span class="in">`eventDate`</span> once reformatted to ISO 8601.</span>
+<span id="cb3-308"><a href="#cb3-308" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-309"><a href="#cb3-309" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-310"><a href="#cb3-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-311"><a href="#cb3-311" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-312"><a href="#cb3-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-313"><a href="#cb3-313" aria-hidden="true" tabindex="-1"></a>::: {.instructor-only}</span>
+<span id="cb3-314"><a href="#cb3-314" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning icon=false}</span>
+<span id="cb3-315"><a href="#cb3-315" aria-hidden="true" tabindex="-1"></a><span class="fu">## {{&lt; fa chalkboard-teacher &gt;}} Instructor notes</span></span>
+<span id="cb3-316"><a href="#cb3-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-317"><a href="#cb3-317" aria-hidden="true" tabindex="-1"></a>**Estimated time:** 60 minutes</span>
+<span id="cb3-318"><a href="#cb3-318" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-319"><a href="#cb3-319" aria-hidden="true" tabindex="-1"></a>**Pacing notes:**</span>
+<span id="cb3-320"><a href="#cb3-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-321"><a href="#cb3-321" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>This episode is conceptual — no code is run yet. Keep momentum by tying every concept back to the concrete example dataset learners will process hands-on in Episode 4.</span>
+<span id="cb3-322"><a href="#cb3-322" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The Occurrence Core vs. Event Core decision (and the eMoF long-format idea) are the two concepts learners most often need repeated in the next episode — flag them as "you'll see this again in five minutes."</span>
+<span id="cb3-323"><a href="#cb3-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-324"><a href="#cb3-324" aria-hidden="true" tabindex="-1"></a>**Common errors:**</span>
+<span id="cb3-325"><a href="#cb3-325" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-326"><a href="#cb3-326" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Confusing <span class="in">`organismQuantity`</span> (per-occurrence read count) with <span class="in">`sampleSizeValue`</span> (total reads in the whole sample) — they're easy to conflate.</span>
+<span id="cb3-327"><a href="#cb3-327" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Assuming Category 1 (metabarcoding) and Category 3 (qPCR) always require the same fields — qPCR requires <span class="in">`scientificName`</span> up front; metabarcoding resolves it after taxon matching.</span>
+<span id="cb3-328"><a href="#cb3-328" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Treating "no WoRMS match" as a reason to drop a row instead of using the highest matched rank or <span class="in">`Biota incertae sedis`</span>.</span>
+<span id="cb3-329"><a href="#cb3-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-330"><a href="#cb3-330" aria-hidden="true" tabindex="-1"></a>**Discussion prompts:**</span>
+<span id="cb3-331"><a href="#cb3-331" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-332"><a href="#cb3-332" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Why does long-format data (used throughout DwC and eMoF) generalize better across datasets than a wide table with one column per measurement type?</span>
+<span id="cb3-333"><a href="#cb3-333" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>What would go wrong if two collaborators independently invented their own <span class="in">`measurementType`</span> labels instead of using a controlled vocabulary?</span>
+<span id="cb3-334"><a href="#cb3-334" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-335"><a href="#cb3-335" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-336"><a href="#cb3-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-337"><a href="#cb3-337" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-338"><a href="#cb3-338" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-339"><a href="#cb3-339" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip icon=false}</span>
+<span id="cb3-340"><a href="#cb3-340" aria-hidden="true" tabindex="-1"></a><span class="fu">## {{&lt; fa key &gt;}} Key points</span></span>
+<span id="cb3-341"><a href="#cb3-341" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-342"><a href="#cb3-342" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A Darwin Core Archive bundles an occurrence core table with extensions (DNA Derived Data, eMoF) and dataset-level EML metadata into one zip file.</span>
+<span id="cb3-343"><a href="#cb3-343" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Figure out your GBIF data category (metabarcoding vs. targeted detection are the two most common) before you start mapping fields.</span>
+<span id="cb3-344"><a href="#cb3-344" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The core transformation for eDNA data is wide-to-long: one row per sequence, per sample.</span>
+<span id="cb3-345"><a href="#cb3-345" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Use an Event Core structure when sample-level metadata would otherwise be repeated across many occurrence rows.</span>
+<span id="cb3-346"><a href="#cb3-346" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Every scientific name should resolve to a WoRMS AphiaID where possible; unmatched sequences are kept, not dropped.</span>
+<span id="cb3-347"><a href="#cb3-347" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-348"><a href="#cb3-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-349"><a href="#cb3-349" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon=false collapse=true}</span>
+<span id="cb3-350"><a href="#cb3-350" aria-hidden="true" tabindex="-1"></a><span class="fu">## Further reading</span></span>
+<span id="cb3-351"><a href="#cb3-351" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-352"><a href="#cb3-352" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Publishing DNA-derived data through biodiversity data platforms</span><span class="co">](https://doi.org/10.35035/DOC-VF1A-NR22)</span> — the joint GBIF/OBIS DNA publishing guide</span>
+<span id="cb3-353"><a href="#cb3-353" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">OBIS Manual: DNA data</span><span class="co">](https://manual.obis.org/dna_data.html)</span></span>
+<span id="cb3-354"><a href="#cb3-354" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">GBIF decision tree for DNA data categories</span><span class="co">](https://docs.gbif.org/publishing-dna-derived-data/1.0/en/#data-packaging-and-mapping)</span></span>
+<span id="cb3-355"><a href="#cb3-355" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
