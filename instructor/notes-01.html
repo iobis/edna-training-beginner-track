@@ -110,6 +110,113 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<style>
+.lang-toggle-item.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+</style>
+<script>
+// Adds an EN/ES language dropdown to the navbar. Always shows both
+// languages; the one without a translated counterpart of the current
+// page is greyed out instead of the dropdown being hidden.
+(function () {
+  // Normalize root/directory URLs (e.g. "/" or "/episodes/") and
+  // pretty URLs without an extension (e.g. "/episodes/03-data-standards")
+  // to the actual rendered file path (".../index.html" or "....html")
+  // before computing the EN/ES counterpart.
+  function normalize(path) {
+    if (/\.html$/.test(path)) return path;
+    if (path.endsWith("/")) return path + "index.html";
+    return path + ".html";
+  }
+
+  function esPathFor(path) {
+    path = normalize(path);
+    if (/\.es\.html$/.test(path)) return path;
+    return path.replace(/\.html$/, ".es.html");
+  }
+
+  function enPathFor(path) {
+    return normalize(path).replace(/\.es\.html$/, ".html");
+  }
+
+  function buildDropdown(enHref, esHref, isEs) {
+    var li = document.createElement("li");
+    li.className = "nav-item dropdown";
+
+    var toggle = document.createElement("a");
+    toggle.className = "nav-link dropdown-toggle";
+    toggle.href = "#";
+    toggle.role = "button";
+    toggle.setAttribute("data-bs-toggle", "dropdown");
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.innerHTML = '<i class="bi bi-translate"></i> ' + (isEs ? "ES" : "EN");
+    li.appendChild(toggle);
+
+    var menu = document.createElement("ul");
+    menu.className = "dropdown-menu dropdown-menu-end";
+
+    menu.appendChild(buildItem("English", enHref, !isEs, true));
+    menu.appendChild(buildItem("Español", esHref, isEs, esHref !== null));
+
+    li.appendChild(menu);
+    return li;
+  }
+
+  function buildItem(label, href, isActive, isAvailable) {
+    var item = document.createElement("li");
+    var a = document.createElement("a");
+    a.className = "dropdown-item lang-toggle-item";
+    if (isActive) a.classList.add("active");
+    if (!isAvailable) {
+      a.classList.add("disabled");
+      a.setAttribute("aria-disabled", "true");
+      a.title = "Not yet translated";
+      a.href = "#";
+    } else {
+      a.href = href;
+    }
+    a.textContent = label;
+    item.appendChild(a);
+    return item;
+  }
+
+  function addToggle() {
+    var navRight = document.querySelector(
+      "#quarto-header .navbar-nav.navbar-nav-scroll.ms-auto, #quarto-header .navbar-nav.ms-auto"
+    );
+    if (!navRight) return;
+
+    var path = normalize(window.location.pathname);
+    var isEs = /\.es\.html$/.test(path);
+    var enHref = isEs ? enPathFor(path) : path;
+    var esCandidate = isEs ? path : esPathFor(path);
+
+    if (isEs) {
+      // The English version always exists (it's the source page).
+      navRight.appendChild(buildDropdown(enHref, esCandidate, isEs));
+      return;
+    }
+
+    fetch(esCandidate, { method: "HEAD" })
+      .then(function (response) {
+        navRight.appendChild(
+          buildDropdown(enHref, response.ok ? esCandidate : null, isEs)
+        );
+      })
+      .catch(function () {
+        navRight.appendChild(buildDropdown(enHref, null, isEs));
+      });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", addToggle);
+  } else {
+    addToggle();
+  }
+})();
+</script>
 
 
 <link rel="stylesheet" href="../site_libs/quarto-contrib/quarto-project/obis-workshop/obis-callouts.css">
