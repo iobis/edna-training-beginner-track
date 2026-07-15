@@ -1,13 +1,13 @@
-column,definition,
-name,"Unique sample identifier assigned by the eDNA Expeditions project (e.g., EE0493).",
-size,"Volume of seawater filtered for the sample, in milliliters.",
-event_begin,Date the sampling event was conducted; recorded in DD/MM/YYYY format.,
-area_name,Local name of the specific sampling site within the marine World Heritage area.,
-area_longitude,Longitude of the sampling site in decimal degrees (WGS84).,
-area_latitude,Latitude of the sampling site in decimal degrees (WGS84).,
-area_uncertainty,"Estimated radius, in meters, of the circle around the reported coordinates within which the actual sampling location is expected to fall.",
-parent_area_name,Name of the UNESCO marine World Heritage site to which the sampling area belongs.,
-dna,"Concentration of extracted DNA from the filtered sample, in nanograms per microliter (ng/μL).",
+column,definition
+name,"Unique sample identifier assigned by the eDNA Expeditions project (e.g., EE0493)."
+size,"Volume of seawater filtered for the sample, in milliliters."
+event_begin,Date the sampling event was conducted; recorded in DD/MM/YYYY format.
+area_name,Local name of the specific sampling site within the marine World Heritage area.
+area_longitude,Longitude of the sampling site in decimal degrees (WGS84).
+area_latitude,Latitude of the sampling site in decimal degrees (WGS84).
+area_uncertainty,"Estimated radius, in meters, of the circle around the reported coordinates within which the actual sampling location is expected to fall."
+parent_area_name,Name of the UNESCO marine World Heritage site to which the sampling area belongs.
+dna,"Concentration of extracted DNA from the filtered sample, in nanograms per microliter (ng/μL)."
 depth,"Depth at which the sample was collected, in meters below the sea surface.",
 temperature,"Temperature of the seawater at the time of sampling, in degrees Celsius.",
 

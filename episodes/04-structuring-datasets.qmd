@@ -71,18 +71,19 @@ library(lubridate)
 library(tidyr)
 library(purrr)
 library(leaflet)
+#if (!require("BiocManager", quietly = TRUE))
+#  install.packages("BiocManager")
+#BiocManager::install("Biostrings")
 library(Biostrings)
+#remotes::install_github("obistools")
+library(obistools)
 #remotes::install_github("pieterprovoost/r-dwca-writer")
 library(dwcawriter)
-
-# make sure to change the output directory to your own
-output_dir <- "./dwc/saara"
-dir.create(output_dir)
 
 # limit number of rows in notebook output
 options(repr.matrix.max.rows = 10, repr.matrix.max.cols = 20)
 ```
-You may need to install some packages. We will use the output_dir in the final step of this tutorial.
+You may need to install some packages. The commented lines provide code to help you install certain packages.
 
 ---
 
@@ -90,18 +91,26 @@ You may need to install some packages. We will use the output_dir in the final s
 
 Make sure you have downloaded the DNA files in the `/data` folder from this training's repository: (<https://github.com/iobis/edna-training-beginner-track>). 
 
-Set your working directory to wherever you have downloaded the data. Confirm it is set by listing the files available to you in the `data/` folder.
+Set your working directory to wherever you have downloaded the data. We will also create an output directory for use in the final step of this tutorial.
+
+Confirm the working directory is set by listing the files available to you in the `data/` folder.
+
 
 ```r
-#setwd(dir = "../dna-training/")
-list.files("./data", full.names = TRUE)
+#setwd(dir = "../data/")
+
+# create an output directory
+output_dir <- "./dwc"
+dir.create(output_dir)
+
+list.files(".", full.names = TRUE)
 ```
 
 
 ::: {.callout-caution icon=false collapse=true}
 ## Solution
 
-You should see six files: `data_dictionary.csv`, `methods.txt`, `samples.csv`, `seqtab.txt`, `sequences.fasta`, and `taxonomy.txt`. Each will be used at a different point in this episode.
+You should see six files: `data_dictionary.csv`, `methods.txt`, `samples.csv`, `seqtab.txt`, `sequences.fasta`, and `taxonomy.txt`. You will also see the newly created sub-folder `/dwc` Each will be used at a different point in this episode.
 :::
 
 Next we are going to take a closer look at each of the tables to understand what it's in them, starting with the ASV table.
@@ -111,8 +120,8 @@ Next we are going to take a closer look at each of the tables to understand what
 `seqtab.txt` is the ASV (Amplicon Sequence Variant) table: one row per ASV, and one column per sample containing the number of sequence reads.
 
 ```r
-seqtab <- read.table("./data/seqtab.txt", sep = "\t", header = TRUE)
-rmarkdown::paged_table(seqtab)
+seqtab <- read.table("./seqtab.txt", sep = "\t", header = TRUE)
+View(seqtab)
 ```
 
 ::: {.callout-tip}
@@ -126,8 +135,8 @@ rmarkdown::paged_table(seqtab)
 `taxonomy.txt` gives a taxon name for each ASV, as assigned by the reference database used during bioinformatic processing.
 
 ```r
-taxonomy <- read.table("./data/taxonomy.txt", sep = "\t", header = TRUE)
-rmarkdown::paged_table(head(taxonomy))
+taxonomy <- read.table("./taxonomy.txt", sep = "\t", header = TRUE)
+View(head(taxonomy))
 ```
 
 These names come straight from the reference database, so they still need to be matched against WoRMS - we'll do that later.
@@ -137,7 +146,7 @@ These names come straight from the reference database, so they still need to be 
 `samples.csv` contains one row per sample, with sampling event details. Take a look a what information is recorded. Note that column headers do not align with DwC terms! 
 
 ```r
-samples <- read.csv("./data/samples.csv")
+samples <- read.csv("./samples.csv")
 samples
 ```
 
@@ -147,7 +156,7 @@ samples
 `data_dictionary.csv` documents what each column in `samples.csv` means and its units. It's worth a quick look before we start mapping fields in step two. In some cases, you may have to confirm with the data provider what a column header means.
 
 ```r
-read.csv("./data/data_dictionary.csv")[, 1:2]
+read.csv("./data_dictionary.csv")
 ```
 :::
 
@@ -194,24 +203,27 @@ The `samples.csv` table has identifiers (`name`), time (`event_begin`), coordina
 
 ```r
 event <- samples %>%
-    select(
-        eventID = name,
-        materialSampleID = name,
-        eventDate = event_begin,
-        locality = area_name,
-        decimalLongitude = area_longitude,
-        decimalLatitude = area_latitude,
-        coordinateUncertaintyInMeters = area_uncertainty,
-        higherGeography = parent_area_name,
-        minimumDepthInMeters = depth,
-        maximumDepthInMeters = depth,
-        sampleSizeValue = size,
-        dna,
-        temperature
-    ) %>%
-    mutate(sampleSizeUnit = "ml")
+  select(
+    materialSampleID = name,
+    eventDate = event_begin,
+    locality = area_name,
+    decimalLongitude = area_longitude,
+    decimalLatitude = area_latitude,
+    coordinateUncertaintyInMeters = area_uncertainty,
+    higherGeography = parent_area_name,
+    minimumDepthInMeters = depth,
+    maximumDepthInMeters = depth,
+    sampleSizeValue = size,
+    dna,
+    temperature
+  ) %>%
+  mutate(eventID = paste0(year(dmy(eventDate)),"_",gsub(" ", "", locality), "_", materialSampleID),
+         sampleSizeUnit = "ml"
+         )
 event
 ```
+
+You'll notice we are also creating an `eventID` string by concatenating information about the date, location, and sample name. See the [OBIS Manual](https://manual.obis.org/identifiers.html) for more details about constructing identifiers.
 
 ::: {.callout-tip}
 ## `select()`, `mutate()`, and the pipe
@@ -231,13 +243,14 @@ The ASV table is in "wide" format, with one column per sample. We need "long" fo
 
 ```r
 occurrence <- seqtab %>%
-    gather(eventID, organismQuantity, 2:3) %>%
-    filter(organismQuantity > 0) %>%
-    mutate(
-        occurrenceID = paste0(eventID, "_", asv),
-        organismQuantityType = "sequence reads"
-    )
-rmarkdown::paged_table(occurrence)
+  gather(materialSampleID, organismQuantity, 2:3) %>%
+  filter(organismQuantity > 0) %>%
+  left_join(event %>% select(materialSampleID, eventID), by = "materialSampleID") %>%
+  mutate(
+    occurrenceID = paste0(eventID, "_", asv),
+    organismQuantityType = "DNA sequence reads"
+  )
+View(occurrence)
 ```
 
 ::: {.callout-tip}
@@ -254,7 +267,7 @@ taxonomy <- taxonomy %>%
 
 occurrence <- occurrence %>%
     left_join(taxonomy, by = "asv")
-rmarkdown::paged_table(occurrence)
+View(occurrence)
 ```
 
 ::: {.callout-tip}
@@ -265,23 +278,23 @@ rmarkdown::paged_table(occurrence)
 
 ### 2.3 Joining event and occurrence fields
 
-Now we ensure all our occurrences are linked to the correct eventID, indicating which sample a given detection originated from.
+Now we ensure all our occurrences are assocaited with the sample DNA concentrations. We will use this later when we create the DNA Derived Data table.
 
 ```r
 occurrence <- event %>%
-    #Note to update - add select so only necessary event fields added to occ
-    left_join(occurrence, by = "eventID")
-rmarkdown::paged_table(occurrence)
+  select(eventID, dna) %>%
+  left_join(occurrence, by = "eventID")
+View(occurrence)
 ```
 
 ---
 
 ## Adding metadata
 
-Populate `samplingProtocol` with a link to the eDNA Expeditions protocol used to collect these samples.
+Populate `samplingProtocol` with a link to the eDNA Expeditions protocol used to collect these samples. We obtained this link from the first sentence in `methods.txt`.
 
 ```r
-occurrence$samplingProtocol <- "https://github.com/BeBOP-OBON/UNESCO_protocol_collection"
+event$samplingProtocol <- "https://unesdoc.unesco.org/ark:/48223/pf0000384014"
 ```
 
 ---
@@ -296,19 +309,19 @@ Let's match the taxa to WoRMS using `obistools`. WoRMS names use spaces rather t
 taxon_names <- stringr::str_replace(occurrence$verbatimIdentification, "_", " ")
 ```
 
-Now we run the `match_taxa` function to obtain a list of matched species names.
+Now we run the `match_taxa` function to obtain a list of matched species names. This may take some time.
 
 ```r
 matched <- obistools::match_taxa(taxon_names, ask = FALSE) %>%
     select(scientificName, scientificNameID)
-rmarkdown::paged_table(matched)
+View(matched)
 ```
 
 Finally, we bind our matched names to our Occurrence table, adding both `scientificName` and `scientificNameID`.
 
 ```r
 occurrence <- bind_cols(occurrence, matched)
-rmarkdown::paged_table(occurrence)
+View(occurrence)
 ```
 
 ### Find the non-matching names
@@ -326,10 +339,9 @@ non_matches <- occurrence %>%
     arrange(desc(n))
 
 write.table(non_matches, file = file.path(output_dir, "nonmatches.txt"), sep = "\t", row.names = FALSE, na = "", quote = FALSE)
-rmarkdown::paged_table(non_matches)
+View(non_matches)
 ```
 :::
-
 
 Normally we would resolve these names one by one, but for this exercise we'll just fix the most common case: records annotated only as `Eukaryota` (or left blank) can be populated with `scientificName = "Incertae sedis"` and `scientificNameID = "urn:lsid:marinespecies.org:taxname:12"`.
 
@@ -341,7 +353,7 @@ occurrence <- occurrence %>%
     )
 ```
 
-::: {.callout-note icon=false collapse=true}
+::: {.callout-note icon=false}
 ## Optional but recommended: add higher taxonomic levels
 
 OBIS automatically links higher taxonomic levels based on the AphiaID in `scientificNameID`, so this step isn't required. But it can be good practice, especially when publishing to both OBIS and GBIF, to include them in your own table. See code below:
@@ -404,7 +416,7 @@ mof_temperature <- occurrence %>%
     )
 
 mof <- bind_rows(mof_reads, mof_samplesize, mof_dna, mof_temperature)
-rmarkdown::paged_table(mof)
+View(mof)
 ```
 
 ---
@@ -417,17 +429,22 @@ rmarkdown::paged_table(mof)
 Note you need the readDNAStringSet R package to read fasta files.
 
 ```r
-fasta_file <- readDNAStringSet("./data/sequences.fasta")
+fasta_file <- readDNAStringSet("./sequences.fasta")
 fasta <- data.frame(asv = names(fasta_file), DNA_sequence = paste(fasta_file))
-rmarkdown::paged_table(fasta)
+View(fasta)
 ```
 Once loaded, we join the relevant fields from the Occurrence table - the `occurrenceID`, the `asv` column so we can use it in joining, and we will finally rename the `dna` column (not to be confused with the newly created `dna` data table!) to the DwC DNA term: `concentration`.
 ```r
 dna <- occurrence %>%
-    select(occurrenceID, samp_name = eventID, asv, concentration = dna, sampleSizeValue) %>%
-    left_join(fasta, by = "asv")
-
-rmarkdown::paged_table(dna)
+  select(occurrenceID, eventID, samp_name = materialSampleID, asv, concentration = dna) %>%
+  left_join(
+    event %>% 
+      mutate(samp_vol_we_dna_ext = paste0(sampleSizeValue, " ", "milliliter")) %>%
+      select(eventID, samp_vol_we_dna_ext),
+    by = "eventID"
+  ) %>%
+  left_join(fasta, by = "asv")
+View(dna)
 ```
 
 ### 5.2 Adding sequencing metadata
@@ -435,12 +452,12 @@ rmarkdown::paged_table(dna)
 `methods.txt` describes how the samples were amplified and sequenced. Read it to find the values needed for the DNADerivedData extension.
 
 ```r
-cat(paste0(readLines("./data/methods.txt"), collapse = "\n"))
+cat(paste0(readLines("./methods.txt"), collapse = "\n"))
 ```
 
 Using the text in the file (and the sampling protocol it links to), we want to add the following columns to our DNA table:
 
-* `sop`, `target_gene`, `pcr_primer_forward`, `pcr_primer_reverse`, `pcr_primer_name_forward`, `pcr_primer_name_reverse`, `pcr_primer_reference`, `lib_layout`, `seq_meth`, `concentrationUnit`, `samp_size`, `samp_vol_we_dna_ext`, `env_broad_scale`, `env_local_scale`, `env_medium`, `project_name`, `nucl_acid_ext`, and `nucl_acid_amp`.
+* `sop`, `target_gene`, `pcr_primer_forward`, `pcr_primer_reverse`, `pcr_primer_name_forward`, `pcr_primer_name_reverse`, `pcr_primer_reference`, `lib_layout`, `seq_meth`, `concentrationUnit`, `samp_size`, `env_broad_scale`, `env_local_scale`, `env_medium`, `project_name`, `nucl_acid_ext`, and `nucl_acid_amp`.
 
 Use the DwC DNA derived data extension schema as a reference for definitions of each of these terms: <https://rs.gbif.org/extension/gbif/1.0/dna_derived_data_2024-07-11.xml>.
 
@@ -456,7 +473,6 @@ Use the DwC DNA derived data extension schema as a reference for definitions of 
 | `sop` | "Sequences were processed on the PacMAN bioinformatic pipeline" (**github.com/iobis/PacMAN-pipeline)** |
 | `samp_size`, `env_broad_scale`, `env_local_scale`, `env_medium` | Not in `methods.txt` itself! These come from the linked sampling protocol (total water volume collected), and the `env_` fields are filled with [ENVO](https://www.ebi.ac.uk/ols4/ontologies/envo) terms for a coastal marine site |
 | `concentrationUnit` | Matches the unit of the `concentration` column we already mapped from `dna` in `samples.csv` |
-| `samp_vol_we_dna_ext` | Already in our table as `sampleSizeValue` (the `size` column from `samples.csv`) — just needs its unit appended |
 
 So, putting it together we would use the following code:
 
@@ -474,7 +490,6 @@ dna <- dna %>%
         seq_meth = "Illumina NovaSeq 6000",
         concentrationUnit = "ng/µl",
         samp_size = "2000 milliliter",
-        samp_vol_we_dna_ext = paste(sampleSizeValue, "milliliter"),
         env_broad_scale = "marine biome (ENVO:00000447)",
         env_local_scale = "coastal water (ENVO:00001250)",
         env_medium = "waterborne particulate matter (ENVO:01000436)",
@@ -482,9 +497,9 @@ dna <- dna %>%
         nucl_acid_ext = "https://www.unesco.org/sites/default/files/medias/fichiers/2024/12/eDNA_expeditions_protocols_EN.pdf?hub=66910",
         nucl_acid_amp = "https://www.unesco.org/sites/default/files/medias/fichiers/2024/12/eDNA_expeditions_protocols_EN.pdf?hub=66910"
     ) %>%
-    select(-asv, -sampleSizeValue)
+    select(-asv)
 
-rmarkdown::paged_table(dna)
+View(dna)
 ```
 :::
 
@@ -499,7 +514,7 @@ There are few quality control checks we should run before putting all our files 
 Let's check the coordinates by plotting the distinct coordinate pairs on a map.
 
 ```r
-stations <- occurrence %>%
+stations <- event %>%
     distinct(locality, decimalLongitude, decimalLatitude)
 stations
 
@@ -518,10 +533,10 @@ Both sampling stations are supposed to be at Aldabra Atoll, in the Seychelles �
 Longitude looks correct, but latitude has the wrong sign — the points are plotted north of the equator instead of south. Flipping the sign of `decimalLatitude` fixes it:
 
 ```r
-occurrence <- occurrence %>%
+event <- event %>%
     mutate(decimalLatitude = -decimalLatitude)
 
-stations <- occurrence %>%
+stations <- event %>%
     distinct(locality, decimalLongitude, decimalLatitude)
 stations
 
@@ -536,16 +551,16 @@ leaflet() %>%
 Now, ket's check the event dates using `obistools::check_eventdate()`. As a reminder, Darwin Core requires eventDate to be formatted in ISO 8601 - i.e. `YYYY-MM-DD`.
 
 ```r
-obistools::check_eventdate(occurrence)
+obistools::check_eventdate(event)
 ```
 
 `eventDate` isn't in the correct format! We will use `lubridate` to parse the current `DD/MM/YYYY` format and convert it. As a quick aside, if you decide to fix dates manually in Excel, be careful! Excel is notorious for misinterpreting and reformatting dates.
 
 ```r
-occurrence <- occurrence %>%
+event <- event %>%
     mutate(eventDate = format_ISO8601(parse_date_time(eventDate, "%d/%m/%Y"), precision = "ymd", usetz = FALSE))
 
-unique(occurrence$eventDate)
+unique(event$eventDate)
 ```
 
 ### 6.3 Missing fields
@@ -553,8 +568,9 @@ unique(occurrence$eventDate)
 Finally, we will check whether any required Darwin Core fields are missing.
 
 ```r
-obistools::check_fields(occurrence)
 obistools::check_fields(event)
+obistools::check_fields(occurrence)
+
 ```
 
 We are missing two required fields from our Occurrence table: `occurrenceStatus` and `basisOfRecord`. Because all our occurrences have an organismQuantity > 0, we know the `occurrenceStatus` will be `present`. basisOfRecord must be filled with [controlled vocabulary](https://rs.gbif.org/vocabulary/dwc/basis_of_record_2024-02-19.xml). Because all our occurrences are based on DNA samples, we will use MaterialSample.
@@ -574,6 +590,8 @@ occurrence <- occurrence %>%
 Finally, we are ready to export our files. First, let's drop the helper columns we no longer need, then write each table to a text file, and package everything as a Darwin Core Archive. Alternatively, you could export files as csv.
 
 ```r
+event <- event %>%
+  select(-temperature, -dna)
 occurrence <- occurrence %>%
     select(-asv, -dna, -temperature)
 
