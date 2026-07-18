@@ -595,6 +595,7 @@ event <- event %>%
 occurrence <- occurrence %>%
     select(-asv, -dna, -temperature)
 
+write.table(event, file = file.path(output_dir, "event.txt"), sep = "\t", row.names = FALSE, na = "", quote = FALSE)
 write.table(occurrence, file = file.path(output_dir, "occurrence.txt"), sep = "\t", row.names = FALSE, na = "", quote = FALSE)
 write.table(mof, file = file.path(output_dir, "measurementorfact.txt"), sep = "\t", row.names = FALSE, na = "", quote = FALSE)
 write.table(dna, file = file.path(output_dir, "dnaderiveddata.txt"), sep = "\t", row.names = FALSE, na = "", quote = FALSE)
