@@ -282,7 +282,7 @@ Now we ensure all our occurrences are assocaited with the sample DNA concentrati
 
 ```r
 occurrence <- event %>%
-  select(eventID, dna) %>%
+  select(eventID, dna, sampleSizeValue, sampleSizeUnit, temperature) %>%
   left_join(occurrence, by = "eventID")
 View(occurrence)
 ```
