@@ -8,8 +8,6 @@ subtitle: "{{< var lesson.subtitle >}}"
 
 ## Overview
 
-<!-- Write 2–4 sentences introducing the lesson. What is it about? Why does it matter for the eDNA / OBIS community? -->
-
 This online course is aimed at beginners who are new to publishing eDNA data to OBIS and GBIF. It is meant to provide an introduction to DNA data and its management. We cover topics including background information on what eDNA is, the key aspects of collecting, extracting, and sequencing DNA data, and an example of how to format DNA data table outputs into Darwin Core for publishing to OBIS.
 
 This course is not meant to provide advanced knowledge and instead focuses on providing a solid foundation for DNA data.
@@ -17,7 +15,7 @@ This course is not meant to provide advanced knowledge and instead focuses on pr
 ::: {.callout-tip}
 ## Supporting Slides
 
-Supporting slides used by instructors can be found: <https://github.com/iobis/obis_edna_slides>.
+**Supporting slides used by instructors can be found: <https://iobis.github.io/obis_edna_slides/>.**
 :::
 
 ## Learning outcomes
