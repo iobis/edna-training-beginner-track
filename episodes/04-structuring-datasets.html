@@ -81,9 +81,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-de63f62b328812d8e578a4d74e282472.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b4e8409e8c7d361a6492dc627bd32680.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-44f3321c32051f853c765e7629473823.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-b4e8409e8c7d361a6492dc627bd32680.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-493fd6220545e4608b06997885ff7e83.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-3aae7cd40e653ffe05737e770e07a4e0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-493fd6220545e4608b06997885ff7e83.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-6.7.2/all.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-6.7.2/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -627,7 +627,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#  install.packages("BiocManager")</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#BiocManager::install("Biostrings")</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Biostrings)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">#remotes::install_github("obistools")</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">#remotes::install_github("obis/obistools")</span></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(obistools)</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">#remotes::install_github("pieterprovoost/r-dwca-writer")</span></span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dwcawriter)</span>
@@ -854,7 +854,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="joining-event-and-occurrence-fields">2.3 Joining event and occurrence fields</h3>
 <p>Now we ensure all our occurrences are assocaited with the sample DNA concentrations. We will use this later when we create the DNA Derived Data table.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>occurrence <span class="ot">&lt;-</span> event <span class="sc">%&gt;%</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(eventID, dna) <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(eventID, dna, sampleSizeValue, sampleSizeUnit, temperature) <span class="sc">%&gt;%</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(occurrence, <span class="at">by =</span> <span class="st">"eventID"</span>)</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(occurrence)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <hr>
@@ -1163,9 +1163,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>occurrence <span class="ot">&lt;-</span> occurrence <span class="sc">%&gt;%</span></span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>asv, <span class="sc">-</span>dna, <span class="sc">-</span>temperature)</span>
 <span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="fu">write.table</span>(occurrence, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">"occurrence.txt"</span>), <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">""</span>, <span class="at">quote =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="fu">write.table</span>(mof, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">"measurementorfact.txt"</span>), <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">""</span>, <span class="at">quote =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="fu">write.table</span>(dna, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">"dnaderiveddata.txt"</span>), <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">""</span>, <span class="at">quote =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="fu">write.table</span>(event, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">"event.txt"</span>), <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">""</span>, <span class="at">quote =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="fu">write.table</span>(occurrence, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">"occurrence.txt"</span>), <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">""</span>, <span class="at">quote =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="fu">write.table</span>(mof, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">"measurementorfact.txt"</span>), <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">""</span>, <span class="at">quote =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write.table</span>(dna, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">"dnaderiveddata.txt"</span>), <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">""</span>, <span class="at">quote =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>As a reminder, Darwin Core-Archives include an EML metadata file. The code below will create an EML file.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>archive <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
@@ -1802,7 +1803,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb31-77"><a href="#cb31-77" aria-hidden="true" tabindex="-1"></a><span class="co">#  install.packages("BiocManager")</span></span>
 <span id="cb31-78"><a href="#cb31-78" aria-hidden="true" tabindex="-1"></a><span class="co">#BiocManager::install("Biostrings")</span></span>
 <span id="cb31-79"><a href="#cb31-79" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Biostrings)</span>
-<span id="cb31-80"><a href="#cb31-80" aria-hidden="true" tabindex="-1"></a><span class="co">#remotes::install_github("obistools")</span></span>
+<span id="cb31-80"><a href="#cb31-80" aria-hidden="true" tabindex="-1"></a><span class="co">#remotes::install_github("obis/obistools")</span></span>
 <span id="cb31-81"><a href="#cb31-81" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(obistools)</span>
 <span id="cb31-82"><a href="#cb31-82" aria-hidden="true" tabindex="-1"></a><span class="co">#remotes::install_github("pieterprovoost/r-dwca-writer")</span></span>
 <span id="cb31-83"><a href="#cb31-83" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dwcawriter)</span>
@@ -2009,7 +2010,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb31-284"><a href="#cb31-284" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-285"><a href="#cb31-285" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
 <span id="cb31-286"><a href="#cb31-286" aria-hidden="true" tabindex="-1"></a>occurrence <span class="ot">&lt;-</span> event <span class="sc">%&gt;%</span></span>
-<span id="cb31-287"><a href="#cb31-287" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(eventID, dna) <span class="sc">%&gt;%</span></span>
+<span id="cb31-287"><a href="#cb31-287" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(eventID, dna, sampleSizeValue, sampleSizeUnit, temperature) <span class="sc">%&gt;%</span></span>
 <span id="cb31-288"><a href="#cb31-288" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(occurrence, <span class="at">by =</span> <span class="st">"eventID"</span>)</span>
 <span id="cb31-289"><a href="#cb31-289" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(occurrence)</span>
 <span id="cb31-290"><a href="#cb31-290" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -2322,86 +2323,87 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb31-597"><a href="#cb31-597" aria-hidden="true" tabindex="-1"></a>occurrence <span class="ot">&lt;-</span> occurrence <span class="sc">%&gt;%</span></span>
 <span id="cb31-598"><a href="#cb31-598" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>asv, <span class="sc">-</span>dna, <span class="sc">-</span>temperature)</span>
 <span id="cb31-599"><a href="#cb31-599" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-600"><a href="#cb31-600" aria-hidden="true" tabindex="-1"></a><span class="fu">write.table</span>(occurrence, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">"occurrence.txt"</span>), <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">""</span>, <span class="at">quote =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb31-601"><a href="#cb31-601" aria-hidden="true" tabindex="-1"></a><span class="fu">write.table</span>(mof, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">"measurementorfact.txt"</span>), <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">""</span>, <span class="at">quote =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb31-602"><a href="#cb31-602" aria-hidden="true" tabindex="-1"></a><span class="fu">write.table</span>(dna, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">"dnaderiveddata.txt"</span>), <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">""</span>, <span class="at">quote =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb31-603"><a href="#cb31-603" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-604"><a href="#cb31-604" aria-hidden="true" tabindex="-1"></a>As a reminder, Darwin Core-Archives include an EML metadata file. The code below will create an EML file.</span>
-<span id="cb31-605"><a href="#cb31-605" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
-<span id="cb31-606"><a href="#cb31-606" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb31-607"><a href="#cb31-607" aria-hidden="true" tabindex="-1"></a>archive <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb31-608"><a href="#cb31-608" aria-hidden="true" tabindex="-1"></a>    <span class="at">eml =</span> <span class="st">'&lt;eml:eml packageId="https://obis.org/dummydataset/v1.0" scope="system" system="http://gbif.org" xml:lang="en" xmlns:dc="http://purl.org/dc/terms/" xmlns:eml="eml://ecoinformatics.org/eml-2.1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="eml://ecoinformatics.org/eml-2.1.1 http://rs.gbif.org/schema/eml-gbif-profile/1.2/eml.xsd"&gt;</span></span>
-<span id="cb31-609"><a href="#cb31-609" aria-hidden="true" tabindex="-1"></a><span class="st">        &lt;dataset&gt;</span></span>
-<span id="cb31-610"><a href="#cb31-610" aria-hidden="true" tabindex="-1"></a><span class="st">        &lt;title xml:lang="en"&gt;Dummy Dataset&lt;/title&gt;</span></span>
-<span id="cb31-611"><a href="#cb31-611" aria-hidden="true" tabindex="-1"></a><span class="st">        &lt;/dataset&gt;</span></span>
-<span id="cb31-612"><a href="#cb31-612" aria-hidden="true" tabindex="-1"></a><span class="st">    &lt;/eml:eml&gt;'</span>,</span>
-<span id="cb31-613"><a href="#cb31-613" aria-hidden="true" tabindex="-1"></a>    <span class="at">core =</span> <span class="fu">list</span>(</span>
-<span id="cb31-614"><a href="#cb31-614" aria-hidden="true" tabindex="-1"></a>        <span class="at">name =</span> <span class="st">"event"</span>,</span>
-<span id="cb31-615"><a href="#cb31-615" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">"https://rs.gbif.org/core/dwc_event_2025-07-10.xml"</span>,</span>
-<span id="cb31-616"><a href="#cb31-616" aria-hidden="true" tabindex="-1"></a>        <span class="at">index =</span> <span class="fu">which</span>(<span class="fu">names</span>(event) <span class="sc">==</span> <span class="st">"eventID"</span>),</span>
-<span id="cb31-617"><a href="#cb31-617" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> event</span>
-<span id="cb31-618"><a href="#cb31-618" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb31-619"><a href="#cb31-619" aria-hidden="true" tabindex="-1"></a>    <span class="at">extensions =</span> <span class="fu">list</span>(</span>
-<span id="cb31-620"><a href="#cb31-620" aria-hidden="true" tabindex="-1"></a>        <span class="fu">list</span>(</span>
-<span id="cb31-621"><a href="#cb31-621" aria-hidden="true" tabindex="-1"></a>            <span class="at">name =</span> <span class="st">"occurrence"</span>,</span>
-<span id="cb31-622"><a href="#cb31-622" aria-hidden="true" tabindex="-1"></a>            <span class="at">type =</span> <span class="st">"https://rs.gbif.org/core/dwc_occurrence_2022-02-02.xml"</span>,</span>
-<span id="cb31-623"><a href="#cb31-623" aria-hidden="true" tabindex="-1"></a>            <span class="at">index =</span> <span class="fu">which</span>(<span class="fu">names</span>(occurrence) <span class="sc">==</span> <span class="st">"occurrenceID"</span>),</span>
-<span id="cb31-624"><a href="#cb31-624" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> occurrence</span>
-<span id="cb31-625"><a href="#cb31-625" aria-hidden="true" tabindex="-1"></a>        ),</span>
-<span id="cb31-626"><a href="#cb31-626" aria-hidden="true" tabindex="-1"></a>        <span class="fu">list</span>(</span>
-<span id="cb31-627"><a href="#cb31-627" aria-hidden="true" tabindex="-1"></a>            <span class="at">name =</span> <span class="st">"measurementorfact"</span>,</span>
-<span id="cb31-628"><a href="#cb31-628" aria-hidden="true" tabindex="-1"></a>            <span class="at">type =</span> <span class="st">"https://rs.gbif.org/extension/obis/extended_measurement_or_fact_2023-08-28.xml"</span>,</span>
-<span id="cb31-629"><a href="#cb31-629" aria-hidden="true" tabindex="-1"></a>            <span class="at">index =</span> <span class="fu">which</span>(<span class="fu">names</span>(mof) <span class="sc">==</span> <span class="st">"eventID"</span>),</span>
-<span id="cb31-630"><a href="#cb31-630" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> mof</span>
-<span id="cb31-631"><a href="#cb31-631" aria-hidden="true" tabindex="-1"></a>        ),</span>
-<span id="cb31-632"><a href="#cb31-632" aria-hidden="true" tabindex="-1"></a>        <span class="fu">list</span>(</span>
-<span id="cb31-633"><a href="#cb31-633" aria-hidden="true" tabindex="-1"></a>            <span class="at">name =</span> <span class="st">"dnaderiveddata"</span>,</span>
-<span id="cb31-634"><a href="#cb31-634" aria-hidden="true" tabindex="-1"></a>            <span class="at">type =</span> <span class="st">"https://rs.gbif.org/extension/gbif/1.0/dna_derived_data_2022-02-23.xml"</span>,</span>
-<span id="cb31-635"><a href="#cb31-635" aria-hidden="true" tabindex="-1"></a>            <span class="at">index =</span> <span class="fu">which</span>(<span class="fu">names</span>(dna) <span class="sc">==</span> <span class="st">"occurrenceID"</span>),</span>
-<span id="cb31-636"><a href="#cb31-636" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> dna</span>
-<span id="cb31-637"><a href="#cb31-637" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb31-638"><a href="#cb31-638" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb31-639"><a href="#cb31-639" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb31-640"><a href="#cb31-640" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-641"><a href="#cb31-641" aria-hidden="true" tabindex="-1"></a><span class="fu">write_dwca</span>(archive, <span class="fu">file.path</span>(output_dir, <span class="st">"archive.zip"</span>))</span>
-<span id="cb31-642"><a href="#cb31-642" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-643"><a href="#cb31-643" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-644"><a href="#cb31-644" aria-hidden="true" tabindex="-1"></a>You should now have an <span class="in">`occurrence.txt`</span>, <span class="in">`measurementorfact.txt`</span>, <span class="in">`dnaderiveddata.txt`</span>, and <span class="in">`archive.zip`</span> in your <span class="in">`dwc/yourname`</span> directory — a complete Darwin Core Archive ready to be published or shared.</span>
-<span id="cb31-645"><a href="#cb31-645" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-646"><a href="#cb31-646" aria-hidden="true" tabindex="-1"></a>::: {.instructor-only}</span>
-<span id="cb31-647"><a href="#cb31-647" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning icon=false}</span>
-<span id="cb31-648"><a href="#cb31-648" aria-hidden="true" tabindex="-1"></a><span class="fu">## {{&lt; fa chalkboard-teacher &gt;}} Instructor notes</span></span>
-<span id="cb31-649"><a href="#cb31-649" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-650"><a href="#cb31-650" aria-hidden="true" tabindex="-1"></a>**Estimated time:** 90 minutes</span>
-<span id="cb31-651"><a href="#cb31-651" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-652"><a href="#cb31-652" aria-hidden="true" tabindex="-1"></a>**Pacing notes:**</span>
-<span id="cb31-653"><a href="#cb31-653" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-654"><a href="#cb31-654" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The taxon matching step (<span class="in">`match_taxa`</span>) can take a few minutes to run against the WoRMS web service; consider having learners run it once and share the result, or provide a pre-computed <span class="in">`matched`</span> table as a fallback if the network is slow or unavailable.</span>
-<span id="cb31-655"><a href="#cb31-655" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The latitude sign bug (Exercise 4.3) is the key "aha" moment of this episode — let learners spot it from the map rather than pointing it out immediately.</span>
-<span id="cb31-656"><a href="#cb31-656" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-657"><a href="#cb31-657" aria-hidden="true" tabindex="-1"></a>**Common errors:**</span>
-<span id="cb31-658"><a href="#cb31-658" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-659"><a href="#cb31-659" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Forgetting to update <span class="in">`2:3`</span> in <span class="in">`gather()`</span> if working with a dataset that has a different number of sample columns.</span>
-<span id="cb31-660"><a href="#cb31-660" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Running <span class="in">`obistools::check_eventdate()`</span> before converting <span class="in">`eventDate`</span>, then being confused by the warning — this is expected and is what drives the next step.</span>
-<span id="cb31-661"><a href="#cb31-661" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Network/proxy issues blocking <span class="in">`match_taxa()`</span>'s calls to the WoRMS API.</span>
-<span id="cb31-662"><a href="#cb31-662" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-663"><a href="#cb31-663" aria-hidden="true" tabindex="-1"></a>**Discussion prompts:**</span>
-<span id="cb31-664"><a href="#cb31-664" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-665"><a href="#cb31-665" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Why is it useful to join all tables into one Occurrence table *before* running quality control, rather than checking each source file separately?</span>
-<span id="cb31-666"><a href="#cb31-666" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>What other measurements from your own eDNA workflows might belong in an ExtendedMeasurementOrFact table?</span>
-<span id="cb31-667"><a href="#cb31-667" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb31-600"><a href="#cb31-600" aria-hidden="true" tabindex="-1"></a><span class="fu">write.table</span>(event, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">"event.txt"</span>), <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">""</span>, <span class="at">quote =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb31-601"><a href="#cb31-601" aria-hidden="true" tabindex="-1"></a><span class="fu">write.table</span>(occurrence, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">"occurrence.txt"</span>), <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">""</span>, <span class="at">quote =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb31-602"><a href="#cb31-602" aria-hidden="true" tabindex="-1"></a><span class="fu">write.table</span>(mof, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">"measurementorfact.txt"</span>), <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">""</span>, <span class="at">quote =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb31-603"><a href="#cb31-603" aria-hidden="true" tabindex="-1"></a><span class="fu">write.table</span>(dna, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">"dnaderiveddata.txt"</span>), <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">""</span>, <span class="at">quote =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb31-604"><a href="#cb31-604" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-605"><a href="#cb31-605" aria-hidden="true" tabindex="-1"></a>As a reminder, Darwin Core-Archives include an EML metadata file. The code below will create an EML file.</span>
+<span id="cb31-606"><a href="#cb31-606" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
+<span id="cb31-607"><a href="#cb31-607" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb31-608"><a href="#cb31-608" aria-hidden="true" tabindex="-1"></a>archive <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb31-609"><a href="#cb31-609" aria-hidden="true" tabindex="-1"></a>    <span class="at">eml =</span> <span class="st">'&lt;eml:eml packageId="https://obis.org/dummydataset/v1.0" scope="system" system="http://gbif.org" xml:lang="en" xmlns:dc="http://purl.org/dc/terms/" xmlns:eml="eml://ecoinformatics.org/eml-2.1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="eml://ecoinformatics.org/eml-2.1.1 http://rs.gbif.org/schema/eml-gbif-profile/1.2/eml.xsd"&gt;</span></span>
+<span id="cb31-610"><a href="#cb31-610" aria-hidden="true" tabindex="-1"></a><span class="st">        &lt;dataset&gt;</span></span>
+<span id="cb31-611"><a href="#cb31-611" aria-hidden="true" tabindex="-1"></a><span class="st">        &lt;title xml:lang="en"&gt;Dummy Dataset&lt;/title&gt;</span></span>
+<span id="cb31-612"><a href="#cb31-612" aria-hidden="true" tabindex="-1"></a><span class="st">        &lt;/dataset&gt;</span></span>
+<span id="cb31-613"><a href="#cb31-613" aria-hidden="true" tabindex="-1"></a><span class="st">    &lt;/eml:eml&gt;'</span>,</span>
+<span id="cb31-614"><a href="#cb31-614" aria-hidden="true" tabindex="-1"></a>    <span class="at">core =</span> <span class="fu">list</span>(</span>
+<span id="cb31-615"><a href="#cb31-615" aria-hidden="true" tabindex="-1"></a>        <span class="at">name =</span> <span class="st">"event"</span>,</span>
+<span id="cb31-616"><a href="#cb31-616" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">"https://rs.gbif.org/core/dwc_event_2025-07-10.xml"</span>,</span>
+<span id="cb31-617"><a href="#cb31-617" aria-hidden="true" tabindex="-1"></a>        <span class="at">index =</span> <span class="fu">which</span>(<span class="fu">names</span>(event) <span class="sc">==</span> <span class="st">"eventID"</span>),</span>
+<span id="cb31-618"><a href="#cb31-618" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> event</span>
+<span id="cb31-619"><a href="#cb31-619" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb31-620"><a href="#cb31-620" aria-hidden="true" tabindex="-1"></a>    <span class="at">extensions =</span> <span class="fu">list</span>(</span>
+<span id="cb31-621"><a href="#cb31-621" aria-hidden="true" tabindex="-1"></a>        <span class="fu">list</span>(</span>
+<span id="cb31-622"><a href="#cb31-622" aria-hidden="true" tabindex="-1"></a>            <span class="at">name =</span> <span class="st">"occurrence"</span>,</span>
+<span id="cb31-623"><a href="#cb31-623" aria-hidden="true" tabindex="-1"></a>            <span class="at">type =</span> <span class="st">"https://rs.gbif.org/core/dwc_occurrence_2022-02-02.xml"</span>,</span>
+<span id="cb31-624"><a href="#cb31-624" aria-hidden="true" tabindex="-1"></a>            <span class="at">index =</span> <span class="fu">which</span>(<span class="fu">names</span>(occurrence) <span class="sc">==</span> <span class="st">"occurrenceID"</span>),</span>
+<span id="cb31-625"><a href="#cb31-625" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> occurrence</span>
+<span id="cb31-626"><a href="#cb31-626" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="cb31-627"><a href="#cb31-627" aria-hidden="true" tabindex="-1"></a>        <span class="fu">list</span>(</span>
+<span id="cb31-628"><a href="#cb31-628" aria-hidden="true" tabindex="-1"></a>            <span class="at">name =</span> <span class="st">"measurementorfact"</span>,</span>
+<span id="cb31-629"><a href="#cb31-629" aria-hidden="true" tabindex="-1"></a>            <span class="at">type =</span> <span class="st">"https://rs.gbif.org/extension/obis/extended_measurement_or_fact_2023-08-28.xml"</span>,</span>
+<span id="cb31-630"><a href="#cb31-630" aria-hidden="true" tabindex="-1"></a>            <span class="at">index =</span> <span class="fu">which</span>(<span class="fu">names</span>(mof) <span class="sc">==</span> <span class="st">"eventID"</span>),</span>
+<span id="cb31-631"><a href="#cb31-631" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> mof</span>
+<span id="cb31-632"><a href="#cb31-632" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="cb31-633"><a href="#cb31-633" aria-hidden="true" tabindex="-1"></a>        <span class="fu">list</span>(</span>
+<span id="cb31-634"><a href="#cb31-634" aria-hidden="true" tabindex="-1"></a>            <span class="at">name =</span> <span class="st">"dnaderiveddata"</span>,</span>
+<span id="cb31-635"><a href="#cb31-635" aria-hidden="true" tabindex="-1"></a>            <span class="at">type =</span> <span class="st">"https://rs.gbif.org/extension/gbif/1.0/dna_derived_data_2022-02-23.xml"</span>,</span>
+<span id="cb31-636"><a href="#cb31-636" aria-hidden="true" tabindex="-1"></a>            <span class="at">index =</span> <span class="fu">which</span>(<span class="fu">names</span>(dna) <span class="sc">==</span> <span class="st">"occurrenceID"</span>),</span>
+<span id="cb31-637"><a href="#cb31-637" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> dna</span>
+<span id="cb31-638"><a href="#cb31-638" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb31-639"><a href="#cb31-639" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb31-640"><a href="#cb31-640" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb31-641"><a href="#cb31-641" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-642"><a href="#cb31-642" aria-hidden="true" tabindex="-1"></a><span class="fu">write_dwca</span>(archive, <span class="fu">file.path</span>(output_dir, <span class="st">"archive.zip"</span>))</span>
+<span id="cb31-643"><a href="#cb31-643" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-644"><a href="#cb31-644" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-645"><a href="#cb31-645" aria-hidden="true" tabindex="-1"></a>You should now have an <span class="in">`occurrence.txt`</span>, <span class="in">`measurementorfact.txt`</span>, <span class="in">`dnaderiveddata.txt`</span>, and <span class="in">`archive.zip`</span> in your <span class="in">`dwc/yourname`</span> directory — a complete Darwin Core Archive ready to be published or shared.</span>
+<span id="cb31-646"><a href="#cb31-646" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-647"><a href="#cb31-647" aria-hidden="true" tabindex="-1"></a>::: {.instructor-only}</span>
+<span id="cb31-648"><a href="#cb31-648" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning icon=false}</span>
+<span id="cb31-649"><a href="#cb31-649" aria-hidden="true" tabindex="-1"></a><span class="fu">## {{&lt; fa chalkboard-teacher &gt;}} Instructor notes</span></span>
+<span id="cb31-650"><a href="#cb31-650" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-651"><a href="#cb31-651" aria-hidden="true" tabindex="-1"></a>**Estimated time:** 90 minutes</span>
+<span id="cb31-652"><a href="#cb31-652" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-653"><a href="#cb31-653" aria-hidden="true" tabindex="-1"></a>**Pacing notes:**</span>
+<span id="cb31-654"><a href="#cb31-654" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-655"><a href="#cb31-655" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The taxon matching step (<span class="in">`match_taxa`</span>) can take a few minutes to run against the WoRMS web service; consider having learners run it once and share the result, or provide a pre-computed <span class="in">`matched`</span> table as a fallback if the network is slow or unavailable.</span>
+<span id="cb31-656"><a href="#cb31-656" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The latitude sign bug (Exercise 4.3) is the key "aha" moment of this episode — let learners spot it from the map rather than pointing it out immediately.</span>
+<span id="cb31-657"><a href="#cb31-657" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-658"><a href="#cb31-658" aria-hidden="true" tabindex="-1"></a>**Common errors:**</span>
+<span id="cb31-659"><a href="#cb31-659" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-660"><a href="#cb31-660" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Forgetting to update <span class="in">`2:3`</span> in <span class="in">`gather()`</span> if working with a dataset that has a different number of sample columns.</span>
+<span id="cb31-661"><a href="#cb31-661" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Running <span class="in">`obistools::check_eventdate()`</span> before converting <span class="in">`eventDate`</span>, then being confused by the warning — this is expected and is what drives the next step.</span>
+<span id="cb31-662"><a href="#cb31-662" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Network/proxy issues blocking <span class="in">`match_taxa()`</span>'s calls to the WoRMS API.</span>
+<span id="cb31-663"><a href="#cb31-663" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-664"><a href="#cb31-664" aria-hidden="true" tabindex="-1"></a>**Discussion prompts:**</span>
+<span id="cb31-665"><a href="#cb31-665" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-666"><a href="#cb31-666" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Why is it useful to join all tables into one Occurrence table *before* running quality control, rather than checking each source file separately?</span>
+<span id="cb31-667"><a href="#cb31-667" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>What other measurements from your own eDNA workflows might belong in an ExtendedMeasurementOrFact table?</span>
 <span id="cb31-668"><a href="#cb31-668" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb31-669"><a href="#cb31-669" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-670"><a href="#cb31-670" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb31-671"><a href="#cb31-671" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-672"><a href="#cb31-672" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip icon=false}</span>
-<span id="cb31-673"><a href="#cb31-673" aria-hidden="true" tabindex="-1"></a><span class="fu">## {{&lt; fa key &gt;}} Key points</span></span>
-<span id="cb31-674"><a href="#cb31-674" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-675"><a href="#cb31-675" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A raw ASV table, taxonomy file, and sample sheet can be joined into a single Darwin Core Occurrence table, with the ASV table reshaped from wide to long format.</span>
-<span id="cb31-676"><a href="#cb31-676" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`obistools`</span> provides ready-made checks for taxon matching, coordinates, dates, and required fields - always run them before publishing!</span>
-<span id="cb31-677"><a href="#cb31-677" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Measurements like sequence reads, sample size, and DNA concentration belong in the extendedMeasurementOrFact extension; sequencing methods and primers belong in the DNADerivedData extension.</span>
-<span id="cb31-678"><a href="#cb31-678" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The final output is a set of Darwin Core text files packaged into a Darwin Core Archive (<span class="in">`.zip`</span>).</span>
-<span id="cb31-679"><a href="#cb31-679" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb31-669"><a href="#cb31-669" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb31-670"><a href="#cb31-670" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-671"><a href="#cb31-671" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb31-672"><a href="#cb31-672" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-673"><a href="#cb31-673" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip icon=false}</span>
+<span id="cb31-674"><a href="#cb31-674" aria-hidden="true" tabindex="-1"></a><span class="fu">## {{&lt; fa key &gt;}} Key points</span></span>
+<span id="cb31-675"><a href="#cb31-675" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-676"><a href="#cb31-676" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A raw ASV table, taxonomy file, and sample sheet can be joined into a single Darwin Core Occurrence table, with the ASV table reshaped from wide to long format.</span>
+<span id="cb31-677"><a href="#cb31-677" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`obistools`</span> provides ready-made checks for taxon matching, coordinates, dates, and required fields - always run them before publishing!</span>
+<span id="cb31-678"><a href="#cb31-678" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Measurements like sequence reads, sample size, and DNA concentration belong in the extendedMeasurementOrFact extension; sequencing methods and primers belong in the DNADerivedData extension.</span>
+<span id="cb31-679"><a href="#cb31-679" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The final output is a set of Darwin Core text files packaged into a Darwin Core Archive (<span class="in">`.zip`</span>).</span>
+<span id="cb31-680"><a href="#cb31-680" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
