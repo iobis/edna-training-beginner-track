@@ -34,7 +34,7 @@ By the end of this episode, you will be able to:
 
 The dataset we will work with is an eDNA metabarcoding dataset, obtained from eDNA Expeditions. This example is adapted from training resources developed for OBON in 2024, created by Pieter Provoost and can be found in <https://github.com/iobis/obon-2024-dna-training>.
 
-Download the files from <https://github.com/iobis/edna-training-beginner-track/tree/main/data>
+**Download the files from <https://github.com/iobis/edna-training-beginner-track/tree/main/data>**
 :::
 
 ---

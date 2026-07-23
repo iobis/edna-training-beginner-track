@@ -35,7 +35,7 @@ Al final de este episodio, usted podrá:
 
 El conjunto de datos con el que trabajaremos es un conjunto de datos de metabarcoding de eDNA, obtenido de eDNA Expeditions. Este ejemplo está adaptado de materiales de capacitación desarrollados para OBON en 2024, creados por Pieter Provoost, y se puede encontrar en <https://github.com/iobis/obon-2024-dna-training>.
 
-Descargue los archivos desde <https://github.com/iobis/edna-training-beginner-track/tree/main/data>
+**Descargue los archivos desde <https://github.com/iobis/edna-training-beginner-track/tree/main/data>**
 :::
 
 ---
